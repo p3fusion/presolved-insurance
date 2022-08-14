@@ -1,0 +1,93 @@
+{
+  "name": "mapp",
+  "version": "1.1.0",
+  "private": true,
+  "dependencies": {
+    "@aws-amplify/datastore": "^3.12.2",
+    "@aws-amplify/ui-react": "^3.2.0",
+    "@babel/core": "^7.0.0-rc.2",
+    "@babel/plugin-proposal-class-properties": "^7.13.0",
+    "@babel/plugin-proposal-object-rest-spread": "^7.0.0-rc.2",
+    "@babel/preset-env": "^7.18.9",
+    "@babel/preset-react": "^7.18.6",
+    "@reach/router": "^1.3.4",
+    "@reduxjs/toolkit": "^1.8.3",
+    "@testing-library/jest-dom": "^5.16.4",
+    "@testing-library/react": "^13.3.0",
+    "@testing-library/user-event": "^13.5.0",
+    "antd": "^4.18.0",
+    "aws-amplify": "^4.3.28",
+    "axios": "^0.18.1",
+    "babel-eslint": "^8.2.6",
+    "babel-loader": "^8.0.0-beta.6",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-preset-react": "^6.24.1",
+    "cross-env": "^7.0.3",
+    "dotenv": "^16.0.1",
+    "extract-text-webpack-plugin": "^4.0.0-beta.0",
+    "file-loader": "^6.0.0",
+    "less": "3.11.3",
+    "less-loader": "7.0.0",
+    "lodash": "^4.17.21",
+    "moment-range": "^4.0.2",
+    "moment-timezone": "^0.5.31",
+    "qs": "^6.11.0",
+    "react": "17.0.1",
+    "react-csv-reader": "^3.5.0",
+    "react-dom": "^17.0.1",
+    "react-error-boundary": "^3.1.3",
+    "react-redux": "^7.2.8",
+    "react-simple-line-icons": "^1.0.8",
+    "redux": "^4.2.0",
+    "redux-logger": "^3.0.6",
+    "redux-promise": "^0.6.0",
+    "redux-thunk": "^2.2.0",
+    "styled-components": "^5.3.4",
+    "web-vitals": "^2.1.4"
+  },
+  "devDependencies": {
+    "autoprefixer": "^7.1.6",
+    "concurrently": "^7.2.2",
+    "copy-webpack-plugin": "^6.1.0",
+    "css-loader": "^0.28.11",
+    "eslint": "^4.19.1",
+    "eslint-plugin-react": "^7.8.2",
+    "html-webpack-plugin": "^3.2.0",
+    "postcss-loader": "^2.1.6",
+    "sass-loader": "^7.1.0",
+    "serve": "^13.0.4",
+    "style-loader": "^1.2.1",
+    "uglifyjs-webpack-plugin": "^1.2.4",
+    "url-loader": "^1.1.1",
+    "webpack": "^4.17.0",
+    "webpack-bundle-analyzer": "^2.13.1",
+    "webpack-cli": "^4.9.2"
+  },
+  "scripts": {
+    "progress": "mkdir build && cp ./public/build.html ./build/index.html && cp ./public/template.csv ./build/template.csv",
+    "clean": "rm -rf ./build/",
+    "start": "serve -s ./build/",
+    "dev": "npm run clean && concurrently  \"npm run progress\" \"webpack --config ./src/webpack.dev.js\" \"serve -s ./build/\"",
+    "build": "npm run clean && webpack --config ./src/webpack.config.js  && cp ./public/template.csv ./build/template.csv",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
