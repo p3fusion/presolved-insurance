@@ -11,10 +11,14 @@ import DashboardSidebar from './layout/sidebar';
 import DashboardIndexPage from './pages';
 import OutboundCallsPage from './pages/outboundCalls';
 
+ 
+
 const { Content } = Layout;
 const APP = () => {
 
     const [collapsed, setCollapsed] = useState(false);
+
+    
 
     return (
         <Layout className='newdashboard'>
@@ -26,6 +30,7 @@ const APP = () => {
                         <DashboardIndexPage path="/" />
                         <OutboundCallsPage path="/outbound-calls" />
                     </Router>
+                    <div id="ccp" style={{ width: "80vw", height: "500px", margin:"30px 0", border:0 }}></div>
                 </Content>
             </Layout>
         </Layout>
