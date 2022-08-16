@@ -43,7 +43,8 @@
     "redux-promise": "^0.6.0",
     "redux-thunk": "^2.2.0",
     "styled-components": "^5.3.4",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "amazon-connect-streams": "1.4.7"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.6",
