@@ -74,7 +74,7 @@
     "dev": "npm run clean && concurrently  \"npm run progress\" \"webpack --config ./src/webpack.dev.js\" \"serve -s ./build/\"",
     "build": "npm run clean && webpack --config ./src/webpack.config.js  && cp ./public/template.csv ./build/template.csv",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "release": "amplify publish"
   },
   "eslintConfig": {
     "extends": [
