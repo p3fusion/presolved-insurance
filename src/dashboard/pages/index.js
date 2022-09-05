@@ -156,9 +156,9 @@ const DashboardIndexPAge = () => {
                     </section>
                 </TabPane>
 
-                {state.interactions.map((interation) =>
+                {state.interactions.map((interation,index) =>
                     <TabPane tab={<div><PhoneOutlined /> Interation - {interation.id} </div>} key={interation.id} closable>
-                        <NewInteraction id={interation.id} />
+                        <NewInteraction id={interation.id} key={interation.id} />
                     </TabPane>
                 )}
 

@@ -10,6 +10,7 @@ import DashboardHeader from './layout/header';
 import DashboardSidebar from './layout/sidebar';
 import DashboardIndexPage from './pages';
 import OutboundCallsPage from './pages/outboundCalls';
+import ChatPage from './pages/ChatPage';
 
 
 const { Content } = Layout;
@@ -25,6 +26,7 @@ const APP = () => {
                 <Content className="main" style={{minHeight: '100vh', }}>
                     <Router basepath='/'>
                         <DashboardIndexPage path="/" />
+                        <ChatPage path="/" />
                         <OutboundCallsPage path="/outbound-calls" />
                     </Router>
                    

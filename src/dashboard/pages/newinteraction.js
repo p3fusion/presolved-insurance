@@ -1,14 +1,18 @@
-import React, { useState } from 'react';
-import { Button, Input, PageHeader, Row, Tabs, Menu , Radio, Col, Card, Space, Collapse, Modal, Form, Divider, Steps } from 'antd';
-import { PlusCircleOutlined, SettingOutlined, MinusSquareOutlined, InsuranceOutlined, PropertySafetyOutlined } from '@ant-design/icons';
-
+import React, { useState, useRef, useLayoutEffect, useEffect } from 'react';
+import { Button, Input, PageHeader, Row, Tabs, Menu, Radio, Col, Card, Space, Collapse, Modal, Form, Divider, Steps } from 'antd';
+import { PlusCircleOutlined, SettingOutlined, MinusSquareOutlined, InsuranceOutlined, PropertySafetyOutlined, CloseOutlined } from '@ant-design/icons';
 import '../assets/style/interaction.less'
 import AddBuilding from './addBuilding';
+import '../../gc-components/connect-streams'
+import '../../gc-components/amazon-connect-customer-profiles'
+import '../../gc-components/amazon-connect-task'
+
 const { TabPane } = Tabs;
 const { Panel } = Collapse;
 const { Step } = Steps;
 
 const NewInteraction = (props) => {
+    const divCCP = useRef(null);
     const { id } = props
     const [form] = Form.useForm();
     const [state, setState] = useState({
@@ -20,187 +24,252 @@ const NewInteraction = (props) => {
             loh: false,
         }
     })
-    const menu = (
-        <Menu
-            items={[
-                {
-                    key: '1',                  
-                    label: (<span><PropertySafetyOutlined /> Add Building</span>),
+
+    useEffect(() => {
+        const connectUrl = "https://p3fusion-uat.my.connect.aws/ccp-v2"
+
+        if (divCCP.current) {
+            connect.agentApp.initCCP(divCCP.current, {
+                ccpUrl: connectUrl, // REQUIRED
+                loginPopup: true, // optional, defaults to `true`
+                loginPopupAutoClose: true, // optional, defaults to `false`
+                loginOptions: {
+                    // optional, if provided opens login in new window
+                    autoClose: true, // optional, defaults to `false`
+                    height: 600, // optional, defaults to 578
+                    width: 400, // optional, defaults to 433
+                    top: 80, // optional, defaults to 0
+                    right: 100 // optional, defaults to 0
                 },
-                {
-                    key: '2',
-                    label: (
-                        <a target="_blank" rel="noopener noreferrer" href="https://www.aliyun.com">
-                            2nd menu item
-                        </a>
-                    ),
+                region: "us-east-1", // REQUIRED for `CHAT`, optional otherwise
+                softphone: {
+                    // optional, defaults below apply if not provided
+                    allowFramedSoftphone: true, // optional, defaults to false
+                    disableRingtone: false, // optional, defaults to false
+                    ringtoneUrl: "./ringtone.mp3" // optional, defaults to CCP’s default ringtone if a falsy value is set
                 },
-                {
-                    key: '3',
-                    label: (
-                        <a target="_blank" rel="noopener noreferrer" href="https://www.luohanacademy.com">
-                            3rd menu item
-                        </a>
-                    ),
+                pageOptions: {
+                    //optional
+                    enableAudioDeviceSettings: false, //optional, defaults to 'false'
+                    enablePhoneTypeSettings: true //optional, defaults to 'true'
                 },
-            ]}
-        />
-    );
-    const addTask = (e) => {
-        setState({
-            ...state,
-            tasks: {
-                ...state.tasks,
-                [e.target.value]: true
-            },
-            showAddTask: false
-        })
-        console.log({ e: e.target.value });
+                ccpAckTimeout: 5000, //optional, defaults to 3000 (ms)
+                ccpSynTimeout: 3000, //optional, defaults to 1000 (ms)
+                ccpLoadTimeout: 10000 //optional, defaults to 5000 (ms)
+            });
+
+
+
+
+            /*  if (connect.isCCP()) {
+                 
+                 client.listProfileObjects({
+                     "MaxResults": 10
+                 }).then((profiles) => {
+                     console.table(profiles)
+                 }).catch((ex) => {
+                     console.error({ ex });
+                 })
+             } */
+
+            /*  client.searchProfiles({
+                 "KeyName": "name",
+                 "Values": ["sai"]
+             }).then((res) => {
+                 console.log({ res });
+             }).catch((ex) => {
+                 console.error({ ex });
+             })
+  */
+            connect.contact(function (contact) {
+                contact.onIncoming(function (contact) {
+                    console.log("onIncoming", contact);
+                });
+
+                contact.onRefresh(function (contact) {
+                    console.log("onRefresh", contact);
+                });
+
+                contact.onAccepted(function (contact) {
+                    console.log("onAccepted", contact);
+                });
+
+                contact.onEnded(function () {
+                    console.log("onEnded", contact);
+                });
+
+                contact.onConnected(function () {
+                    console.log(`onConnected(${contact.getContactId()})`);
+                    var attributeMap = contact.getAttributes();
+                    /* var name = JSON.stringify(attributeMap["firstName"]["value"]);
+                    var phone = JSON.stringify(attributeMap["phoneNumber"]["value"]);
+                    var account = JSON.stringify(attributeMap["accountNumber"]["value"]);
+                    console.log(name);
+                    console.log(phone); */
+
+                    console.log({
+                        attributeMap: JSON.stringify(attributeMap)
+                    })
+                });
+            });
+        }
+    }, [])
+
+    const searchProfile = () => {
+        const instanceUrl = 'https://p3fusion-uat.my.connect.aws/'
+        let client = new connect.CustomerProfilesClient(instanceUrl);
+
+        if (connect.agent.initialized) {
+            connect.agent(function (agent) {
+                const queryParams = {// required
+                   
+                    maxResults: 50 //optional, number, max value of 100
+                };
+                
+                agent.listTaskTemplates(queryParams, {
+                    success: function(data) { 
+                        console.log({data});
+                     },
+                    failure: function(err) {console.error({err}); }
+                });
+
+
+                /* var queuesARNs = agent.getAllQueueARNs();
+                agent.getEndpoints(queuesARNs,{
+                        success: function (data) {
+                            var endpoints = data.endpoints; // or data.addresses
+                            console.log({data});
+                            const newTask = {
+                                name: "Test task from taskJS", //required, max len: 512
+                                description: "N/A", //optional, max len: 4096
+                                endpoint: endpoints[3],
+                                references: { //optional
+                                    "reference name": { // string, max len: 4096
+                                        type: "URL", //required, currently only "URL" is supported as a reference type,
+                                        value: "https://www.amazon.com" //required, string, max len: 4096
+                                    }
+                                }
+                            };//ends newTask
+                            console.log(newTask);
+                            agent.createTask(newTask, {
+                                success: function (data) { 
+                                    console.log("Created a task with contact id: ", data.contactId) 
+                                },
+                                failure: function (err) { 
+                                    console.log("error has occured",err); 
+                                }
+                            });//ends createTask
+                        },//end success
+
+                        failure: function (err) {
+                            console.error({err})
+                        }
+                    }//ends QueueARN
+                );// ends agent.getEndpoints */
+            })
+
+            /*  client.createProfile({
+             
+                 "DomainName": "amazon-connect-P3fusion-uat",
+                 "FirstName": "Khizar Ahmed"
+             }).then((res) => {
+                 console.log('Success response: ' + JSON.stringify(res));
+             }).catch((errorResp) => {
+                 console.log('Error response: ' + JSON.stringify(errorResp));
+             });       */
+        }
+
     }
 
-    return (
-        <Tabs tabPosition="right"  >
 
-            <TabPane tab="Search Account" key="search">
-                <section className="interaction">
+    return (
+        <section className="interaction">
+
+            <Row gutter={[16, 16]}>
+                <Col span={18}>
                     <PageHeader ghost={false} className="site-page-header" onBack={() => null}
                         title={<span>Interaction : <em>{id}</em></span>} subTitle=" New Interaction" extra={[
                             <Button icon={<SettingOutlined />} />,
                             <Button onClick={() => setState({ ...state, showAddTask: true })} icon={<PlusCircleOutlined />} >Add Task</Button>,
                         ]} />
+                    <Row style={{ marginTop: 30 }}>
+                        <Col span={24}>
 
-                    <Card title="Search Customer" style={{ marginTop: 30 }}>
-                        <Row gutter={[16, 16]}>
-                            <Col span={12}>
-                                <Form form={form} layout='vertical' >
-                                    <Form.Item
-                                        name="AccountNumber"
-                                        label="Account number"
-                                        required
-                                        tooltip="This is a required field"
-                                        rules={[
-                                            {
-                                                message: "Please enter Account number to search",
-                                                required: true,
-                                            },
-                                        ]}
-                                    >
-                                        <Input />
-                                    </Form.Item>
-                                    <Divider />
-                                    <Collapse ghost  >
-                                        <Panel collapsible='header' header="Advanced Search" key="1">
-                                            <Form.Item name="PhoneNumber" label="Phone number" >
-                                                <Input />
-                                            </Form.Item>
-                                            <Form.Item name="Organization" label="Organization" >
-                                                <Input />
-                                            </Form.Item>
-                                            <Form.Item name="StreetAddress" label="Street address" >
-                                                <Input />
-                                            </Form.Item>
-                                            <Form.Item name="city" label="City" >
-                                                <Input />
-                                            </Form.Item>
-                                            <Form.Item name="country" label="Country" >
-                                                <Input />
-                                            </Form.Item>
-                                            <Form.Item name="StateProvince" label="State/Province" >
-                                                <Input />
-                                            </Form.Item>
-                                            <Form.Item name="ZipPostalCode" label="Zip/Postal code" >
-                                                <Input />
-                                            </Form.Item>
-                                        </Panel>
-                                    </Collapse>
-                                    <Row style={{ marginTop: 20 }}>
-                                        <Col span={24}>
-                                            <Form.Item>
-                                                <Space>
-                                                    <Button type="primary" htmlType="submit">Search</Button>
-                                                    <Button htmlType="button" >Clear</Button>
-                                                </Space>
-                                            </Form.Item>
-                                        </Col>
-                                    </Row>
-
-                                </Form>
-                            </Col>
-                        </Row>
-                    </Card>
-                    <Modal closable onCancel={() => setState({ ...state, showAddTask: false })} title="Choose Task Type" centered visible={state.showAddTask} >
-                        <Row align='stretch' justify='space-between'>
-                            <Col span={24} className="add-task-modal">
-                                <Radio.Group onChange={addTask} optionType='button' buttonStyle='solid' size='large'>
-                                    <Radio disabled={state.tasks.addb} value="addb"><PropertySafetyOutlined /> Add Building</Radio>
-                                    <Radio disabled={state.tasks.addc} value="addc"><PropertySafetyOutlined />Address Change</Radio>
-                                    <Radio disabled={state.tasks.coi} value="coi"><PropertySafetyOutlined />Certificate of insurance</Radio>
-                                    <Radio disabled={state.tasks.loh} value="loh"><PropertySafetyOutlined />Loss History</Radio>
-                                </Radio.Group>
-                            </Col>
-                        </Row>
-                    </Modal>
-                </section>
-            </TabPane>
-            {
-                state.tasks.addb &&
-                <TabPane tab={<div><PlusCircleOutlined /> Add Building</div>} key="addb"  >
-                    <section className="interaction">
-                        <PageHeader ghost={false} className="site-page-header" onBack={() => null}
-                            title={<span>Add Building Interaction : <em>{id}</em></span>} subTitle=" Add Building " extra={[
-                                <Button icon={<SettingOutlined />} />,
-                                <Button onClick={() => setState({ ...state, showAddTask: true })} icon={<PlusCircleOutlined />} >Add Task</Button>,
+                            <Card title="search Customer">
+                                <Button onClick={() => searchProfile()}>Search</Button>
+                                <CustomerProile props={props} />
+                                {/*  <div id="wisdom-container" ref={wisdom} /> */}
+                            </Card>
+                        </Col>
+                    </Row>
+                </Col>
+                <Col className='interaction-sidebar' span={6} >
+                    <div className="ccp" >
+                        <div id="containerDiv" ref={divCCP} style={{ height: 600, backgroundColor: '#fff' }} />
 
 
-                            ]} />
-                        <Row style={{ marginTop: 20 }}>
-                            <Col span={24}>
-                                <Card title='Add Address'>
-                                    <Row gutter={[16, 16]}>
-                                        <Col span={24} style={{ margin: '10px 10px 50px 10px' }}>
-                                            <Steps current={1} percent={60}>
-                                                <Step title="COLLECTION INFORMATION" description="This is a description." />
-                                                <Step title="FIELD WORK" subTitle="Left 00:00:08" description="This is a description." />
-                                                <Step title="DIAGRAM & COST ESTIMATE" description="This is a description." />
-                                                <Step title="ENDORSEMENT" description="This is a description." />
-                                                <Step title="RESOLVE" description="This is a description." />
-                                            </Steps>
-                                        </Col>
-                                        <Col span={24}>
-                                            <div className='custom-item'>
-                                                <AddBuilding />
-                                            </div>
-                                        </Col>
-                                    </Row>
-                                </Card>
-                            </Col>
-                        </Row>
-                    </section>
-                </TabPane>
-            }
-            {
-                state.tasks.addc &&
-                <TabPane tab={<div><PlusCircleOutlined />Address Change</div>} key="addc"  >
-
-                </TabPane>
-            }
-
-            {
-                state.tasks.coi &&
-                <TabPane tab={<div><PlusCircleOutlined />Loss History</div>} key="loh"  >
-
-                </TabPane>
-            }
-            {
-                state.tasks.coi &&
-                <TabPane tab={<div><PlusCircleOutlined />Certificate of insurance</div>} key="coi"  >
-
-                </TabPane>
-            }
-
-
-        </Tabs>
+                    </div>
+                </Col>
+            </Row>
+        </section>
     )
 }
 
 export default NewInteraction
+
+
+
+
+const CustomerProile = (props) => {
+    const customerprofiles = useRef(null);
+    const { id } = props
+    useEffect(() => {
+        if (customerprofiles.current) {
+            const instanceUrl = 'https://p3fusion-uat.my.connect.aws/'
+            let client = new connect.CustomerProfilesClient(instanceUrl);
+        }
+    }, [])
+
+
+    /*   useLayoutEffect(() => {
+          if (connect.agent.initialized) {
+  
+              connect.contact(function (contact) {
+                  contact.onIncoming(function (contact) {
+                      console.log("onIncoming", contact);
+                  });
+  
+                  contact.onRefresh(function (contact) {
+                      console.log("onRefresh", contact);
+                  });
+  
+                  contact.onAccepted(function (contact) {
+                      console.log("onAccepted", contact);
+                  });
+  
+                  contact.onEnded(function () {
+                      console.log("onEnded", contact);
+                  });
+  
+                  contact.onConnected(function () {
+                      console.log(`onConnected(${contact.getContactId()})`);
+                      var attributeMap = contact.getAttributes();
+                       var name = JSON.stringify(attributeMap["firstName"]["value"]);
+                       var phone = JSON.stringify(attributeMap["phoneNumber"]["value"]);
+                       var account = JSON.stringify(attributeMap["accountNumber"]["value"]);
+                       console.log(name);
+                       console.log(phone);
+                    
+                      console.log({
+                          attributeMap: JSON.stringify(attributeMap)
+                      })
+                  });
+              });
+          }
+  
+      }) */
+
+    return (
+        <div id={`customerprofiles-container`} style={{ minHeight: '100vh' }} ref={customerprofiles} />
+    )
+}

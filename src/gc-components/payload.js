@@ -1,0 +1,3 @@
+export const createProfile=()=>{
+    return {"FirstName":"Khizar ","LastName":"Ahmed","Gender":"MALE","PartyType":"INDIVIDUAL","BirthDate":"1986-09-07","AccountNumber":"9715463636","EmailAddress":"khizaras@gmail.com","MailingAddress":{"Address1":"102","Address2":"big street","Country":"IN","PostalCode":"600005","City":"Chennai","Province":"Tamil Nadu"},"PhoneNumber":"+919715463636","DomainName":"amazon-connect-P3fusion-uat"}
+}
