@@ -1,0 +1,19 @@
+# This "input" configures a global authorization rule to enable public access to
+# all models in this schema. Learn more about authorization rules here: https://docs.amplify.aws/cli/graphql/authorization-rules
+input AMPLIFY { globalAuthRule: AuthRule = { allow: public } } # FOR TESTING ONLY!
+
+type Channel @model {
+  id: ID!
+  contactID: String!
+  contactAttributes:AWSJSON
+  tasks: [Task] @hasMany(indexName: "byChannel", fields: ["id"])
+}
+
+type Task @model{
+  id: ID!
+  channelID: ID! @index(name: "byChannel", sortKeyFields: ["Name"])
+  channel: Channel! @belongsTo(fields: ["channelID"]) 
+  contactID: String!
+  Name: String!
+  taskAttributes:AWSJSON
+}

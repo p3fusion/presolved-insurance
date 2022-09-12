@@ -1,32 +1,46 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
-
-  aggregators: {
-    "PayPal": {
-      logo: "https://1.bp.blogspot.com/-ro2dP_igRy4/YCAQM0M3GlI/AAAAAAAAJVg/Hz6jyEIBHzMqj3Hlsg9j6eE18Cz_24nQACLcBGAsYHQ/w400-h155/paypal-logo.png"
-    },
-    "Stripe": {
-      logo: "https://upload.wikimedia.org/wikipedia/commons/b/ba/Stripe_Logo%2C_revised_2016.svg"
-    },
+  templates: {},
+  allTemplates: {
+    isLoaded: false,
+    data: []
   }
+
 
 
 }
 
 export const config = createSlice({
-  name: 'merchants',
+  name: 'config',
   initialState,
   reducers: {
-    updateConfig: (state, action) => {
+
+    updateTemplates: (state, action) => {
+      const id = action.payload.id
       return {
         ...state,
-        ...action.payload
+        templates: {
+          ...state.templates,
+          [id]: action.payload.data,
+        }
+
+      }
+    },
+    updateAllTemplates: (state, action) => {
+      console.log({action});
+      return {
+        ...state,
+        allTemplates: {
+          isLoaded: true,
+          data: action.payload,
+        }
+
       }
     },
   },
 })
 // Action creators are generated for each case reducer function
-export const { updateConfig } = config.actions
+export const { updateTemplates, updateAllTemplates } = config.actions
 
 export default config.reducer

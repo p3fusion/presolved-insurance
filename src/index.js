@@ -15,11 +15,13 @@ Amplify.configure(awsExports);
 
 ReactDOM.render(
   <React.StrictMode>
-    <DefaultErrorBoundary>
-     <Router basepath="/">
-      <DashboardIndexPage  path="/*" />
-     </Router>
-    </DefaultErrorBoundary>
+    <Provider store={store}>
+      <DefaultErrorBoundary>
+        <Router basepath="/">
+          <DashboardIndexPage path="/*" />
+        </Router>
+      </DefaultErrorBoundary>
+    </Provider>
   </React.StrictMode>,
   document.getElementById("root")
 );

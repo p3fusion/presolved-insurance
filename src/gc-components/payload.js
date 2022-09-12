@@ -51,3 +51,246 @@ const taskTemplate=[
         "Status": "ACTIVE"
     }
 ]
+
+const tasktemplates=[
+    {
+        "name": "Loss History",
+        "description": "Loss History",
+        "id": "0d82df03-9a49-43d6-a38c-707075e424e0",
+        "fields": [
+            {
+                "Description": "The name of the task",
+                "Id": {
+                    "Name": "Task name"
+                },
+                "SingleSelectOptions": null,
+                "Type": "NAME"
+            },
+            {
+                "Description": "The description of the task",
+                "Id": {
+                    "Name": "Description"
+                },
+                "SingleSelectOptions": null,
+                "Type": "DESCRIPTION"
+            },
+            {
+                "Description": "",
+                "Id": {
+                    "Name": "Delivery method"
+                },
+                "SingleSelectOptions": [
+                    "Email",
+                    "Fax",
+                    "Postal Mail"
+                ],
+                "Type": "SINGLE_SELECT"
+            },
+            {
+                "Description": "",
+                "Id": {
+                    "Name": "Number of Years"
+                },
+                "SingleSelectOptions": null,
+                "Type": "NUMBER"
+            },
+            {
+                "Description": "",
+                "Id": {
+                    "Name": "Lines of Coverage be shown in the report?"
+                },
+                "SingleSelectOptions": null,
+                "Type": "BOOLEAN"
+            },
+            {
+                "Description": "",
+                "Id": {
+                    "Name": "Comments"
+                },
+                "SingleSelectOptions": null,
+                "Type": "TEXT_AREA"
+            },
+            {
+                "Description": "The queue to assign the task to",
+                "Id": {
+                    "Name": "Assign to"
+                },
+                "SingleSelectOptions": null,
+                "Type": "QUICK_CONNECT"
+            },
+            {
+                "Description": "The scheduled time to complete the task",
+                "Id": {
+                    "Name": "Schedule"
+                },
+                "SingleSelectOptions": null,
+                "Type": "SCHEDULED_TIME"
+            }
+        ]
+    },
+    {
+        "name": "Add Building",
+        "description": "Add additional building to existing insurance",
+        "id": "0db3b826-c940-4611-b8b3-dd54e104fe9c",
+        "fields": [
+            {
+                "Description": "The name of the task",
+                "Id": {
+                    "Name": "Task name"
+                },
+                "SingleSelectOptions": null,
+                "Type": "NAME"
+            },
+            {
+                "Description": "The description of the task",
+                "Id": {
+                    "Name": "Description"
+                },
+                "SingleSelectOptions": null,
+                "Type": "DESCRIPTION"
+            },
+            {
+                "Description": "",
+                "Id": {
+                    "Name": "Account Number"
+                },
+                "SingleSelectOptions": null,
+                "Type": "TEXT"
+            },
+            {
+                "Description": "",
+                "Id": {
+                    "Name": "Contact First Name"
+                },
+                "SingleSelectOptions": null,
+                "Type": "TEXT"
+            },
+            {
+                "Description": "",
+                "Id": {
+                    "Name": "Contact Last Name"
+                },
+                "SingleSelectOptions": null,
+                "Type": "TEXT"
+            },
+            {
+                "Description": "",
+                "Id": {
+                    "Name": "Account Status"
+                },
+                "SingleSelectOptions": null,
+                "Type": "TEXT"
+            },
+            {
+                "Description": "",
+                "Id": {
+                    "Name": "Building Type"
+                },
+                "SingleSelectOptions": [
+                    "Newly Purchased Building",
+                    "Newly Constructed Building"
+                ],
+                "Type": "SINGLE_SELECT"
+            },
+            {
+                "Description": "",
+                "Id": {
+                    "Name": "Address of Location"
+                },
+                "SingleSelectOptions": null,
+                "Type": "TEXT_AREA"
+            },
+            {
+                "Description": "The queue to assign the task to",
+                "Id": {
+                    "Name": "Assign to"
+                },
+                "SingleSelectOptions": null,
+                "Type": "QUICK_CONNECT"
+            },
+            {
+                "Description": "The scheduled time to complete the task",
+                "Id": {
+                    "Name": "Schedule"
+                },
+                "SingleSelectOptions": null,
+                "Type": "SCHEDULED_TIME"
+            }
+        ]
+    },
+    {
+        "name": "Address Change",
+        "description": "Address Change",
+        "id": "0f6dbec0-4caa-4e25-bd61-1cef93899acb",
+        "fields": [
+            {
+                "Description": "The name of the task",
+                "Id": {
+                    "Name": "Task name"
+                },
+                "SingleSelectOptions": null,
+                "Type": "NAME"
+            },
+            {
+                "Description": "The description of the task",
+                "Id": {
+                    "Name": "Description"
+                },
+                "SingleSelectOptions": null,
+                "Type": "DESCRIPTION"
+            },
+            {
+                "Description": "",
+                "Id": {
+                    "Name": "Select type of Address Change"
+                },
+                "SingleSelectOptions": [
+                    "Billing Address Change",
+                    "General Correspondence",
+                    "911 Address Change"
+                ],
+                "Type": "SINGLE_SELECT"
+            },
+            {
+                "Description": "",
+                "Id": {
+                    "Name": "Effective Date"
+                },
+                "SingleSelectOptions": null,
+                "Type": "DATE_TIME"
+            },
+            {
+                "Description": "",
+                "Id": {
+                    "Name": "New Address"
+                },
+                "SingleSelectOptions": null,
+                "Type": "TEXT_AREA"
+            },
+            {
+                "Description": "",
+                "Id": {
+                    "Name": "Reason for Address Change"
+                },
+                "SingleSelectOptions": null,
+                "Type": "TEXT_AREA"
+            },
+            {
+                "Description": "The queue to assign the task to",
+                "Id": {
+                    "Name": "Assign to"
+                },
+                "SingleSelectOptions": null,
+                "Type": "QUICK_CONNECT"
+            },
+            {
+                "Description": "The scheduled time to complete the task",
+                "Id": {
+                    "Name": "Schedule"
+                },
+                "SingleSelectOptions": null,
+                "Type": "SCHEDULED_TIME"
+            }
+        ]
+    }
+]

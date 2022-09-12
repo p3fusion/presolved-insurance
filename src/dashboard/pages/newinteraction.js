@@ -1,52 +1,34 @@
 import React, { useState, useRef, useLayoutEffect, useEffect } from 'react';
-import { Button, Input, PageHeader, Row, Tabs, Menu, Radio, Col, Card, Space, Collapse, Modal, Form, Divider, Steps, notification, Spin } from 'antd';
+import { Button, Input, PageHeader, Row, Tabs, Menu, Radio, Col, Card, Space, Collapse, Modal, Form, Divider, Steps, notification, Spin, Dropdown } from 'antd';
 import { PlusCircleOutlined, SettingOutlined, MinusSquareOutlined, InsuranceOutlined, PropertySafetyOutlined, CloseOutlined } from '@ant-design/icons';
 import '../assets/style/interaction.less'
 import AddBuilding from './addBuilding';
 import '../../gc-components/connect-streams'
 import '../../gc-components/amazon-connect-customer-profiles'
 import '../../gc-components/amazon-connect-task'
-
+import { DataStore } from 'aws-amplify';
+import { Channel } from '../../models'
+import { useDispatch, useStore } from 'react-redux';
+import { updateAllTemplates, updateTemplates } from '../../store/reducers/config';
+import { reject } from 'lodash';
 const { TabPane } = Tabs;
 const { Panel } = Collapse;
 const { Step } = Steps;
 
 const NewInteraction = (props) => {
+    const dispatch = useDispatch()
+    const config = useStore((state) => state.config)
     const divCCP = useRef(null);
     const { id } = props
     const [form] = Form.useForm();
     const [state, setState] = useState({
         showAddTask: false,
-        tasks: {
-            addb: false,
-            addc: false,
-            coi: false,
-            loh: false,
-        }
+        taskTemplates: [],
+        templates: {}
     })
-    const tasksEndpoints=[
-        {
-            "endpointARN": "arn:aws:connect:us-east-1:851171462885:instance/bc83e5db-b0ea-4c92-a4df-5b7d994869fa/transfer-destination/73174441-536b-48a7-87dd-ff45406eee52",
-            "endpointId": "arn:aws:connect:us-east-1:851171462885:instance/bc83e5db-b0ea-4c92-a4df-5b7d994869fa/transfer-destination/73174441-536b-48a7-87dd-ff45406eee52",
-            "type": "agent",
-            "name": "Jim",
-            "phoneNumber": null,
-            "agentLogin": null,
-            "queue": null
-        },
-        {
-            "endpointARN": "arn:aws:connect:us-east-1:851171462885:instance/bc83e5db-b0ea-4c92-a4df-5b7d994869fa/transfer-destination/245c9d61-c8fc-4f4e-9414-ea94b22c52e9",
-            "endpointId": "arn:aws:connect:us-east-1:851171462885:instance/bc83e5db-b0ea-4c92-a4df-5b7d994869fa/transfer-destination/245c9d61-c8fc-4f4e-9414-ea94b22c52e9",
-            "type": "agent",
-            "name": "Supervisor",
-            "phoneNumber": null,
-            "agentLogin": null,
-            "queue": null
-        }
-    ]
+
     useEffect(() => {
         const connectUrl = "https://p3fusion-uat.my.connect.aws/ccp-v2"
-
         if (divCCP.current) {
             connect.agentApp.initCCP(divCCP.current, {
                 ccpUrl: connectUrl, // REQUIRED
@@ -77,29 +59,6 @@ const NewInteraction = (props) => {
                 ccpLoadTimeout: 10000 //optional, defaults to 5000 (ms)
             });
 
-
-
-
-            /*  if (connect.isCCP()) {
-                 
-                 client.listProfileObjects({
-                     "MaxResults": 10
-                 }).then((profiles) => {
-                     console.table(profiles)
-                 }).catch((ex) => {
-                     console.error({ ex });
-                 })
-             } */
-
-            /*  client.searchProfiles({
-                 "KeyName": "name",
-                 "Values": ["sai"]
-             }).then((res) => {
-                 console.log({ res });
-             }).catch((ex) => {
-                 console.error({ ex });
-             })
-  */
             connect.contact(function (contact) {
                 contact.onIncoming(function (contact) {
                     console.log("onIncoming", contact);
@@ -111,6 +70,7 @@ const NewInteraction = (props) => {
 
                 contact.onAccepted(function (contact) {
                     console.log("onAccepted", contact);
+
                 });
 
                 contact.onEnded(function () {
@@ -125,160 +85,177 @@ const NewInteraction = (props) => {
                     var account = JSON.stringify(attributeMap["accountNumber"]["value"]);
                     console.log(name);
                     console.log(phone); */
+                    const NewInteraction = new Interaction({
+                        contactID: contact.getContactId(),
+                        interactionID: id,
+                        contactAttributes: attributeMap
+                    })
+                    console.log({ NewInteraction });
+                    DataStore.save(NewInteraction).then((id) => {
+                        console.log({ id });
+                    })
 
                     console.log({
-                        attributeMap: JSON.stringify(attributeMap)
+                        attributeMap: attributeMap
                     })
                 });
             });
         }
+        //getTemplate();
     }, [])
 
-    const searchProfile = () => {
-
-        if (connect.agent.initialized) {
-            connect.agent(function (agent) {
-
-               /*  const templateParams = {// required
-                    id: '0db3b826-c940-4611-b8b3-dd54e104fe9c', //required, string, template ID, template should belong to connect instance                  
-                };
-
-                agent.getTaskTemplate(templateParams, {
-                    success: function (data) {
-                        console.log("Template data loaded successfully")
-                        console.log({ templateParams, data })
-                    },
-                    failure: function (err) { console.error({ err }) }
-                }); */
-
-                const newTask = {
-                    name: "string", //required, max len: 512
-                    description: "string", //optional, max len: 4096
-                    endpoint: tasksEndpoints[0], //required for non templated tasks, can be retrieved via `agent.getEndpoints()`. Agent and queue endpoints supported.
-                    taskTemplateId: "string", //required for templated tasks, ID of the template the task is created from. Template should belong to connect instance
-                    previousContactId: "string", //optional, the previous contact ID for a linked task
-                    references: { //optional. Only URL references are supported for non templated tasks
-                        "reference name 1": { // string, max len: 4096
-                            type: "URL", //required, string, one of connect.ReferenceType types, 
-                            value: "https://www.amazon.com" //required, string, max len: 4096
-                        },
-                        "reference name 2": { // string, max len: 4096
-                            type: "EMAIL", //required, string, one of connect.ReferenceType types
-                            value: "example@abc.com" //required, string, max len: 4096
-                        },	
-                        "reference name 3": { // string, max len: 4096
-                            type: "NUMBER", //required, one of connect.ReferenceType types
-                            value: 1000 //required, number
-                        },
-                        "reference name 4": { // string, max len: 4096
-                            type: "DATE", //required, string, one of connect.ReferenceType types
-                            value: 1649961230 //required, number
-                        },
-                        "reference name 5": { // string, max len: 4096
-                            type: "STRING", //required, string, one of connect.ReferenceType types
-                            value: "example@abc.com" //required, string, max len: 4096
-                        }	
-                    },
-                   
-                };//ends newTask
-                console.log(newTask);
-                agent.createTask(newTask, {
-                    success: function (data) { 
-                        console.log("Created a task with contact id: ", data.contactId) 
-                    },
-                    failure: function (err) { 
-                        console.log("error has occured",err); 
-                    }
-                });//ends createT
-
-                /*  const queryParams = {// required                   
-                     maxResults: 50 //optional, number, max value of 100
-                 };
-                 
-                 agent.listTaskTemplates(queryParams, {
-                     success: function(data) { 
-                         console.log({data});
-                      },
-                     failure: function(err) {console.error({err}); }
-                 });
-                 */
-                
-               /*  var queuesARNs = agent.getAllQueueARNs();
-                agent.getEndpoints(queuesARNs,{
+    const listTaskTemplates = () => {
+        return new Promise((resolve, reject) => {
+            if (connect.agent.initialized) {
+                connect.agent(function (agent) {
+                    const queryParams = {              
+                        maxResults: 50 
+                    };
+                    agent.listTaskTemplates(queryParams, {
                         success: function (data) {
-                            var endpoints = data.endpoints; // or data.addresses
-                            console.log({data,endpoints});                           
-                            const newTask = {
-                                name: "Test task from taskJS", //required, max len: 512
-                                description: "N/A", //optional, max len: 4096
-                                endpoint: endpoints[3],
-                                references: { //optional
-                                    "reference name": { // string, max len: 4096
-                                        type: "URL", //required, currently only "URL" is supported as a reference type,
-                                        value: "https://www.amazon.com" //required, string, max len: 4096
-                                    }
-                                }
-                            };//ends newTask
-                            console.log(newTask);
-                            agent.createTask(newTask, {
-                                success: function (data) { 
-                                    console.log("Created a task with contact id: ", data.contactId) 
-                                },
-                                failure: function (err) { 
-                                    console.log("error has occured",err); 
-                                }
-                            });//ends createTask 
-
-
-                        },//end success
-                        failure: function (err) {
-                            console.error({err})
+                            resolve(data)
                         }
-                    }//ends QueueARN
-                );// ends agent.getEndpoints  */
-                
-            })
+                    })
+                })
+            }
+        })
+    }
+    const getTaskTemplate = (templateParams) => {
+        return new Promise((resolve, reject) => {
+            if (connect.agent.initialized) {
+                connect.agent(function (agent) {
+                    agent.getTaskTemplate(templateParams, {
+                        success: function (data) {
+                            resolve(data)
+                        }
+                    })
+                })
+            }
+        })
+    }
 
-            /*  client.createProfile({
-             
-                 "DomainName": "amazon-connect-P3fusion-uat",
-                 "FirstName": "Khizar Ahmed"
-             }).then((res) => {
-                 console.log('Success response: ' + JSON.stringify(res));
-             }).catch((errorResp) => {
-                 console.log('Error response: ' + JSON.stringify(errorResp));
-             });       */
-        }
+    const getTemplate = () => {
+        let taskTemplates = []
+        let data = []
+        const interval = setInterval(() => {
+            console.log("Polling . . .");
+            if (connect.agent.initialized) {
+                clearInterval(interval);
+                console.log("Cancelling Poll . . .");
+                listTaskTemplates().then((templates) => {
+                   
+                    if (templates.TaskTemplates.length > 0) {
+                        for (var i = 0; i < templates.TaskTemplates.length; i++) {
+                            let task = templates.TaskTemplates[i]
+                            let templateParams = { id: task.Id };
+                            getTaskTemplate(templateParams).then((templateData) => {
+                                data.push({
+                                    name: task.Name,
+                                    description: task.Description,
+                                    id: task.Id,
+                                    fields: templateData.Fields
+                                })
+                            })
+                        }                     
+                       
+                        setState({ ...state, taskTemplates:data })
+                        //dispatch(updateAllTemplates(data))
+                    }
+                })
+
+                /*  connect.agent(function (agent) {
+                     const queryParams = {// required                   
+                         maxResults: 50 //optional, number, max value of 100
+                     };
+                     agent.listTaskTemplates(queryParams, {
+                         success: function (data) {
+                             if (data.TaskTemplates.length > 0) {
+                                 for (var i = 0; i < data.TaskTemplates.length; i++) {
+                                     let task = data.TaskTemplates[i]
+                                     let templateParams = { id: task.Id };
+                                     agent.getTaskTemplate(templateParams, {
+                                         success: function (templateParamsdata) {
+                                             let templateData = {
+                                                 name: task.Name,
+                                                 description: task.Description,
+                                                 id: task.Id,
+                                                 fields: templateParamsdata.Fields
+                                             }
+                                             taskTemplates.push(templateData)
+                                             dispatch(updateTemplates({
+                                                 id: task.Id,
+                                                 data: templateData
+                                             }))
+                                         },
+                                         failure: function (err) {
+                                             console.error({ getTaskTemplate: err })
+                                         }
+                                     });
+                                 }
+                                 console.log("Cancelling Poll . . .", taskTemplates);
+                                 setState({ ...state, taskTemplates })
+                                 //dispatch(updateAllTemplates(taskTemplates))
+                                 clearInterval(interval);
+                             }
+                         },
+                         failure: function (err) {
+                             console.error({ listTaskTemplates: err });
+                         }
+                     });
+                 }) */
+            }
+        }, 2000)
+
 
     }
 
 
     return (
         <section className="interaction">
-
             <Row gutter={[16, 16]}>
                 <Col span={18}>
                     <PageHeader ghost={false} className="site-page-header" onBack={() => null}
                         title={<span>Interaction : <em>{id}</em></span>} subTitle=" New Interaction" extra={[
-                            <Button icon={<SettingOutlined />} />,
-                            <Button onClick={() => setState({ ...state, showAddTask: true })} icon={<PlusCircleOutlined />} >Add Task</Button>,
+                            <Button icon={<SettingOutlined />} onClick={() => getTemplate()} />,
+                            <Dropdown overlay={
+                                <Menu items={
+                                    state.taskTemplates.map((tasks) => {
+                                        return {
+                                            "key": tasks.id,
+                                            "label": tasks.name
+                                        }
+                                    })
+                                } />}
+                                placement="bottomLeft" arrow>
+                                <Button icon={<PlusCircleOutlined />} >Add Task</Button>
+                            </Dropdown>,
                         ]} />
-                    <Row style={{ marginTop: 30 }}>
-                        <Col span={24}>
+                    <Tabs defaultActiveKey="1" type='card'>
+                        <Tabs.TabPane tab="Search Customer" key="1">
+                            <Row style={{ marginTop: 30 }}>
+                                <Col span={24}>
 
-                            <Card title="search Customer">
-                                <Button onClick={() => searchProfile()}>Search</Button>
-                                <CustomerProile props={props} />
-                                {/*  <div id="wisdom-container" ref={wisdom} /> */}
-                            </Card>
-                        </Col>
-                    </Row>
+                                    <Card title="search Customer">
+                                        <CustomerProile props={props} />
+                                        {/*  <div id="wisdom-container" ref={wisdom} /> */}
+                                    </Card>
+                                </Col>
+                            </Row>
+                        </Tabs.TabPane>
+                        <Tabs.TabPane tab="Add Building" key="2">
+                            <Row style={{ marginTop: 30 }}>
+                                <Col span={24}>
+                                    <Card>
+                                        <AddBuilding id={id} />
+                                    </Card>
+                                </Col>
+                            </Row>
+                        </Tabs.TabPane>
+                    </Tabs>
                 </Col>
                 <Col className='interaction-sidebar' span={6} >
                     <div className="ccp" >
                         <div id="containerDiv" ref={divCCP} style={{ height: 600, backgroundColor: '#fff' }} />
-
-
                     </div>
                 </Col>
             </Row>
@@ -311,7 +288,7 @@ const CustomerProile = (props) => {
 
 
     return (
-        <section style={{ minHeight: '100vh' }}>           
+        <section style={{ minHeight: '100vh' }}>
 
             <div id={`customerprofiles-container`} style={{ minHeight: '100vh' }} ref={customerprofiles} />
         </section>
