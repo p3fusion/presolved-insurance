@@ -79,6 +79,51 @@ export const deleteChannel = /* GraphQL */ `
     }
   }
 `;
+export const createTaskTemplate = /* GraphQL */ `
+  mutation CreateTaskTemplate(
+    $input: CreateTaskTemplateInput!
+    $condition: ModelTaskTemplateConditionInput
+  ) {
+    createTaskTemplate(input: $input, condition: $condition) {
+      id
+      name
+      description
+      attributes
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateTaskTemplate = /* GraphQL */ `
+  mutation UpdateTaskTemplate(
+    $input: UpdateTaskTemplateInput!
+    $condition: ModelTaskTemplateConditionInput
+  ) {
+    updateTaskTemplate(input: $input, condition: $condition) {
+      id
+      name
+      description
+      attributes
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteTaskTemplate = /* GraphQL */ `
+  mutation DeleteTaskTemplate(
+    $input: DeleteTaskTemplateInput!
+    $condition: ModelTaskTemplateConditionInput
+  ) {
+    deleteTaskTemplate(input: $input, condition: $condition) {
+      id
+      name
+      description
+      attributes
+      createdAt
+      updatedAt
+    }
+  }
+`;
 export const createTask = /* GraphQL */ `
   mutation CreateTask(
     $input: CreateTaskInput!

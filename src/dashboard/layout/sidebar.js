@@ -2,6 +2,7 @@ import React from 'react';
 import {
     PhoneOutlined, UploadOutlined,
     UserOutlined,
+    AimOutlined,
     VideoCameraOutlined
 } from '@ant-design/icons';
 import { Layout, Menu } from 'antd';
@@ -26,6 +27,12 @@ const DashboardSidebar = ({collapsed}) => {
                         key: '1',
                         icon: <UserOutlined />,
                         label: <Link to='/'>Dashboard</Link>,                  
+                    },
+                    {
+                        key: 'template_builder',
+                        icon: <AimOutlined />,
+                        label: <Link to='/template-builder'>Template Dashboard</Link>,                  
+                        children: [{ label: <Link to='/new-template'> New Template</Link>, key: 'create-new-template' }],
                     },
                     {
                         key: 'outbound',

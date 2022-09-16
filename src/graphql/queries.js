@@ -45,6 +45,37 @@ export const listChannels = /* GraphQL */ `
     }
   }
 `;
+export const getTaskTemplate = /* GraphQL */ `
+  query GetTaskTemplate($id: ID!) {
+    getTaskTemplate(id: $id) {
+      id
+      name
+      description
+      attributes
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listTaskTemplates = /* GraphQL */ `
+  query ListTaskTemplates(
+    $filter: ModelTaskTemplateFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listTaskTemplates(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        name
+        description
+        attributes
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
 export const getTask = /* GraphQL */ `
   query GetTask($id: ID!) {
     getTask(id: $id) {

@@ -1,14 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
-  templates: {},
-  allTemplates: {
+  templates: {
     isLoaded: false,
     data: []
-  }
-
-
-
+  },
 }
 
 export const config = createSlice({
@@ -21,26 +17,15 @@ export const config = createSlice({
       return {
         ...state,
         templates: {
-          ...state.templates,
-          [id]: action.payload.data,
-        }
-
-      }
-    },
-    updateAllTemplates: (state, action) => {
-      console.log({action});
-      return {
-        ...state,
-        allTemplates: {
           isLoaded: true,
-          data: action.payload,
+          data: action.payload.listTaskTemplates?.items,
         }
 
       }
-    },
+    }
   },
 })
 // Action creators are generated for each case reducer function
-export const { updateTemplates, updateAllTemplates } = config.actions
+export const { updateTemplates } = config.actions
 
 export default config.reducer

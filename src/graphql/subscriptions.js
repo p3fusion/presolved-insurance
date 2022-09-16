@@ -70,6 +70,48 @@ export const onDeleteChannel = /* GraphQL */ `
     }
   }
 `;
+export const onCreateTaskTemplate = /* GraphQL */ `
+  subscription OnCreateTaskTemplate(
+    $filter: ModelSubscriptionTaskTemplateFilterInput
+  ) {
+    onCreateTaskTemplate(filter: $filter) {
+      id
+      name
+      description
+      attributes
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdateTaskTemplate = /* GraphQL */ `
+  subscription OnUpdateTaskTemplate(
+    $filter: ModelSubscriptionTaskTemplateFilterInput
+  ) {
+    onUpdateTaskTemplate(filter: $filter) {
+      id
+      name
+      description
+      attributes
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onDeleteTaskTemplate = /* GraphQL */ `
+  subscription OnDeleteTaskTemplate(
+    $filter: ModelSubscriptionTaskTemplateFilterInput
+  ) {
+    onDeleteTaskTemplate(filter: $filter) {
+      id
+      name
+      description
+      attributes
+      createdAt
+      updatedAt
+    }
+  }
+`;
 export const onCreateTask = /* GraphQL */ `
   subscription OnCreateTask($filter: ModelSubscriptionTaskFilterInput) {
     onCreateTask(filter: $filter) {

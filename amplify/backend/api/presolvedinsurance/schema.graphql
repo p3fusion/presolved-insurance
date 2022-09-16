@@ -9,6 +9,13 @@ type Channel @model {
   tasks: [Task] @hasMany(indexName: "byChannel", fields: ["id"])
 }
 
+type TaskTemplate @model {
+  id: ID!
+  name:String!
+  description: String!
+  attributes:AWSJSON
+}
+
 type Task @model{
   id: ID!
   channelID: ID! @index(name: "byChannel", sortKeyFields: ["Name"])

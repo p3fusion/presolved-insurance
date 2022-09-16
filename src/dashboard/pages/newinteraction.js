@@ -7,24 +7,24 @@ import '../../gc-components/connect-streams'
 import '../../gc-components/amazon-connect-customer-profiles'
 import '../../gc-components/amazon-connect-task'
 import { DataStore } from 'aws-amplify';
-import { Channel } from '../../models'
-import { useDispatch, useStore } from 'react-redux';
-import { updateAllTemplates, updateTemplates } from '../../store/reducers/config';
-import { reject } from 'lodash';
+
+import { useDispatch, useSelector, useStore } from 'react-redux';
+
 const { TabPane } = Tabs;
 const { Panel } = Collapse;
 const { Step } = Steps;
 
 const NewInteraction = (props) => {
     const dispatch = useDispatch()
-    const config = useStore((state) => state.config)
+
+    const config = useSelector((store) => store.config)
     const divCCP = useRef(null);
     const { id } = props
-    const [form] = Form.useForm();
+
     const [state, setState] = useState({
         showAddTask: false,
-        taskTemplates: [],
-        templates: {}
+        isTemplatesLoaded: false,
+        tasks:[]
     })
 
     useEffect(() => {
@@ -79,12 +79,7 @@ const NewInteraction = (props) => {
 
                 contact.onConnected(function () {
                     console.log(`onConnected(${contact.getContactId()})`);
-                    var attributeMap = contact.getAttributes();
-                    /* var name = JSON.stringify(attributeMap["firstName"]["value"]);
-                    var phone = JSON.stringify(attributeMap["phoneNumber"]["value"]);
-                    var account = JSON.stringify(attributeMap["accountNumber"]["value"]);
-                    console.log(name);
-                    console.log(phone); */
+                    var attributeMap = contact.getAttributes();                   
                     const NewInteraction = new Interaction({
                         contactID: contact.getContactId(),
                         interactionID: id,
@@ -104,35 +99,12 @@ const NewInteraction = (props) => {
         //getTemplate();
     }, [])
 
-    const listTaskTemplates = () => {
-        return new Promise((resolve, reject) => {
-            if (connect.agent.initialized) {
-                connect.agent(function (agent) {
-                    const queryParams = {              
-                        maxResults: 50 
-                    };
-                    agent.listTaskTemplates(queryParams, {
-                        success: function (data) {
-                            resolve(data)
-                        }
-                    })
-                })
-            }
-        })
-    }
-    const getTaskTemplate = (templateParams) => {
-        return new Promise((resolve, reject) => {
-            if (connect.agent.initialized) {
-                connect.agent(function (agent) {
-                    agent.getTaskTemplate(templateParams, {
-                        success: function (data) {
-                            resolve(data)
-                        }
-                    })
-                })
-            }
-        })
-    }
+
+    useEffect(() => {
+        if (config.templates.isLoaded) {
+            setState({ ...state, isTemplatesLoaded: true })
+        }
+    }, [config.templates.isLoaded]);
 
     const getTemplate = () => {
         let taskTemplates = []
@@ -143,7 +115,7 @@ const NewInteraction = (props) => {
                 clearInterval(interval);
                 console.log("Cancelling Poll . . .");
                 listTaskTemplates().then((templates) => {
-                   
+
                     if (templates.TaskTemplates.length > 0) {
                         for (var i = 0; i < templates.TaskTemplates.length; i++) {
                             let task = templates.TaskTemplates[i]
@@ -156,9 +128,9 @@ const NewInteraction = (props) => {
                                     fields: templateData.Fields
                                 })
                             })
-                        }                     
-                       
-                        setState({ ...state, taskTemplates:data })
+                        }
+
+                        setState({ ...state, taskTemplates: data })
                         //dispatch(updateAllTemplates(data))
                     }
                 })
@@ -217,21 +189,23 @@ const NewInteraction = (props) => {
                     <PageHeader ghost={false} className="site-page-header" onBack={() => null}
                         title={<span>Interaction : <em>{id}</em></span>} subTitle=" New Interaction" extra={[
                             <Button icon={<SettingOutlined />} onClick={() => getTemplate()} />,
+                            state.isTemplatesLoaded &&
                             <Dropdown overlay={
                                 <Menu items={
-                                    state.taskTemplates.map((tasks) => {
+                                    config.templates.data.map((tasks) => {
                                         return {
                                             "key": tasks.id,
                                             "label": tasks.name
                                         }
                                     })
-                                } />}
+                                } onChange={(e)=>console.log(e)} />}
                                 placement="bottomLeft" arrow>
                                 <Button icon={<PlusCircleOutlined />} >Add Task</Button>
                             </Dropdown>,
+
                         ]} />
                     <Tabs defaultActiveKey="1" type='card'>
-                        <Tabs.TabPane tab="Search Customer" key="1">
+                        <Tabs.TabPane tab="Search Customer" key="search_customer">
                             <Row style={{ marginTop: 30 }}>
                                 <Col span={24}>
 
@@ -241,16 +215,7 @@ const NewInteraction = (props) => {
                                     </Card>
                                 </Col>
                             </Row>
-                        </Tabs.TabPane>
-                        <Tabs.TabPane tab="Add Building" key="2">
-                            <Row style={{ marginTop: 30 }}>
-                                <Col span={24}>
-                                    <Card>
-                                        <AddBuilding id={id} />
-                                    </Card>
-                                </Col>
-                            </Row>
-                        </Tabs.TabPane>
+                        </Tabs.TabPane>                        
                     </Tabs>
                 </Col>
                 <Col className='interaction-sidebar' span={6} >

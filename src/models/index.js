@@ -4,9 +4,10 @@ import { schema } from './schema';
 
 
 
-const { Channel, Task } = initSchema(schema);
+const { Channel, Task, TaskTemplate } = initSchema(schema);
 
 export {
   Channel,
-  Task
+  Task,
+  TaskTemplate
 };
