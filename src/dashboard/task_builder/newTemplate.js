@@ -1,12 +1,19 @@
 import { CalendarOutlined, CheckCircleOutlined, CloseOutlined, DownOutlined, ExclamationCircleOutlined, FileProtectOutlined, FileTextFilled, PlusOutlined } from '@ant-design/icons';
-import { Button, Card, Col, Dropdown, Form, Input, Layout, Menu, Modal, PageHeader, Row, Select, Tag } from 'antd';
+import { redirectTo } from '@reach/router';
+import { Button, Card, Col, Dropdown, Form, Input, Layout, Menu, Modal, PageHeader, Row, Select, Tag, Switch } from 'antd';
 import { API } from 'aws-amplify';
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import * as mutations from '../../graphql/mutations';
+import * as queries from '../../graphql/queries';
+import { updateTemplates } from '../../store/reducers/config';
+import { getTaskTemplates } from '../api/taskTemplates';
 import '../assets/style/create-template.less';
 
 const { Content } = Layout;
 const CreateNewTemplate = () => {
+    const dispatch = useDispatch 
+
     const [form] = Form.useForm();
     const initialState = {
         items: [],
@@ -35,6 +42,7 @@ const CreateNewTemplate = () => {
             ]}
         />
     );
+
     const removeField = (index) => {
         let { items } = state
 
@@ -51,6 +59,7 @@ const CreateNewTemplate = () => {
         });
 
     }
+
     const addFields = (field) => {
         let { items } = state
 
@@ -59,11 +68,11 @@ const CreateNewTemplate = () => {
                 id: generateTemplateId(),
                 order: items.length + 1,
                 type: 'text',
-                field,
+                fieldType: field,
                 name: undefined,
                 description: undefined,
                 defaultValue: undefined,
-                attributes: { visible: true, required: true }
+                required: true
             })
         }
         if (field === 'textarea') {
@@ -71,7 +80,7 @@ const CreateNewTemplate = () => {
                 id: generateTemplateId(),
                 order: items.length + 1,
                 type: 'textarea',
-                field,
+                fieldType: field,
                 name: undefined,
                 rows: 3,
                 description: undefined,
@@ -84,7 +93,7 @@ const CreateNewTemplate = () => {
                 id: generateTemplateId(),
                 order: items.length + 1,
                 type: 'select',
-                field,
+                fieldType: field,
                 name: undefined,
                 options: "You, can, Add, Multiple, Options",
                 description: undefined,
@@ -98,11 +107,11 @@ const CreateNewTemplate = () => {
                 order: items.length + 1,
                 type: 'date',
                 options: 'date',
-                field,
+                fieldType: field,
                 name: undefined,
                 description: undefined,
                 defaultValue: "-7 days",
-                attributes: { visible: true, required: true }
+                required: false,
             })
         }
         setState({ ...state, items })
@@ -117,16 +126,22 @@ const CreateNewTemplate = () => {
             description: e.task.description,
             attributes: JSON.stringify(e.task.fields)
         }
- 
+        console.log({ newTaskTemplate });
+
         API.graphql({ query: mutations.createTaskTemplate, variables: { input: newTaskTemplate } }).then((id) => {
-            console.log({ id });
-            Modal.confirm({
-                title: 'Success',
-                icon: <CheckCircleOutlined />,
-                content: 'Template Created Successfully',
-                okText: 'Ok',
-                cancelText: 'Close',
-            });
+            console.log({ id });            
+            getTaskTemplates().then((taskTemplates) => {
+                dispatch(updateTemplates(taskTemplates))                
+                Modal.confirm({
+                    title: 'Success',
+                    icon: <CheckCircleOutlined />,
+                    content: 'Template Created Successfully',
+                    okText: 'Ok',
+                    cancelText: 'Close',
+                });
+                redirectTo("/template-builder")
+            })
+
         }).catch((error) => {
             console.error({ error });
             Modal.confirm({
@@ -227,8 +242,12 @@ const CreateNewTemplate = () => {
 const TextField = ({ index, removeField, itm }) => {
     return (
         <Card title={<Tag>{itm.id}</Tag>} extra={[<Button icon={<CloseOutlined />} onClick={() => removeField(index)} />]}>
+            <Form.Item initialValue={itm.type} label={null} name={['task', "fields", index, "type"]}>
+                <Input type='hidden' />
+            </Form.Item>
             <Row gutter={[16, 16]}>
                 <Col span={2}>
+
                     <Form.Item initialValue={index} label="Task Order" name={['task', "fields", index, "order"]}
                         rules={[
                             {
@@ -264,9 +283,14 @@ const TextField = ({ index, removeField, itm }) => {
                         <Input />
                     </Form.Item>
                 </Col>
+                <Col span={4}>
+                    <Form.Item name={['task', "fields", index, "required"]} label="Is Required" valuePropName="yes">
+                        <Switch />
+                    </Form.Item>
+                </Col>
             </Row>
             <Row gutter={[16, 16]}>
-               {/*  <Col span={24}>
+                {/*  <Col span={24}>
                     <Form.Item label="Field Attributes" name={['task', "fields", index, "attributes"]} >
                         <Checkbox value="required">Required</Checkbox>
                         <Checkbox value="visible">visible</Checkbox>
@@ -286,6 +310,9 @@ const TextField = ({ index, removeField, itm }) => {
 const TextareaField = ({ itm, index, removeField }) => {
     return (
         <Card title={<Tag>{itm.id}</Tag>} extra={[<Button icon={<CloseOutlined />} onClick={() => removeField(index)} />]}>
+            <Form.Item initialValue={itm.type} label={null} name={['task', "fields", index, "type"]}>
+                <Input type='hidden' />
+            </Form.Item>
             <Row gutter={[16, 16]}>
                 <Col span={2}>
                     <Form.Item initialValue={index} label="Task Order" name={['task', "fields", index, "order"]}
@@ -296,7 +323,7 @@ const TextareaField = ({ itm, index, removeField }) => {
                             },
                         ]}
                     >
-                        <Input inputMode='numeric' />
+                        <Input />
                     </Form.Item>
                 </Col>
                 <Col span={6}>
@@ -327,18 +354,22 @@ const TextareaField = ({ itm, index, removeField }) => {
                     <Form.Item initialValue={itm.rows || 3} label="No Of Rows." name={['task', "fields", index, "rows"]}
                         rules={[
                             {
-                                type: 'integer',
                                 required: true,
                                 message: 'Please enter rows',
                             },
                         ]}
                     >
-                        <Input />
+                        <Input type='number' />
+                    </Form.Item>
+                </Col>
+                <Col span={4}>
+                    <Form.Item name={['task', "fields", index, "required"]} label="Is Required" valuePropName="yes">
+                        <Switch />
                     </Form.Item>
                 </Col>
             </Row>
             <Row gutter={[16, 16]}>
-               {/*  <Col span={24}>
+                {/*  <Col span={24}>
                     <Form.Item label="Field Attributes" name={['task', "fields", index, "attributes"]} >
                         <Checkbox value="required">Required</Checkbox>
                         <Checkbox value="visible">visible</Checkbox>
@@ -363,6 +394,9 @@ const SelectField = ({ itm, index, removeField }) => {
     }
     return (
         <Card title={<Tag>{itm.id}</Tag>} extra={[<Button icon={<CloseOutlined />} onClick={() => removeField(index)} />]}>
+            <Form.Item initialValue={itm.type} label={null} name={['task', "fields", index, "type"]}>
+                <Input type='hidden' />
+            </Form.Item>
             <Row gutter={[16, 16]}>
                 <Col span={2}>
                     <Form.Item initialValue={index} label="Task Order" name={['task', "fields", index, "order"]}
@@ -416,9 +450,14 @@ const SelectField = ({ itm, index, removeField }) => {
 
                     </Form.Item>
                 </Col>
+                <Col span={4}>
+                    <Form.Item name={['task', "fields", index, "required"]} label="Is Required" valuePropName="yes">
+                        <Switch />
+                    </Form.Item>
+                </Col>
             </Row>
             <Row gutter={[16, 16]}>
-              {/*   <Col span={24}>
+                {/*   <Col span={24}>
                     <Form.Item label="Field Attributes" name={['task', "fields", index, "attributes"]} >
                         <Checkbox value='Required'>Required</Checkbox>
                         <Checkbox value="visible">visible</Checkbox>
@@ -439,6 +478,9 @@ const DateField = ({ itm, index, removeField }) => {
 
     return (
         <Card title={<Tag>{itm.id}</Tag>} extra={[<Button icon={<CloseOutlined />} onClick={() => removeField(index)} />]}>
+            <Form.Item initialValue={itm.type} label={null} name={['task', "fields", index, "type"]}>
+                <Input type='hidden' />
+            </Form.Item>
             <Row gutter={[16, 16]}>
                 <Col span={2}>
                     <Form.Item initialValue={index} label="Task Order" name={['task', "fields", index, "order"]}
@@ -491,6 +533,11 @@ const DateField = ({ itm, index, removeField }) => {
                             <option value="range">Date Range select</option>
                         </Select>
 
+                    </Form.Item>
+                </Col>
+                <Col span={4}>
+                    <Form.Item name={['task', "fields", index, "required"]} label="Is Required" valuePropName="yes">
+                        <Switch />
                     </Form.Item>
                 </Col>
             </Row>
