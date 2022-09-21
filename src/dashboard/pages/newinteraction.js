@@ -43,7 +43,7 @@ const NewInteraction = (props) => {
         showWrapButton: false
     })
 
-    /* useEffect(() => {
+    useEffect(() => {
         const connectUrl = "https://p3fusion-uat.my.connect.aws/ccp-v2"
           if (divCCP.current) {
               connect.agentApp.initCCP(divCCP.current, {
@@ -101,12 +101,13 @@ const NewInteraction = (props) => {
                       delete contactAttributes.connections
                       delete contactAttributes.contactFeatures
                       delete contactAttributes.queue
+                      setState({...state,showWrapButton:true})
                       createChannel(contactAttributes)
                   });
               });
           } 
 
-    }, []) */
+    }, [])
 
     const createChannel = (contactData) => {
         const newChannel = {
