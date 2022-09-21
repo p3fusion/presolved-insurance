@@ -17,6 +17,13 @@ export const schema = {
                     "isRequired": true,
                     "attributes": []
                 },
+                "channelType": {
+                    "name": "channelType",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true,
+                    "attributes": []
+                },
                 "contactAttributes": {
                     "name": "contactAttributes",
                     "isArray": false,
@@ -89,6 +96,13 @@ export const schema = {
                 },
                 "contactID": {
                     "name": "contactID",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "channelType": {
+                    "name": "channelType",
                     "isArray": false,
                     "type": "String",
                     "isRequired": true,
@@ -204,5 +218,5 @@ export const schema = {
     },
     "enums": {},
     "nonModels": {},
-    "version": "08527ea975ca9d0f6af2aab88dbdc386"
+    "version": "f440719c1e0ce15d0bd56af2295ad4fd"
 };

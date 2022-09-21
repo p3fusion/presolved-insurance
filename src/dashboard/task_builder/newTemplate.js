@@ -2,7 +2,7 @@ import { CalendarOutlined, CheckCircleOutlined, CloseOutlined, DownOutlined, Exc
 import { redirectTo } from '@reach/router';
 import { Button, Card, Col, Dropdown, Form, Input, Layout, Menu, Modal, PageHeader, Row, Select, Tag, Switch } from 'antd';
 import { API } from 'aws-amplify';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import * as mutations from '../../graphql/mutations';
 import * as queries from '../../graphql/queries';
@@ -11,14 +11,31 @@ import { getTaskTemplates } from '../api/taskTemplates';
 import '../assets/style/create-template.less';
 
 const { Content } = Layout;
-const CreateNewTemplate = () => {
-    const dispatch = useDispatch 
+const CreateNewTemplate = (props) => {
+    const dispatch = useDispatch
 
     const [form] = Form.useForm();
     const initialState = {
         items: [],
-        collection: {}
+        collection: {},
+        isEdit: props?.location?.state?.edit || false,
+        id: props?.location?.state?.id || null,
+        record: props?.location?.state?.record || null,
     }
+    useEffect(() => {
+        if (props.location.state.edit) {
+            let { record } = props.location.state
+            let newFormat = {
+                ...record,
+                fields: JSON.parse(record.attributes)
+            }
+            form.setFieldsValue({
+                task: newFormat              
+            })
+            setState({...state,items:newFormat.fields})            
+        }
+    }, []);
+
 
     const fields = (
         <Menu onClick={({ key }) => addFields(key)}
@@ -129,9 +146,9 @@ const CreateNewTemplate = () => {
         console.log({ newTaskTemplate });
 
         API.graphql({ query: mutations.createTaskTemplate, variables: { input: newTaskTemplate } }).then((id) => {
-            console.log({ id });            
+            console.log({ id });
             getTaskTemplates().then((taskTemplates) => {
-                dispatch(updateTemplates(taskTemplates))                
+                dispatch(updateTemplates(taskTemplates))
                 Modal.confirm({
                     title: 'Success',
                     icon: <CheckCircleOutlined />,
@@ -174,7 +191,7 @@ const CreateNewTemplate = () => {
                         <PageHeader ghost={false} className="site-page-header" onBack={() => window.history.back()} title="Create a new template" subTitle=" New Interaction" />
                     </Col>
                 </Row>
-                <Form form={form} layout="vertical" onFinish={onFinish}  >
+                <Form name="task" form={form} layout="vertical" onFinish={onFinish}  >
                     <Row gutter={[16, 16]} style={{ marginTop: 30 }}>
                         <Col span={24}>
                             <Card actions={[

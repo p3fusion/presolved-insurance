@@ -8,21 +8,19 @@ const initialState = {
 }
 
 export const transactions = createSlice({
-  name: 'merchants',
+  name: 'channels',
   initialState,
   reducers: {
-    getTransactions: (state, action) => {
+    updateChannels: (state, action) => {
       return {
-        ...state,
-        transactions: {
-          isLoaded: true,
-          data: action.payload
-        }
+        isLoaded: true,
+        data: action.payload
+
       }
     },
   },
 })
 // Action creators are generated for each case reducer function
-export const { getTransactions } = transactions.actions
+export const { updateChannels } = transactions.actions
 
 export default transactions.reducer

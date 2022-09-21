@@ -19,6 +19,7 @@ type TaskTemplateMetaData = {
 export declare class Channel {
   readonly id: string;
   readonly contactID: string;
+  readonly channelType: string;
   readonly contactAttributes?: string | null;
   readonly tasks?: (Task | null)[] | null;
   readonly createdAt?: string | null;
@@ -31,6 +32,7 @@ export declare class Task {
   readonly id: string;
   readonly channel: Channel;
   readonly contactID: string;
+  readonly channelType: string;
   readonly Name: string;
   readonly taskAttributes?: string | null;
   readonly createdAt?: string | null;

@@ -9,12 +9,14 @@ export const createChannel = /* GraphQL */ `
     createChannel(input: $input, condition: $condition) {
       id
       contactID
+      channelType
       contactAttributes
       tasks {
         items {
           id
           channelID
           contactID
+          channelType
           Name
           taskAttributes
           createdAt
@@ -35,12 +37,14 @@ export const updateChannel = /* GraphQL */ `
     updateChannel(input: $input, condition: $condition) {
       id
       contactID
+      channelType
       contactAttributes
       tasks {
         items {
           id
           channelID
           contactID
+          channelType
           Name
           taskAttributes
           createdAt
@@ -61,12 +65,14 @@ export const deleteChannel = /* GraphQL */ `
     deleteChannel(input: $input, condition: $condition) {
       id
       contactID
+      channelType
       contactAttributes
       tasks {
         items {
           id
           channelID
           contactID
+          channelType
           Name
           taskAttributes
           createdAt
@@ -135,6 +141,7 @@ export const createTask = /* GraphQL */ `
       channel {
         id
         contactID
+        channelType
         contactAttributes
         tasks {
           nextToken
@@ -143,6 +150,7 @@ export const createTask = /* GraphQL */ `
         updatedAt
       }
       contactID
+      channelType
       Name
       taskAttributes
       createdAt
@@ -161,6 +169,7 @@ export const updateTask = /* GraphQL */ `
       channel {
         id
         contactID
+        channelType
         contactAttributes
         tasks {
           nextToken
@@ -169,6 +178,7 @@ export const updateTask = /* GraphQL */ `
         updatedAt
       }
       contactID
+      channelType
       Name
       taskAttributes
       createdAt
@@ -187,6 +197,7 @@ export const deleteTask = /* GraphQL */ `
       channel {
         id
         contactID
+        channelType
         contactAttributes
         tasks {
           nextToken
@@ -195,6 +206,7 @@ export const deleteTask = /* GraphQL */ `
         updatedAt
       }
       contactID
+      channelType
       Name
       taskAttributes
       createdAt

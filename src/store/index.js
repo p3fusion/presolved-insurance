@@ -2,7 +2,7 @@ import { configureStore } from '@reduxjs/toolkit'
 import userSlice  from './reducers/user'
 import promise from 'redux-promise';
 import { combineReducers, compose } from 'redux';
-import  transactionsReducer  from './reducers/transactions';
+import  channelsReducer  from './reducers/channels';
 import  configReducer  from './reducers/config';
 
 const composeEnhancers = typeof window === 'object' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
@@ -13,7 +13,7 @@ const composeEnhancers = typeof window === 'object' && window.__REDUX_DEVTOOLS_E
 export const store = configureStore({
     reducer: combineReducers({
         user:userSlice,
-        transactions:transactionsReducer,
+        channels:channelsReducer,
         config:configReducer,
     }),
     middleware: (getDefaultMiddleware) => getDefaultMiddleware({

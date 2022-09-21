@@ -6,12 +6,14 @@ export const onCreateChannel = /* GraphQL */ `
     onCreateChannel(filter: $filter) {
       id
       contactID
+      channelType
       contactAttributes
       tasks {
         items {
           id
           channelID
           contactID
+          channelType
           Name
           taskAttributes
           createdAt
@@ -29,12 +31,14 @@ export const onUpdateChannel = /* GraphQL */ `
     onUpdateChannel(filter: $filter) {
       id
       contactID
+      channelType
       contactAttributes
       tasks {
         items {
           id
           channelID
           contactID
+          channelType
           Name
           taskAttributes
           createdAt
@@ -52,12 +56,14 @@ export const onDeleteChannel = /* GraphQL */ `
     onDeleteChannel(filter: $filter) {
       id
       contactID
+      channelType
       contactAttributes
       tasks {
         items {
           id
           channelID
           contactID
+          channelType
           Name
           taskAttributes
           createdAt
@@ -120,6 +126,7 @@ export const onCreateTask = /* GraphQL */ `
       channel {
         id
         contactID
+        channelType
         contactAttributes
         tasks {
           nextToken
@@ -128,6 +135,7 @@ export const onCreateTask = /* GraphQL */ `
         updatedAt
       }
       contactID
+      channelType
       Name
       taskAttributes
       createdAt
@@ -143,6 +151,7 @@ export const onUpdateTask = /* GraphQL */ `
       channel {
         id
         contactID
+        channelType
         contactAttributes
         tasks {
           nextToken
@@ -151,6 +160,7 @@ export const onUpdateTask = /* GraphQL */ `
         updatedAt
       }
       contactID
+      channelType
       Name
       taskAttributes
       createdAt
@@ -166,6 +176,7 @@ export const onDeleteTask = /* GraphQL */ `
       channel {
         id
         contactID
+        channelType
         contactAttributes
         tasks {
           nextToken
@@ -174,6 +185,7 @@ export const onDeleteTask = /* GraphQL */ `
         updatedAt
       }
       contactID
+      channelType
       Name
       taskAttributes
       createdAt

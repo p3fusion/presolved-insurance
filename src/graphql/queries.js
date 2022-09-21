@@ -6,12 +6,14 @@ export const getChannel = /* GraphQL */ `
     getChannel(id: $id) {
       id
       contactID
+      channelType
       contactAttributes
       tasks {
         items {
           id
           channelID
           contactID
+          channelType
           Name
           taskAttributes
           createdAt
@@ -34,6 +36,7 @@ export const listChannels = /* GraphQL */ `
       items {
         id
         contactID
+        channelType
         contactAttributes
         tasks {
           nextToken
@@ -84,6 +87,7 @@ export const getTask = /* GraphQL */ `
       channel {
         id
         contactID
+        channelType
         contactAttributes
         tasks {
           nextToken
@@ -92,6 +96,7 @@ export const getTask = /* GraphQL */ `
         updatedAt
       }
       contactID
+      channelType
       Name
       taskAttributes
       createdAt
@@ -112,11 +117,13 @@ export const listTasks = /* GraphQL */ `
         channel {
           id
           contactID
+          channelType
           contactAttributes
           createdAt
           updatedAt
         }
         contactID
+        channelType
         Name
         taskAttributes
         createdAt

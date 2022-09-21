@@ -13,14 +13,18 @@ import OutboundCallsPage from './pages/outboundCalls';
 import TemplateBuilder from './task_builder';
 import CreateNewTemplate from './task_builder/newTemplate';
 import { useDispatch, useSelector } from 'react-redux';
-import { getTaskTemplates } from './api/taskTemplates';
+import { getTaskTemplates, getAllChannels } from './api/taskTemplates';
 import { updateTemplates } from '../store/reducers/config';
+import { updateChannels } from '../store/reducers/channels';
+
+import '../gc-components/chat'
 
 
 const { Content } = Layout;
 const APP = () => {
     const dispatch = useDispatch()
     const config = useSelector((state) => state.config)
+    const channels = useSelector((state) => state.channels)
     const [collapsed, setCollapsed] = useState(true);
 
     useEffect(() => {
@@ -30,6 +34,17 @@ const APP = () => {
             }).catch((error) => {
                 notification.error({
                     message: "Unable to load the configs, something went wrong",
+                    type: 'error'
+
+                })
+            })
+        }
+        if (!channels.isLoaded) {
+            getAllChannels().then((result) => {
+                dispatch(updateChannels(result))
+            }).catch((error) => {
+                notification.error({
+                    message: "Unable to load the channels, something went wrong",
                     type: 'error'
 
                 })
