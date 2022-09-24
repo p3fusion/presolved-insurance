@@ -4,6 +4,7 @@ input AMPLIFY { globalAuthRule: AuthRule = { allow: public } } # FOR TESTING ONL
 
 type Channel @model {
   id: ID!
+  user:String!
   contactID: String!
   channelType:String!
   contactAttributes:AWSJSON
@@ -19,10 +20,13 @@ type TaskTemplate @model {
 
 type Task @model{
   id: ID!
+  user:String!
+  assignTo:String!
   channelID: ID! @index(name: "byChannel", sortKeyFields: ["Name"])
   channel: Channel! @belongsTo(fields: ["channelID"]) 
   contactID: String!
   channelType:String!
   Name: String!
   taskAttributes:AWSJSON
+  status:String!
 }

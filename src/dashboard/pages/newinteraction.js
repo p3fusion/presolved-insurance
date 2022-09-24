@@ -43,71 +43,93 @@ const NewInteraction = (props) => {
         showWrapButton: false
     })
 
+
     useEffect(() => {
+        getSnapShot()
         const connectUrl = "https://p3fusion-uat.my.connect.aws/ccp-v2"
-          if (divCCP.current) {
-              connect.agentApp.initCCP(divCCP.current, {
-                  ccpUrl: connectUrl, // REQUIRED
-                  loginPopup: true, // optional, defaults to `true`
-                  loginPopupAutoClose: true, // optional, defaults to `false`
-                  loginOptions: {
-                      // optional, if provided opens login in new window
-                      autoClose: true, // optional, defaults to `false`
-                      height: 600, // optional, defaults to 578
-                      width: 400, // optional, defaults to 433
-                      top: 80, // optional, defaults to 0
-                      right: 100 // optional, defaults to 0
-                  },
-                  region: "us-east-1", // REQUIRED for `CHAT`, optional otherwise
-                  softphone: {
-                      // optional, defaults below apply if not provided
-                      allowFramedSoftphone: true, // optional, defaults to false
-                      disableRingtone: false, // optional, defaults to false
-                      ringtoneUrl: "./ringtone.mp3" // optional, defaults to CCP’s default ringtone if a falsy value is set
-                  },
-                  pageOptions: {
-                      //optional
-                      enableAudioDeviceSettings: false, //optional, defaults to 'false'
-                      enablePhoneTypeSettings: true //optional, defaults to 'true'
-                  },
-                  ccpAckTimeout: 5000, //optional, defaults to 3000 (ms)
-                  ccpSynTimeout: 3000, //optional, defaults to 1000 (ms)
-                  ccpLoadTimeout: 10000 //optional, defaults to 5000 (ms)
-              });
-  
-              connect.contact(function (contact) {
-                  contact.onIncoming(function (contact) {
-                      console.log("onIncoming", contact);
-                  });
-  
-                  contact.onRefresh(function (contact) {
-                      console.log("onRefresh", contact);
-                  });
-  
-                  contact.onAccepted(function (contact) {
-                      console.log("onAccepted", contact);
-                  });
-  
-                  contact.onEnded(function () {
-                      console.log("onEnded", contact);
-                      var _getData = contact._getData()
-                      console.log({ data: _getData, });
-                  });
-  
-                  contact.onConnected(function () {
-                      console.log(`onConnected(${contact.getContactId()})`);
-                      var contactData = contact._getData()
-                      var contactAttributes = { ...contactData }
-                      delete contactAttributes.connections
-                      delete contactAttributes.contactFeatures
-                      delete contactAttributes.queue
-                      setState({...state,showWrapButton:true})
-                      createChannel(contactAttributes)
-                  });
-              });
-          } 
+        if (divCCP.current) {
+            connect.agentApp.initCCP(divCCP.current, {
+                ccpUrl: connectUrl, // REQUIRED
+                loginPopup: true, // optional, defaults to `true`
+                loginPopupAutoClose: true, // optional, defaults to `false`
+                loginOptions: {
+                    // optional, if provided opens login in new window
+                    autoClose: true, // optional, defaults to `false`
+                    height: 600, // optional, defaults to 578
+                    width: 400, // optional, defaults to 433
+                    top: 80, // optional, defaults to 0
+                    right: 100 // optional, defaults to 0
+                },
+                region: "us-east-1", // REQUIRED for `CHAT`, optional otherwise
+                softphone: {
+                    // optional, defaults below apply if not provided
+                    allowFramedSoftphone: true, // optional, defaults to false
+                    disableRingtone: false, // optional, defaults to false
+                    ringtoneUrl: "./ringtone.mp3" // optional, defaults to CCP’s default ringtone if a falsy value is set
+                },
+                pageOptions: {
+                    //optional
+                    enableAudioDeviceSettings: false, //optional, defaults to 'false'
+                    enablePhoneTypeSettings: true //optional, defaults to 'true'
+                },
+                ccpAckTimeout: 5000, //optional, defaults to 3000 (ms)
+                ccpSynTimeout: 3000, //optional, defaults to 1000 (ms)
+                ccpLoadTimeout: 10000 //optional, defaults to 5000 (ms)
+            });
+
+
+
+            connect.contact(function (contact) {
+                contact.onIncoming(function (contact) {
+                    console.log("onIncoming", contact);
+                });
+
+                contact.onRefresh(function (contact) {
+                    console.log("onRefresh", contact);
+                });
+
+                contact.onAccepted(function (contact) {
+                    console.log("onAccepted", contact);
+                    var contactData = contact._getData()
+                    var contactAttributes = { ...contactData }
+                    delete contactAttributes.connections
+                    delete contactAttributes.contactFeatures
+                    delete contactAttributes.queue
+                    setState({ ...state, showWrapButton: true })
+                    createChannel(contactAttributes)
+                });
+
+                contact.onEnded(function () {
+                    console.log("onEnded", contact);
+                    var _getData = contact._getData()
+                    console.log({ data: _getData, });
+                });
+
+                contact.onConnected(function () {
+                    console.log(`onConnected(${contact.getContactId()})`);
+                });
+            });
+        }
 
     }, [])
+
+    const getSnapShot = () => {
+        const snapshot = setInterval(() => {
+            console.log("******************************************** Polling");
+            if (connect.agent.initialized) {
+                console.log("******************************************** completed *********************");
+                connect.agent((agent) => {
+                    let agentData=agent._getData()
+                    console.log("************************************");
+                    console.log({ agent })
+                    console.log({ agentData })
+                    console.log("************************************");
+                });
+                clearInterval(snapshot);
+            }
+
+        }, 1000);
+    }
 
     const createChannel = (contactData) => {
         const newChannel = {
@@ -175,86 +197,7 @@ const NewInteraction = (props) => {
 
     }
 
-    useEffect(() => {
-        if (config.templates.isLoaded) {
-            setState({ ...state, isTemplatesLoaded: true })
-        }
-    }, [config.templates.isLoaded]);
 
-    const getTemplate = () => {
-        let taskTemplates = []
-        let data = []
-        const interval = setInterval(() => {
-            console.log("Polling . . .");
-            if (connect.agent.initialized) {
-                clearInterval(interval);
-                console.log("Cancelling Poll . . .");
-                listTaskTemplates().then((templates) => {
-
-                    if (templates.TaskTemplates.length > 0) {
-                        for (var i = 0; i < templates.TaskTemplates.length; i++) {
-                            let task = templates.TaskTemplates[i]
-                            let templateParams = { id: task.Id };
-                            getTaskTemplate(templateParams).then((templateData) => {
-                                data.push({
-                                    name: task.Name,
-                                    description: task.Description,
-                                    id: task.Id,
-                                    fields: templateData.Fields
-                                })
-                            })
-                        }
-
-                        setState({ ...state, taskTemplates: data })
-                        //dispatch(updateAllTemplates(data))
-                    }
-                })
-
-                /*  connect.agent(function (agent) {
-                     const queryParams = {// required                   
-                         maxResults: 50 //optional, number, max value of 100
-                     };
-                     agent.listTaskTemplates(queryParams, {
-                         success: function (data) {
-                             if (data.TaskTemplates.length > 0) {
-                                 for (var i = 0; i < data.TaskTemplates.length; i++) {
-                                     let task = data.TaskTemplates[i]
-                                     let templateParams = { id: task.Id };
-                                     agent.getTaskTemplate(templateParams, {
-                                         success: function (templateParamsdata) {
-                                             let templateData = {
-                                                 name: task.Name,
-                                                 description: task.Description,
-                                                 id: task.Id,
-                                                 fields: templateParamsdata.Fields
-                                             }
-                                             taskTemplates.push(templateData)
-                                             dispatch(updateTemplates({
-                                                 id: task.Id,
-                                                 data: templateData
-                                             }))
-                                         },
-                                         failure: function (err) {
-                                             console.error({ getTaskTemplate: err })
-                                         }
-                                     });
-                                 }
-                                 console.log("Cancelling Poll . . .", taskTemplates);
-                                 setState({ ...state, taskTemplates })
-                                 //dispatch(updateAllTemplates(taskTemplates))
-                                 clearInterval(interval);
-                             }
-                         },
-                         failure: function (err) {
-                             console.error({ listTaskTemplates: err });
-                         }
-                     });
-                 }) */
-            }
-        }, 2000)
-
-
-    }
     const onFinishFailed = (e) => {
         console.log({ e });
     }
@@ -272,6 +215,7 @@ const NewInteraction = (props) => {
                     let tsk = task[i]
                     saveTask(tsk)
                 }
+
             }
         });
 
@@ -284,8 +228,7 @@ const NewInteraction = (props) => {
             <Row gutter={[16, 16]}>
                 <Col span={18}>
                     <PageHeader ghost={false} className="site-page-header" onBack={() => window.history.back()}
-                        title={<span>Interaction : <em>{id}</em></span>} subTitle=" New Interaction" extra={[
-                            state.isTemplatesLoaded &&
+                        title={<span>Interaction : <em>{id}</em></span>} subTitle=" New Interaction" extra={[                           
                             <Dropdown overlay={
                                 <Menu items={
                                     config.templates.data.map((tasks) => {
@@ -444,50 +387,17 @@ export const IRenderField = ({ data, index, taskIndex }) => {
         </Col>
     }
     return (<></>)
-    /*     return (
-            <Col span={24} key={index}>
-    
-                <Form.Item
-                    help={data.description}
-                    label={data.name}
-                    name={["case", "task", 'attrinutes', data.name.replaceAll(" ", "_")]}
-    
-                >
-                    {data.type === 'text' && <Input />}
-                    {data.type === 'textarea' && <Input.TextArea rows={data.rows} />}
-                    {data.type === 'select' &&
-                        <Select>
-                            {
-                                data.options.map((opt, selindex) =>
-                                    <Select.Option key={selindex} value={opt}>{opt}</Select.Option>
-                                )}
-                        </Select>
-                    }
-                    {data.type === 'date' &&
-                        <DatePicker format="MM/DD/YYYY" allowClear
-                            defaultValue={moment(moment().subtract(data?.defaultValue.split("days")[0] || 7, 'days'), 'MM/DD/YYYYY')} />}
-                </Form.Item>
-            </Col>
-        ) */
-
 }
 
 
 const CustomerProile = (props) => {
     const customerprofiles = useRef(null);
-    const { id } = props
-    const [loading, setLoading] = useState(false)
     useEffect(() => {
-        /*   if (customerprofiles.current) {
-              const instanceUrl = 'https://p3fusion-uat.my.connect.aws/'
-              let client = new connect.CustomerProfilesClient(instanceUrl);
-          }
-          if (connect.agent.initialized) {
-              notification.success({
-                  message: "Customer Profile initiated successfully"
-              })
-              setLoading(true)
-          } */
+        if (customerprofiles.current) {
+            const instanceUrl = 'https://p3fusion-uat.my.connect.aws/'
+            let client = new connect.CustomerProfilesClient(instanceUrl);
+
+        }
 
     }, [connect.agent.initialized])
 

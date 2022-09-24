@@ -8,17 +8,21 @@ export const createChannel = /* GraphQL */ `
   ) {
     createChannel(input: $input, condition: $condition) {
       id
+      user
       contactID
       channelType
       contactAttributes
       tasks {
         items {
           id
+          user
+          assignTo
           channelID
           contactID
           channelType
           Name
           taskAttributes
+          status
           createdAt
           updatedAt
         }
@@ -36,17 +40,21 @@ export const updateChannel = /* GraphQL */ `
   ) {
     updateChannel(input: $input, condition: $condition) {
       id
+      user
       contactID
       channelType
       contactAttributes
       tasks {
         items {
           id
+          user
+          assignTo
           channelID
           contactID
           channelType
           Name
           taskAttributes
+          status
           createdAt
           updatedAt
         }
@@ -64,17 +72,21 @@ export const deleteChannel = /* GraphQL */ `
   ) {
     deleteChannel(input: $input, condition: $condition) {
       id
+      user
       contactID
       channelType
       contactAttributes
       tasks {
         items {
           id
+          user
+          assignTo
           channelID
           contactID
           channelType
           Name
           taskAttributes
+          status
           createdAt
           updatedAt
         }
@@ -137,9 +149,12 @@ export const createTask = /* GraphQL */ `
   ) {
     createTask(input: $input, condition: $condition) {
       id
+      user
+      assignTo
       channelID
       channel {
         id
+        user
         contactID
         channelType
         contactAttributes
@@ -153,6 +168,7 @@ export const createTask = /* GraphQL */ `
       channelType
       Name
       taskAttributes
+      status
       createdAt
       updatedAt
     }
@@ -165,9 +181,12 @@ export const updateTask = /* GraphQL */ `
   ) {
     updateTask(input: $input, condition: $condition) {
       id
+      user
+      assignTo
       channelID
       channel {
         id
+        user
         contactID
         channelType
         contactAttributes
@@ -181,6 +200,7 @@ export const updateTask = /* GraphQL */ `
       channelType
       Name
       taskAttributes
+      status
       createdAt
       updatedAt
     }
@@ -193,9 +213,12 @@ export const deleteTask = /* GraphQL */ `
   ) {
     deleteTask(input: $input, condition: $condition) {
       id
+      user
+      assignTo
       channelID
       channel {
         id
+        user
         contactID
         channelType
         contactAttributes
@@ -209,6 +232,7 @@ export const deleteTask = /* GraphQL */ `
       channelType
       Name
       taskAttributes
+      status
       createdAt
       updatedAt
     }

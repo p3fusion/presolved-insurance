@@ -5,17 +5,21 @@ export const onCreateChannel = /* GraphQL */ `
   subscription OnCreateChannel($filter: ModelSubscriptionChannelFilterInput) {
     onCreateChannel(filter: $filter) {
       id
+      user
       contactID
       channelType
       contactAttributes
       tasks {
         items {
           id
+          user
+          assignTo
           channelID
           contactID
           channelType
           Name
           taskAttributes
+          status
           createdAt
           updatedAt
         }
@@ -30,17 +34,21 @@ export const onUpdateChannel = /* GraphQL */ `
   subscription OnUpdateChannel($filter: ModelSubscriptionChannelFilterInput) {
     onUpdateChannel(filter: $filter) {
       id
+      user
       contactID
       channelType
       contactAttributes
       tasks {
         items {
           id
+          user
+          assignTo
           channelID
           contactID
           channelType
           Name
           taskAttributes
+          status
           createdAt
           updatedAt
         }
@@ -55,17 +63,21 @@ export const onDeleteChannel = /* GraphQL */ `
   subscription OnDeleteChannel($filter: ModelSubscriptionChannelFilterInput) {
     onDeleteChannel(filter: $filter) {
       id
+      user
       contactID
       channelType
       contactAttributes
       tasks {
         items {
           id
+          user
+          assignTo
           channelID
           contactID
           channelType
           Name
           taskAttributes
+          status
           createdAt
           updatedAt
         }
@@ -122,9 +134,12 @@ export const onCreateTask = /* GraphQL */ `
   subscription OnCreateTask($filter: ModelSubscriptionTaskFilterInput) {
     onCreateTask(filter: $filter) {
       id
+      user
+      assignTo
       channelID
       channel {
         id
+        user
         contactID
         channelType
         contactAttributes
@@ -138,6 +153,7 @@ export const onCreateTask = /* GraphQL */ `
       channelType
       Name
       taskAttributes
+      status
       createdAt
       updatedAt
     }
@@ -147,9 +163,12 @@ export const onUpdateTask = /* GraphQL */ `
   subscription OnUpdateTask($filter: ModelSubscriptionTaskFilterInput) {
     onUpdateTask(filter: $filter) {
       id
+      user
+      assignTo
       channelID
       channel {
         id
+        user
         contactID
         channelType
         contactAttributes
@@ -163,6 +182,7 @@ export const onUpdateTask = /* GraphQL */ `
       channelType
       Name
       taskAttributes
+      status
       createdAt
       updatedAt
     }
@@ -172,9 +192,12 @@ export const onDeleteTask = /* GraphQL */ `
   subscription OnDeleteTask($filter: ModelSubscriptionTaskFilterInput) {
     onDeleteTask(filter: $filter) {
       id
+      user
+      assignTo
       channelID
       channel {
         id
+        user
         contactID
         channelType
         contactAttributes
@@ -188,6 +211,7 @@ export const onDeleteTask = /* GraphQL */ `
       channelType
       Name
       taskAttributes
+      status
       createdAt
       updatedAt
     }

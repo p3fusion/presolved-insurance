@@ -12,6 +12,7 @@ import DashboardIndexPage from './pages';
 import OutboundCallsPage from './pages/outboundCalls';
 import TemplateBuilder from './task_builder';
 import CreateNewTemplate from './task_builder/newTemplate';
+import AdvancedBuilder from './task_builder/advancedBuilder';
 import { useDispatch, useSelector } from 'react-redux';
 import { getTaskTemplates, getAllChannels } from './api/taskTemplates';
 import { updateTemplates } from '../store/reducers/config';
@@ -27,7 +28,7 @@ const APP = () => {
     const channels = useSelector((state) => state.channels)
     const [collapsed, setCollapsed] = useState(true);
 
-    useEffect(() => {
+     useEffect(() => {
         if (!config.templates.isLoaded) {
             getTaskTemplates().then((taskTemplates) => {
                 dispatch(updateTemplates(taskTemplates))
@@ -50,7 +51,6 @@ const APP = () => {
                 })
             })
         }
-
     }, [config.templates]);
 
     return (
@@ -64,6 +64,7 @@ const APP = () => {
                         <OutboundCallsPage path="/outbound-calls" />
                         <TemplateBuilder path="/template-builder" />
                         <CreateNewTemplate path="/new-template" />
+                        <AdvancedBuilder path="/advanced-template" />
                     </Router>
 
                 </Content>

@@ -8,7 +8,7 @@ font-family: 'Noto Sans', sans-serif
 body {
   font-family: "Noto Sans", sans-serif;
 }
-iframe{
+iframe {
   border: 0;
 }
 .newdashboard {
@@ -17,10 +17,16 @@ iframe{
     box-shadow: 0 0 4px 0px #ccc;
     z-index: 10;
     .logo {
-      display: flex;
-      flex-direction: row;
-      justify-content: center;
+      overflow: hidden;
       margin-bottom: 50px;
+      img.collapsed.logo {
+        margin-top: 5px;
+        margin-left: -25px;
+      }
+      img.logo {
+        margin-top: 5px;
+        margin-left: 0;
+      }
     }
     .ant-menu {
       .ant-menu-item::after {
@@ -37,11 +43,10 @@ iframe{
     }
   }
   .customHeader {
-    h3.ant-typography  {
+    h3.ant-typography {
       margin-bottom: 0 !important;
       font-weight: 600;
       line-height: 35px !important;
-   
     }
     background: #fff;
     padding: 10px;
@@ -53,8 +58,8 @@ iframe{
       padding: 5px;
       right: 0;
       background: #fff;
-      .containerDiv{
-        min-height:   100vh;
+      .containerDiv {
+        min-height: 100vh;
       }
     }
   }

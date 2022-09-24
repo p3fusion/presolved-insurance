@@ -14,7 +14,7 @@ export const getTaskTemplates = async () => {
         throw error
     }
 
-}
+} 
 
 export const getAllChannels = async () => {
     try {

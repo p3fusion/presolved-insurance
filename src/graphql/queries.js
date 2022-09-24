@@ -5,17 +5,21 @@ export const getChannel = /* GraphQL */ `
   query GetChannel($id: ID!) {
     getChannel(id: $id) {
       id
+      user
       contactID
       channelType
       contactAttributes
       tasks {
         items {
           id
+          user
+          assignTo
           channelID
           contactID
           channelType
           Name
           taskAttributes
+          status
           createdAt
           updatedAt
         }
@@ -35,6 +39,7 @@ export const listChannels = /* GraphQL */ `
     listChannels(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
+        user
         contactID
         channelType
         contactAttributes
@@ -83,9 +88,12 @@ export const getTask = /* GraphQL */ `
   query GetTask($id: ID!) {
     getTask(id: $id) {
       id
+      user
+      assignTo
       channelID
       channel {
         id
+        user
         contactID
         channelType
         contactAttributes
@@ -99,6 +107,7 @@ export const getTask = /* GraphQL */ `
       channelType
       Name
       taskAttributes
+      status
       createdAt
       updatedAt
     }
@@ -113,9 +122,12 @@ export const listTasks = /* GraphQL */ `
     listTasks(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
+        user
+        assignTo
         channelID
         channel {
           id
+          user
           contactID
           channelType
           contactAttributes
@@ -126,6 +138,7 @@ export const listTasks = /* GraphQL */ `
         channelType
         Name
         taskAttributes
+        status
         createdAt
         updatedAt
       }

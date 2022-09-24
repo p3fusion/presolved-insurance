@@ -6,16 +6,17 @@ import {
     VideoCameraOutlined
 } from '@ant-design/icons';
 import { Layout, Menu } from 'antd';
-import logo from '../assets/images/logo.jpg';
+import p3fsmall from '../assets/images/p3f-small.png';
+import p3flogo from '../assets/images/p3f-full.png';
 import { Link } from '@reach/router';
 const { Sider } = Layout;
 
 const DashboardSidebar = ({collapsed}) => {
     return (
         <Sider theme='light' className='main-sidebar' trigger={null} collapsible collapsed={collapsed}>
-            <div className="logo">
+            <div className="logo"> 
                 <Link to="/">
-                <img src={logo} height={collapsed ? 60 : 80} />
+                <img src={collapsed ? p3fsmall: p3flogo} width={collapsed ? 110 : 180} className={collapsed ? 'collapsed logo' : 'logo' } />
                 </Link>
             </div>
             <Menu
