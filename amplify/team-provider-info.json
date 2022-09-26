@@ -9,13 +9,28 @@
       "UnauthRoleName": "amplify-presolvedinsurance-develop-195154-unauthRole",
       "StackName": "amplify-presolvedinsurance-develop-195154",
       "StackId": "arn:aws:cloudformation:us-east-1:039289871235:stack/amplify-presolvedinsurance-develop-195154/77b4dc10-1bdc-11ed-a230-0af644332813",
-      "AmplifyAppId": "d2psmfmze7bmwp"
+      "AmplifyAppId": "d2psmfmze7bmwp",
+      "APIGatewayAuthURL": "https://s3.amazonaws.com/amplify-presolvedinsurance-develop-195154-deployment/amplify-cfn-templates/api/APIGatewayAuthStack.json"
     },
     "categories": {
       "hosting": {
         "amplifyhosting": {
           "appId": "d2psmfmze7bmwp",
           "type": "manual"
+        }
+      },
+      "auth": {
+        "undefined": {},
+        "presolvedinsurance": {}
+      },
+      "function": {
+        "GetUsersList": {
+          "deploymentBucketName": "amplify-presolvedinsurance-develop-195154-deployment",
+          "s3Key": "amplify-builds/GetUsersList-6f7872467276337a4d56-build.zip"
+        },
+        "presolvedinsuranceConnectSDK": {
+          "deploymentBucketName": "amplify-presolvedinsurance-develop-195154-deployment",
+          "s3Key": "amplify-builds/presolvedinsuranceConnectSDK-LambdaLayerVersion04e18d33-build.zip"
         }
       }
     }
