@@ -15,15 +15,17 @@ const AdvancedTaskTemplate = (props) => {
     const dispatch = useDispatch()
 
     const [form] = Form.useForm();
-    const [settingsform] = Form.useForm();
+    const [columnSettingsform] = Form.useForm();
+    const [rowSettingsform] = Form.useForm();
+
 
 
     const initialState = {
-        selectedLayout: {
-            id: null,
-            showSettings: false
-        },
-        items: [],
+        showColumnSettings: false,
+        showRowSettings: false,
+        selectedColumn: {},
+        selectedRow: {},
+        columns: {},
         layout: [],
         collection: {},
         isEdit: props?.location?.state?.edit || false,
@@ -33,9 +35,9 @@ const AdvancedTaskTemplate = (props) => {
 
     const [state, setState] = useState({ ...initialState })
 
-    const getFields = (id, colPosition) => {
+    const getFields = (id) => {
         return (
-            <Menu onClick={({ key }) => addFields(key, id, colPosition)}
+            <Menu onClick={({ key }) => addFields(key, id)}
                 items={[
                     {
                         key: 'text',
@@ -63,15 +65,45 @@ const AdvancedTaskTemplate = (props) => {
 
     }
 
-    const addLayout = () => {
-        let { items } = state
+    const addColumns = () => {
 
-        items.push({
-            layoutID: makeid(5),
-            columns: 3,
-            bg: '#ffffff'
-        })
-        setState({ ...state, items })
+        let { columns } = state
+        let layoutID = makeid(5)
+
+        columns[layoutID] = {
+            title: null,
+            subTitle: null,
+            layoutID,
+            rowsLength: 3,
+            bg: '#ffffff',
+            rows: {
+                "row1": {
+                    id: "row1",
+                    width: '33%',
+                    bg: '#ffffff',
+                    fieldName: "Row1",
+                    fieldType: "text"
+                },
+                "row2": {
+                    id: "row2",
+                    width: '33%',
+                    bg: '#ffffff',
+                    fieldName: "Row2",
+                    fieldType: "text"
+                },
+                "row3": {
+                    id: "row3",
+                    width: '33%',
+                    bg: '#ffffff',
+                    fieldName: "Row3",
+                    fieldType: "text"
+                }
+            }
+        }
+
+
+
+        setState({ ...state, columns })
     }
 
     //generate random alpha numeric id in react ?
@@ -87,34 +119,87 @@ const AdvancedTaskTemplate = (props) => {
     }
 
     const updateColumnsSettings = (e) => {
+        let { columns } = state
+        let rows = columns[e.layoutID].rows
 
-        console.log({ e });
-        let { items } = state
-
-        const newState = items.map(obj => {
-            // 👇️ if id equals 2, update country property
-            if (obj.layoutID === e.layoutID) {
-                console.log({ obj });
-                return { ...e };
-            }
-
-            // 👇️ otherwise return object as is
-            return obj;
-        });
-
-        console.log({ newState });
+        columns[e.layoutID] = {
+            ...e,
+            rows
+        }
 
         setState({
             ...state,
-            items: newState,
-            selectedLayout: {
-                ...e,
-
-                showSettings: false
-            }
+            columns,
+            showColumnSettings: false
         })
     }
 
+
+
+    const setColumnSettings = (itm) => {
+        let selectedColumn = state.columns[itm.layoutID]
+
+        setState({
+            ...state,
+            showColumnSettings: true,
+            selectedColumn
+        })
+        columnSettingsform.setFieldsValue({ ...selectedColumn })
+    }
+
+    const setRowSettings = (column, row) => {
+
+
+
+        setState({
+            ...state,
+            showRowSettings: true,
+            selectedColumn: column,
+            selectedRow: row
+        })
+
+        //rowSettingsform.setFieldsValue({ ...selectedColumn })
+    }
+    const updateRowSettings = (e) => {
+
+        console.log({ e });
+        /*  let { columns } = state
+         columns[e.layoutID] = { ...e }
+         setState({
+             ...state,
+             columns,
+             showColumnSettings: false
+         }) */
+    }
+    const deleteRow = (column, row) => {
+        let { columns } = state
+        let { layoutID } = column
+        delete columns[layoutID].rows[row.id]
+
+        setState({
+            ...state,
+            columns
+        })
+
+    }
+    const addRow = (column) => {
+        let { columns } = state
+        let { layoutID } = column
+
+        let Rows = Object.keys(columns[layoutID].rows)
+        columns[layoutID].rows["row" + Rows.length + 1] = {
+            id: "row" + Rows.length + 1,
+            width: '33%',
+            bg: '#ffffff',
+            fieldName: "Row" + Rows.length + 1,
+            fieldType: "text"
+        }
+        setState({
+            ...state,
+            columns
+        })
+
+    }
     return (
         <Content className="dashboard">
             <section className="new-template">
@@ -126,7 +211,7 @@ const AdvancedTaskTemplate = (props) => {
                 <Form name="task" form={form} layout="vertical"   >
                     <Row gutter={[16, 16]} style={{ marginTop: 30 }}>
                         <Col span={24} style={{ marginBottom: 30 }}>
-                            <Card actions={[<Button type='primary' icon={<PlusOutlined />} onClick={() => addLayout()} > Add Column</Button>]}>
+                            <Card actions={[<Button type='primary' icon={<PlusOutlined />} onClick={() => addColumns()} > Add Column</Button>]}>
                                 <Row gutter={[16, 16]}>
                                     <Col span={10}>
                                         <Form.Item label="Task Name" name={['task', 'name']}
@@ -155,58 +240,71 @@ const AdvancedTaskTemplate = (props) => {
                                 </Row>
                             </Card>
                         </Col>
-
-
-
-                        {
-                            /* state.items.map((itm, index) => {
-                                return (
-                                    <Col span={24} key={index} className="dynamicFields">
-                                        {itm.type === 'text' && <TextField removeField={removeField} index={index} itm={itm} />}
-                                        {itm.type === 'textarea' && <TextareaField removeField={removeField} index={index} itm={itm} />}
-                                        {itm.type === 'select' && <SelectField removeField={removeField} index={index} itm={itm} />}
-                                        {itm.type === 'date' && <DateField removeField={removeField} index={index} itm={itm} />}
-                                    </Col>
-                                )
-                            }) */
-                        }
-
-
                     </Row>
                     <Row gutter={[16, 16]}>
-
                         {
-                            state.items.map((itm, index) => {
+                            Object.keys(state.columns).map((record) => {
+                                let column = state.columns[record]
                                 return (
-                                    <Col span={24} key={itm.layoutID}>
-                                        <Card title={<span>Layout <small><em>{itm.layoutID}</em></small></span>} extra={[
+                                    <Col span={24} key={column.layoutID}>
+                                        <Card title={<span>Layout <small><em>{column.layoutID}</em></small></span>} extra={[
                                             <Space>
                                                 <Button type='primary' shape='circle' icon={<SettingOutlined />}
-                                                    onClick={() => setState({
-                                                        ...state,
-                                                        selectedLayout: { showSettings: true, ...itm }
-                                                    })
-                                                    }
-                                                />,
+                                                    onClick={() => setColumnSettings(column)}
+                                                />
+                                                <Button type='primary' onClick={() => addRow(column)} shape='circle' icon={<PlusOutlined />} />
                                                 <Button type='primary' danger shape='circle' icon={<CloseOutlined />} />
                                             </Space>
                                         ]}>
-                                            <Row gutter={[16, 16]} className="tempplateRow">
-                                                {Array.apply(null, { length: itm.columns }).map((e, i) =>
-                                                    <Col key={i} span={8} style={{ backgroundColor: itm.bg || '#fff' }} >
-                                                        <div className="templateColumn">
-                                                            <Dropdown overlay={getFields(itm.layoutID, i)} placement="bottomLeft" arrow>
-                                                                <Button type='default' shape='round' icon={<PlusOutlined />} > Add Fields</Button>
-                                                            </Dropdown>
-                                                        </div>
-                                                    </Col>
-                                                )}
 
-                                            </Row>
+
+                                            <div className="tempplateRow">
+                                                {
+                                                    Object.keys(column.rows).map((rec) => {
+                                                        let row = column.rows[rec]
+                                                        return (
+                                                            <div key={rec} style={{ backgroundColor: row.bg || '#fff', width: row.width }} >
+                                                                <h3>{row.fieldName}</h3>
+                                                                <div className="templateColumn">
+                                                                    <div className='filed-holder'>
+                                                                        <Dropdown overlay={getFields(column.layoutID)} placement="bottomLeft"  >
+                                                                            <Button type='default' shape='round' icon={<PlusOutlined />} > Add Fields</Button>
+                                                                        </Dropdown>
+                                                                    </div>
+                                                                    <div className='settings-holder'>
+                                                                        <Space>
+                                                                            <Button type='primary' size='small' shape='circle' onClick={() => setRowSettings(column, row)} icon={<SettingOutlined />} />
+                                                                            <Button type='primary' size='small' danger shape='circle' onClick={() => deleteRow(column, row)} icon={<CloseOutlined />} />
+                                                                        </Space>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        )
+                                                    })
+                                                }
+                                                {
+                                                    /*  Array.apply(null, { length: column.rowsLength }).map((e, i) =>
+                                                         <Col key={i} span={8} style={{ backgroundColor: column.bg || '#fff' }} >
+                                                             <div className="templateColumn">
+                                                                 <div className='filed-holder'>
+                                                                     <Dropdown overlay={getFields(column.layoutID, i)} placement="bottomLeft"  >
+                                                                         <Button type='default' shape='round' icon={<PlusOutlined />} > Add Fields</Button>
+                                                                     </Dropdown>
+                                                                 </div>
+                                                                 <div className='settings-holder'>
+                                                                     <Button type='default' shape='circle' icon={<SettingOutlined />} />
+                                                                 </div>
+                                                             </div>
+                                                         </Col>
+                                                     ) */
+                                                }
+                                            </div>
                                         </Card>
                                     </Col>
                                 )
                             })
+
+
 
                         }
 
@@ -222,15 +320,54 @@ const AdvancedTaskTemplate = (props) => {
                 </Form>
             </section>
             <section className='layout-options'>
-                <Modal onOk={() => settingsform.submit()} closable onCancel={() => setState({ ...state, selectedLayout: { ...state.selectedLayout, showSettings: false } })} visible={state.selectedLayout.showSettings} title={<span>Settings for {state.selectedLayout.id}</span>}>
-                    <Form key="ModalPopuForm" initialValues={state.selectedLayout} form={settingsform} labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} onFinish={updateColumnsSettings}>
+                <Modal key="columnSettingsModal" onOk={() => columnSettingsform.submit()} closable
+                    onCancel={() => setState({ ...state, showColumnSettings: false })}
+                    visible={state.showColumnSettings}
+                    title={<span>Settings for {state.selectedColumn.layoutID}</span>}>
+                    <Form key="ModalPopuForm" form={columnSettingsform} labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} onFinish={updateColumnsSettings}>
                         <Form.Item style={{ display: 'none' }} name="layoutID">
                             <Input type='hidden' />
                         </Form.Item>
 
-                        <Form.Item label="No of columns" name="columns">
+                        <Form.Item label="No of Rows" name="rowsLength">
                             <Input type='number' max={9} min={1} />
                         </Form.Item>
+
+                        <Form.Item label="Title" name="title" help="Optional">
+                            <Input />
+                        </Form.Item>
+                        <Form.Item label="Sub Title" name="subTitle" help="Optional">
+                            <Input />
+                        </Form.Item>
+                        <Form.Item label="Background Color" name="bg">
+                            <Input type='color' />
+                        </Form.Item>
+
+                    </Form>
+                </Modal>
+                <Modal key="rowSettingsModal" onOk={() => rowSettingsform.submit()} closable
+                    onCancel={() => setState({ ...state, showRowSettings: false })}
+                    visible={state.showRowSettings}
+                    title={<span>Settings for {state.selectedRow.fieldName}</span>}>
+                    <Form key="ModalPopuForm" form={rowSettingsform} labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} onFinish={updateRowSettings}>
+                        <Form.Item style={{ display: 'none' }} name="layoutID">
+                            <Input type='hidden' />
+                        </Form.Item>
+
+                        <Form.Item style={{ display: 'none' }} name="rows" initialValue={JSON.stringify(state.selectedRow.rows)}>
+                            <Input type='hidden' />
+                        </Form.Item>
+
+                        <Form.Item label="No of Rows" name="rowsLength">
+                            <Input type='number' max={9} min={1} />
+                        </Form.Item>
+                        <Form.Item label="Title" name="title" help="Optional">
+                            <Input />
+                        </Form.Item>
+                        <Form.Item label="Sub Title" name="subTitle" help="Optional">
+                            <Input />
+                        </Form.Item>
+
 
                         <Form.Item label="Background Color" name="bg">
                             <Input type='color' />
@@ -243,6 +380,18 @@ const AdvancedTaskTemplate = (props) => {
     )
 }
 
+{
+    /* state.items.map((itm, index) => {
+        return (
+            <Col span={24} key={index} className="dynamicFields">
+                {itm.type === 'text' && <TextField removeField={removeField} index={index} itm={itm} />}
+                {itm.type === 'textarea' && <TextareaField removeField={removeField} index={index} itm={itm} />}
+                {itm.type === 'select' && <SelectField removeField={removeField} index={index} itm={itm} />}
+                {itm.type === 'date' && <DateField removeField={removeField} index={index} itm={itm} />}
+            </Col>
+        )
+    }) */
+}
 
 const TextField = ({ index, removeField, itm }) => {
     return (
@@ -356,7 +505,7 @@ const TextareaField = ({ itm, index, removeField }) => {
                     </Form.Item>
                 </Col>
                 <Col span={6}>
-                    <Form.Item initialValue={itm.rows || 3} label="No Of Rows." name={['task', "fields", index, "rows"]}
+                    <Form.Item initialValue={itm.rowsLength || 3} label="No Of Rows." name={['task', "fields", index, "rowsLength"]}
                         rules={[
                             {
                                 required: true,

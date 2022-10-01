@@ -1,11 +1,18 @@
-.ant-row.tempplateRow {
-  .ant-col {
-    .templateColumn:hover{
-        background-color: #ffffdd;
-    }
-    .templateColumn {
-      padding: 10px !important;
-      border: dashed 2px #ccc;
-    }
+.tempplateRow {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+
+  .templateColumn:hover {
+    background-color: #ffffdd;
+  }
+  .templateColumn {
+    padding: 10px !important;
+    border: dashed 2px #ccc;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
   }
 }

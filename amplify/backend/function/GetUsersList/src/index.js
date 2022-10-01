@@ -1,0 +1,53 @@
+
+const { ConnectClient, SearchUsersCommand } = require("@aws-sdk/client-connect"); 
+
+
+/**
+ * @type {import('@types/aws-lambda').APIGatewayProxyHandler}
+ */
+exports.handler = async (event) => {
+    console.log(`EVENT: ${JSON.stringify(event)}`);
+
+    // a client can be shared by different commands.
+    const client = new ConnectClient({ region: "us-east-1" });
+
+    const input = {
+    /** input parameters */
+    InstanceId: 'b19b8083-cbfe-4bc3-84d1-8fbb0fdd5a99', /* required */
+    MaxResults: 100    
+    };
+
+    const command = new SearchUsersCommand(input);
+
+    // async/await.
+    try {
+        const response = await client.send(command);
+        console.log(response);
+        return {
+            statusCode: 200,
+        //  Uncomment below to enable CORS requests
+        //  headers: {
+        //      "Access-Control-Allow-Origin": "*",
+        //      "Access-Control-Allow-Headers": "*"
+        //  }, 
+            body: JSON.stringify(response),
+        };        
+        // process data.
+    } catch (error) {
+        // error handling.
+        return {
+            statusCode: 500,
+        //  Uncomment below to enable CORS requests
+        //  headers: {
+        //      "Access-Control-Allow-Origin": "*",
+        //      "Access-Control-Allow-Headers": "*"
+        //  }, 
+            body: error,
+        };        
+    } finally {
+        // finally.
+    }
+
+
+
+};

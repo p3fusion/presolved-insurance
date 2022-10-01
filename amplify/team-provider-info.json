@@ -9,7 +9,8 @@
       "UnauthRoleName": "amplify-presolvedinsurance-develop-195154-unauthRole",
       "StackName": "amplify-presolvedinsurance-develop-195154",
       "StackId": "arn:aws:cloudformation:us-east-1:039289871235:stack/amplify-presolvedinsurance-develop-195154/77b4dc10-1bdc-11ed-a230-0af644332813",
-      "AmplifyAppId": "d2psmfmze7bmwp"
+      "AmplifyAppId": "d2psmfmze7bmwp",
+      "APIGatewayAuthURL": "https://s3.amazonaws.com/amplify-presolvedinsurance-develop-195154-deployment/amplify-cfn-templates/api/APIGatewayAuthStack.json"
     },
     "categories": {
       "hosting": {

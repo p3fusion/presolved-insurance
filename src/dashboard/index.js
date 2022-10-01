@@ -19,6 +19,7 @@ import { updateTemplates } from '../store/reducers/config';
 import { updateChannels } from '../store/reducers/channels';
 
 import '../gc-components/chat'
+import DND from './task_builder/dnd';
 
 
 const { Content } = Layout;
@@ -28,7 +29,7 @@ const APP = () => {
     const channels = useSelector((state) => state.channels)
     const [collapsed, setCollapsed] = useState(true);
 
-     useEffect(() => {
+/*      useEffect(() => {
         if (!config.templates.isLoaded) {
             getTaskTemplates().then((taskTemplates) => {
                 dispatch(updateTemplates(taskTemplates))
@@ -52,7 +53,7 @@ const APP = () => {
             })
         }
     }, [config.templates]);
-
+ */
     return (
         <Layout className='newdashboard'>
             <DashboardSidebar collapsed={collapsed} />
@@ -61,10 +62,11 @@ const APP = () => {
                 <Content className="main" style={{ minHeight: '100vh', }}>
                     <Router basepath='/'>
                         <DashboardIndexPage path="/" />
-                        <OutboundCallsPage path="/outbound-calls" />
+                        <OutboundCallsPage path="/outbound-calls" /> 
                         <TemplateBuilder path="/template-builder" />
                         <CreateNewTemplate path="/new-template" />
                         <AdvancedBuilder path="/advanced-template" />
+                        <DND path="/dnd" />
                     </Router>
 
                 </Content>
