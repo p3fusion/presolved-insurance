@@ -1,37 +1,42 @@
 {
-  "develop": {
+  "dev": {
     "awscloudformation": {
-      "AuthRoleName": "amplify-presolvedinsurance-develop-195154-authRole",
-      "UnauthRoleArn": "arn:aws:iam::039289871235:role/amplify-presolvedinsurance-develop-195154-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::039289871235:role/amplify-presolvedinsurance-develop-195154-authRole",
+      "AuthRoleName": "amplify-presolvedinsurance-dev-211801-authRole",
+      "UnauthRoleArn": "arn:aws:iam::039289871235:role/amplify-presolvedinsurance-dev-211801-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::039289871235:role/amplify-presolvedinsurance-dev-211801-authRole",
       "Region": "us-east-1",
-      "DeploymentBucketName": "amplify-presolvedinsurance-develop-195154-deployment",
-      "UnauthRoleName": "amplify-presolvedinsurance-develop-195154-unauthRole",
-      "StackName": "amplify-presolvedinsurance-develop-195154",
-      "StackId": "arn:aws:cloudformation:us-east-1:039289871235:stack/amplify-presolvedinsurance-develop-195154/77b4dc10-1bdc-11ed-a230-0af644332813",
+      "DeploymentBucketName": "amplify-presolvedinsurance-dev-211801-deployment",
+      "UnauthRoleName": "amplify-presolvedinsurance-dev-211801-unauthRole",
+      "StackName": "amplify-presolvedinsurance-dev-211801",
+      "StackId": "arn:aws:cloudformation:us-east-1:039289871235:stack/amplify-presolvedinsurance-dev-211801/9a18f6c0-4269-11ed-9fd4-0e9fd2770e1b",
       "AmplifyAppId": "d2psmfmze7bmwp",
-      "APIGatewayAuthURL": "https://s3.amazonaws.com/amplify-presolvedinsurance-develop-195154-deployment/amplify-cfn-templates/api/APIGatewayAuthStack.json"
+      "APIGatewayAuthURL": "https://s3.amazonaws.com/amplify-presolvedinsurance-dev-211801-deployment/amplify-cfn-templates/api/APIGatewayAuthStack.json"
     },
     "categories": {
-      "hosting": {
-        "amplifyhosting": {
-          "appId": "d2psmfmze7bmwp",
-          "type": "manual"
-        }
-      },
       "auth": {
-        "undefined": {},
         "presolvedinsurance": {}
       },
       "function": {
-        "GetUsersList": {
-          "deploymentBucketName": "amplify-presolvedinsurance-develop-195154-deployment",
-          "s3Key": "amplify-builds/GetUsersList-6f7872467276337a4d56-build.zip"
+        "presolvedinsurancelayer": {
+          "deploymentBucketName": "amplify-presolvedinsurance-dev-211801-deployment",
+          "s3Key": "amplify-builds/presolvedinsurancelayer-LambdaLayerVersion57403c84-build.zip"
         },
-        "presolvedinsuranceConnectSDK": {
-          "deploymentBucketName": "amplify-presolvedinsurance-develop-195154-deployment",
-          "s3Key": "amplify-builds/presolvedinsuranceConnectSDK-LambdaLayerVersion04e18d33-build.zip"
+        "GetUsersList": {
+          "deploymentBucketName": "amplify-presolvedinsurance-dev-211801-deployment",
+          "s3Key": "amplify-builds/GetUsersList-685534566c496d64666b-build.zip"
+        },
+        "presolvedinsurancemsgraph": {
+          "deploymentBucketName": "amplify-presolvedinsurance-dev-211801-deployment",
+          "s3Key": "amplify-builds/presolvedinsurancemsgraph-LambdaLayerVersion06bca3b9-build.zip"
+        },
+        "GetMails": {
+          "deploymentBucketName": "amplify-presolvedinsurance-dev-211801-deployment",
+          "s3Key": "amplify-builds/GetMails-61614f77494547794355-build.zip"
         }
+      },
+      "api": {
+        "presolvedinsurance": {},
+        "ConnectAPI": {}
       }
     }
   }

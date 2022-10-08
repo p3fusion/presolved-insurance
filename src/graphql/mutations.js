@@ -8,14 +8,13 @@ export const createChannel = /* GraphQL */ `
   ) {
     createChannel(input: $input, condition: $condition) {
       id
-      user
+      assignTo
       contactID
       channelType
       contactAttributes
       tasks {
         items {
           id
-          user
           assignTo
           channelID
           contactID
@@ -40,14 +39,13 @@ export const updateChannel = /* GraphQL */ `
   ) {
     updateChannel(input: $input, condition: $condition) {
       id
-      user
+      assignTo
       contactID
       channelType
       contactAttributes
       tasks {
         items {
           id
-          user
           assignTo
           channelID
           contactID
@@ -72,14 +70,13 @@ export const deleteChannel = /* GraphQL */ `
   ) {
     deleteChannel(input: $input, condition: $condition) {
       id
-      user
+      assignTo
       contactID
       channelType
       contactAttributes
       tasks {
         items {
           id
-          user
           assignTo
           channelID
           contactID
@@ -149,12 +146,11 @@ export const createTask = /* GraphQL */ `
   ) {
     createTask(input: $input, condition: $condition) {
       id
-      user
       assignTo
       channelID
       channel {
         id
-        user
+        assignTo
         contactID
         channelType
         contactAttributes
@@ -181,12 +177,11 @@ export const updateTask = /* GraphQL */ `
   ) {
     updateTask(input: $input, condition: $condition) {
       id
-      user
       assignTo
       channelID
       channel {
         id
-        user
+        assignTo
         contactID
         channelType
         contactAttributes
@@ -213,12 +208,11 @@ export const deleteTask = /* GraphQL */ `
   ) {
     deleteTask(input: $input, condition: $condition) {
       id
-      user
       assignTo
       channelID
       channel {
         id
-        user
+        assignTo
         contactID
         channelType
         contactAttributes
@@ -233,6 +227,159 @@ export const deleteTask = /* GraphQL */ `
       Name
       taskAttributes
       status
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const createEmailMessage = /* GraphQL */ `
+  mutation CreateEmailMessage(
+    $input: CreateEmailMessageInput!
+    $condition: ModelEmailMessageConditionInput
+  ) {
+    createEmailMessage(input: $input, condition: $condition) {
+      id
+      channelID
+      from
+      to
+      messageID
+      body
+      subject
+      attachments
+      receivedTime
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateEmailMessage = /* GraphQL */ `
+  mutation UpdateEmailMessage(
+    $input: UpdateEmailMessageInput!
+    $condition: ModelEmailMessageConditionInput
+  ) {
+    updateEmailMessage(input: $input, condition: $condition) {
+      id
+      channelID
+      from
+      to
+      messageID
+      body
+      subject
+      attachments
+      receivedTime
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteEmailMessage = /* GraphQL */ `
+  mutation DeleteEmailMessage(
+    $input: DeleteEmailMessageInput!
+    $condition: ModelEmailMessageConditionInput
+  ) {
+    deleteEmailMessage(input: $input, condition: $condition) {
+      id
+      channelID
+      from
+      to
+      messageID
+      body
+      subject
+      attachments
+      receivedTime
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const createAudit = /* GraphQL */ `
+  mutation CreateAudit(
+    $input: CreateAuditInput!
+    $condition: ModelAuditConditionInput
+  ) {
+    createAudit(input: $input, condition: $condition) {
+      id
+      reference
+      performedBy
+      activity
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateAudit = /* GraphQL */ `
+  mutation UpdateAudit(
+    $input: UpdateAuditInput!
+    $condition: ModelAuditConditionInput
+  ) {
+    updateAudit(input: $input, condition: $condition) {
+      id
+      reference
+      performedBy
+      activity
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteAudit = /* GraphQL */ `
+  mutation DeleteAudit(
+    $input: DeleteAuditInput!
+    $condition: ModelAuditConditionInput
+  ) {
+    deleteAudit(input: $input, condition: $condition) {
+      id
+      reference
+      performedBy
+      activity
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const createConfig = /* GraphQL */ `
+  mutation CreateConfig(
+    $input: CreateConfigInput!
+    $condition: ModelConfigConditionInput
+  ) {
+    createConfig(input: $input, condition: $condition) {
+      id
+      name
+      type
+      ARNReference
+      parameters
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateConfig = /* GraphQL */ `
+  mutation UpdateConfig(
+    $input: UpdateConfigInput!
+    $condition: ModelConfigConditionInput
+  ) {
+    updateConfig(input: $input, condition: $condition) {
+      id
+      name
+      type
+      ARNReference
+      parameters
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteConfig = /* GraphQL */ `
+  mutation DeleteConfig(
+    $input: DeleteConfigInput!
+    $condition: ModelConfigConditionInput
+  ) {
+    deleteConfig(input: $input, condition: $condition) {
+      id
+      name
+      type
+      ARNReference
+      parameters
       createdAt
       updatedAt
     }

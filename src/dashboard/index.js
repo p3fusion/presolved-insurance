@@ -14,7 +14,7 @@ import TemplateBuilder from './task_builder';
 import CreateNewTemplate from './task_builder/newTemplate';
 import AdvancedBuilder from './task_builder/advancedBuilder';
 import { useDispatch, useSelector } from 'react-redux';
-import { getTaskTemplates, getAllChannels } from './api/taskTemplates';
+import { getTaskTemplates, getAllChannels, getAllUsersFromConnect } from './api/taskTemplates';
 import { updateTemplates } from '../store/reducers/config';
 import { updateChannels } from '../store/reducers/channels';
 
@@ -29,13 +29,26 @@ const APP = () => {
     const channels = useSelector((state) => state.channels)
     const [collapsed, setCollapsed] = useState(true);
 
-/*      useEffect(() => {
+    useEffect(() => {
         if (!config.templates.isLoaded) {
+            getAllUsersFromConnect().then((allUsers) => {
+                console.log({ allUsers })
+            }).catch((error) => {
+                notification.error({
+                    description: error.message,
+                    duration:10,
+                    message: "Unable to load  getAllUsersFromConnect",
+                    type: 'error'
+
+                })
+            })
+
             getTaskTemplates().then((taskTemplates) => {
                 dispatch(updateTemplates(taskTemplates))
             }).catch((error) => {
                 notification.error({
-                    message: "Unable to load the configs, something went wrong",
+                    message: "Unable to load the configs",
+                    description: error.message,
                     type: 'error'
 
                 })
@@ -46,14 +59,15 @@ const APP = () => {
                 dispatch(updateChannels(result))
             }).catch((error) => {
                 notification.error({
-                    message: "Unable to load the channels, something went wrong",
+                    description: error.message,
+                    message: "Unable to load the channels",
                     type: 'error'
 
                 })
             })
         }
-    }, [config.templates]);
- */
+    }, []);
+
     return (
         <Layout className='newdashboard'>
             <DashboardSidebar collapsed={collapsed} />
@@ -62,7 +76,7 @@ const APP = () => {
                 <Content className="main" style={{ minHeight: '100vh', }}>
                     <Router basepath='/'>
                         <DashboardIndexPage path="/" />
-                        <OutboundCallsPage path="/outbound-calls" /> 
+                        <OutboundCallsPage path="/outbound-calls" />
                         <TemplateBuilder path="/template-builder" />
                         <CreateNewTemplate path="/new-template" />
                         <AdvancedBuilder path="/advanced-template" />

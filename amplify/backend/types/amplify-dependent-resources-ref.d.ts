@@ -12,14 +12,24 @@ export type AmplifyDependentResourcesAttributes = {
         }
     },
     "function": {
+        "presolvedinsurancelayer": {
+            "Arn": "string"
+        },
         "GetUsersList": {
             "Name": "string",
             "Arn": "string",
             "Region": "string",
             "LambdaExecutionRole": "string"
         },
-        "presolvedinsuranceConnectSDK": {
+        "presolvedinsurancemsgraph": {
             "Arn": "string"
+        },
+        "GetMails": {
+            "Name": "string",
+            "Arn": "string",
+            "Region": "string",
+            "LambdaExecutionRole": "string",
+            "CloudWatchEventRule": "string"
         }
     },
     "auth": {

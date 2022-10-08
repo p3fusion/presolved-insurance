@@ -6,17 +6,17 @@ import {
     VideoCameraOutlined
 } from '@ant-design/icons';
 import { Layout, Menu } from 'antd';
-import p3fsmall from '../assets/images/p3f-small.png';
-import p3flogo from '../assets/images/p3f-full.png';
+import p3fsmall from '../assets/images/presolved-small-logo.png';
+import p3flogo from '../assets/images/new-big-logo.png'; //'../assets/images/p3f-full.png';
 import { Link } from '@reach/router';
 const { Sider } = Layout;
 
-const DashboardSidebar = ({collapsed}) => {
+const DashboardSidebar = ({ collapsed }) => {
     return (
         <Sider theme='light' className='main-sidebar' trigger={null} collapsible collapsed={collapsed}>
-            <div className="logo"> 
+            <div className="logo">
                 <Link to="/">
-                <img src={collapsed ? p3fsmall: p3flogo} width={collapsed ? 110 : 180} className={collapsed ? 'collapsed logo' : 'logo' } />
+                    <img src={collapsed ? p3fsmall : p3flogo} height={collapsed ? 50 : 100} className={collapsed ? 'collapsed logo' : 'logo'} />
                 </Link>
             </div>
             <Menu
@@ -27,12 +27,12 @@ const DashboardSidebar = ({collapsed}) => {
                     {
                         key: '1',
                         icon: <UserOutlined />,
-                        label: <Link to='/'>Dashboard</Link>,                  
+                        label: <Link to='/'>Dashboard</Link>,
                     },
                     {
                         key: 'template_builder',
                         icon: <AimOutlined />,
-                        label: <Link to='/template-builder'>Template Dashboard</Link>,                  
+                        label: <Link to='/template-builder'>Template Dashboard</Link>,
                         children: [{ label: <Link to='/new-template'> New Template</Link>, key: 'create-new-template' }],
                     },
                     {

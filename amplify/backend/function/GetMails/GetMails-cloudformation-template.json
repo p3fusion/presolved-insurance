@@ -47,12 +47,12 @@
         "FunctionName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "GetUsersList",
+            "GetMails",
             {
               "Fn::Join": [
                 "",
                 [
-                  "GetUsersList",
+                  "GetMails",
                   "-",
                   {
                     "Ref": "env"
@@ -89,12 +89,12 @@
         "RoleName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "presolvedinsuranceLambdaRole753d85a0",
+            "presolvedinsuranceLambdaRole2aae7a72",
             {
               "Fn::Join": [
                 "",
                 [
-                  "presolvedinsuranceLambdaRole753d85a0",
+                  "presolvedinsuranceLambdaRole2aae7a72",
                   "-",
                   {
                     "Ref": "env"
@@ -160,7 +160,53 @@
                   }
                 ]
               }
+            },
+            {
+              "Effect": "Allow",
+              "Action": [
+                "secretsmanager:*"
+              ],
+              "Resource": "*"
             }
+          ]
+        }
+      }
+    },
+    "CloudWatchEvent": {
+      "Type": "AWS::Events::Rule",
+      "Properties": {
+        "Description": "Schedule rule for Lambda",
+        "ScheduleExpression": {
+          "Ref": "CloudWatchRule"
+        },
+        "State": "ENABLED",
+        "Targets": [
+          {
+            "Arn": {
+              "Fn::GetAtt": [
+                "LambdaFunction",
+                "Arn"
+              ]
+            },
+            "Id": {
+              "Ref": "LambdaFunction"
+            }
+          }
+        ]
+      }
+    },
+    "PermissionForEventsToInvokeLambda": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "LambdaFunction"
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "events.amazonaws.com",
+        "SourceArn": {
+          "Fn::GetAtt": [
+            "CloudWatchEvent",
+            "Arn"
           ]
         }
       }
@@ -188,6 +234,11 @@
     "LambdaExecutionRole": {
       "Value": {
         "Ref": "LambdaExecutionRole"
+      }
+    },
+    "CloudWatchEventRule": {
+      "Value": {
+        "Ref": "CloudWatchEvent"
       }
     }
   }

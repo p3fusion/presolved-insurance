@@ -4,10 +4,13 @@ import { schema } from './schema';
 
 
 
-const { Channel, Task, TaskTemplate } = initSchema(schema);
+const { Channel, Task, TaskTemplate, EmailMessage, Audit, Config } = initSchema(schema);
 
 export {
   Channel,
   Task,
-  TaskTemplate
+  TaskTemplate,
+  EmailMessage,
+  Audit,
+  Config
 };

@@ -10,6 +10,13 @@ export const schema = {
                     "isRequired": true,
                     "attributes": []
                 },
+                "assignTo": {
+                    "name": "assignTo",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true,
+                    "attributes": []
+                },
                 "contactID": {
                     "name": "contactID",
                     "isArray": false,
@@ -81,6 +88,13 @@ export const schema = {
                     "isRequired": true,
                     "attributes": []
                 },
+                "assignTo": {
+                    "name": "assignTo",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true,
+                    "attributes": []
+                },
                 "channel": {
                     "name": "channel",
                     "isArray": false,
@@ -120,6 +134,13 @@ export const schema = {
                     "isArray": false,
                     "type": "AWSJSON",
                     "isRequired": false,
+                    "attributes": []
+                },
+                "status": {
+                    "name": "status",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true,
                     "attributes": []
                 },
                 "createdAt": {
@@ -214,9 +235,222 @@ export const schema = {
                     "properties": {}
                 }
             ]
+        },
+        "EmailMessage": {
+            "name": "EmailMessage",
+            "fields": {
+                "id": {
+                    "name": "id",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "channelID": {
+                    "name": "channelID",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "from": {
+                    "name": "from",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "to": {
+                    "name": "to",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "messageID": {
+                    "name": "messageID",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "body": {
+                    "name": "body",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "subject": {
+                    "name": "subject",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "attachments": {
+                    "name": "attachments",
+                    "isArray": false,
+                    "type": "AWSJSON",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "receivedTime": {
+                    "name": "receivedTime",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "createdAt": {
+                    "name": "createdAt",
+                    "isArray": false,
+                    "type": "AWSDateTime",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isReadOnly": true
+                },
+                "updatedAt": {
+                    "name": "updatedAt",
+                    "isArray": false,
+                    "type": "AWSDateTime",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isReadOnly": true
+                }
+            },
+            "syncable": true,
+            "pluralName": "EmailMessages",
+            "attributes": [
+                {
+                    "type": "model",
+                    "properties": {}
+                }
+            ]
+        },
+        "Audit": {
+            "name": "Audit",
+            "fields": {
+                "id": {
+                    "name": "id",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "reference": {
+                    "name": "reference",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "performedBy": {
+                    "name": "performedBy",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "activity": {
+                    "name": "activity",
+                    "isArray": false,
+                    "type": "AWSJSON",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "createdAt": {
+                    "name": "createdAt",
+                    "isArray": false,
+                    "type": "AWSDateTime",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isReadOnly": true
+                },
+                "updatedAt": {
+                    "name": "updatedAt",
+                    "isArray": false,
+                    "type": "AWSDateTime",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isReadOnly": true
+                }
+            },
+            "syncable": true,
+            "pluralName": "Audits",
+            "attributes": [
+                {
+                    "type": "model",
+                    "properties": {}
+                }
+            ]
+        },
+        "Config": {
+            "name": "Config",
+            "fields": {
+                "id": {
+                    "name": "id",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "name": {
+                    "name": "name",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "type": {
+                    "name": "type",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "ARNReference": {
+                    "name": "ARNReference",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "parameters": {
+                    "name": "parameters",
+                    "isArray": false,
+                    "type": "AWSJSON",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "createdAt": {
+                    "name": "createdAt",
+                    "isArray": false,
+                    "type": "AWSDateTime",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isReadOnly": true
+                },
+                "updatedAt": {
+                    "name": "updatedAt",
+                    "isArray": false,
+                    "type": "AWSDateTime",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isReadOnly": true
+                }
+            },
+            "syncable": true,
+            "pluralName": "Configs",
+            "attributes": [
+                {
+                    "type": "model",
+                    "properties": {}
+                }
+            ]
         }
     },
     "enums": {},
     "nonModels": {},
-    "version": "f440719c1e0ce15d0bd56af2295ad4fd"
+    "version": "a4993e83d3c52e613824843a47019c02"
 };

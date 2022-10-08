@@ -5,14 +5,13 @@ export const getChannel = /* GraphQL */ `
   query GetChannel($id: ID!) {
     getChannel(id: $id) {
       id
-      user
+      assignTo
       contactID
       channelType
       contactAttributes
       tasks {
         items {
           id
-          user
           assignTo
           channelID
           contactID
@@ -39,7 +38,7 @@ export const listChannels = /* GraphQL */ `
     listChannels(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
-        user
+        assignTo
         contactID
         channelType
         contactAttributes
@@ -88,12 +87,11 @@ export const getTask = /* GraphQL */ `
   query GetTask($id: ID!) {
     getTask(id: $id) {
       id
-      user
       assignTo
       channelID
       channel {
         id
-        user
+        assignTo
         contactID
         channelType
         contactAttributes
@@ -122,12 +120,11 @@ export const listTasks = /* GraphQL */ `
     listTasks(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
-        user
         assignTo
         channelID
         channel {
           id
-          user
+          assignTo
           contactID
           channelType
           contactAttributes
@@ -139,6 +136,111 @@ export const listTasks = /* GraphQL */ `
         Name
         taskAttributes
         status
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const getEmailMessage = /* GraphQL */ `
+  query GetEmailMessage($id: ID!) {
+    getEmailMessage(id: $id) {
+      id
+      channelID
+      from
+      to
+      messageID
+      body
+      subject
+      attachments
+      receivedTime
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listEmailMessages = /* GraphQL */ `
+  query ListEmailMessages(
+    $filter: ModelEmailMessageFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listEmailMessages(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        channelID
+        from
+        to
+        messageID
+        body
+        subject
+        attachments
+        receivedTime
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const getAudit = /* GraphQL */ `
+  query GetAudit($id: ID!) {
+    getAudit(id: $id) {
+      id
+      reference
+      performedBy
+      activity
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listAudits = /* GraphQL */ `
+  query ListAudits(
+    $filter: ModelAuditFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listAudits(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        reference
+        performedBy
+        activity
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const getConfig = /* GraphQL */ `
+  query GetConfig($id: ID!) {
+    getConfig(id: $id) {
+      id
+      name
+      type
+      ARNReference
+      parameters
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listConfigs = /* GraphQL */ `
+  query ListConfigs(
+    $filter: ModelConfigFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listConfigs(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        name
+        type
+        ARNReference
+        parameters
         createdAt
         updatedAt
       }

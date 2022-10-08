@@ -1,16 +1,19 @@
 import React, { useState, useRef, useLayoutEffect, useEffect } from 'react';
 import { Button, Input, PageHeader, Row, Tabs, Menu, Radio, Col, Card, Space, Collapse, Modal, Form, Divider, DatePicker, Steps, notification, Spin, Dropdown, Select, Typography } from 'antd';
 import { CheckCircleOutlined, PlusCircleOutlined, SettingOutlined, MinusSquareOutlined, InsuranceOutlined, PropertySafetyOutlined, CloseOutlined } from '@ant-design/icons';
-import '../assets/style/interaction.less'
-import '../../gc-components/connect-streams'
-import '../../gc-components/amazon-connect-customer-profiles'
-import '../../gc-components/amazon-connect-task'
+
 import { API } from 'aws-amplify';
 import * as mutations from '../../graphql/mutations'
 import { filter, find } from 'lodash'
 import { useDispatch, useSelector, useStore } from 'react-redux';
-
+import { updateUser } from '../../store/reducers/user';
 import moment from 'moment-timezone';
+
+import '../assets/style/interaction.less'
+import '../../gc-components/connect-streams'
+import '../../gc-components/amazon-connect-customer-profiles'
+import '../../gc-components/amazon-connect-task'
+
 
 const { TabPane } = Tabs;
 const { Panel } = Collapse;
@@ -21,10 +24,15 @@ const NewInteraction = (props) => {
     const dispatch = useDispatch()
     const [form] = Form.useForm();
     const config = useSelector((store) => store.config)
+    const user = useSelector((store) => store.user)
     const divCCP = useRef(null);
+    const username = useRef(null);
     const { id } = props
 
     const [state, setState] = useState({
+        user: {
+            isLoggedin: false,
+        },
         showAddTask: false,
         isTemplatesLoaded: false,
         tasks: [],
@@ -43,9 +51,11 @@ const NewInteraction = (props) => {
         showWrapButton: false
     })
 
+    useEffect(() => {
+
+    }, [])
 
     useEffect(() => {
-        getSnapShot()
         const connectUrl = "https://p3fusion-uat.my.connect.aws/ccp-v2"
         if (divCCP.current) {
             connect.agentApp.initCCP(divCCP.current, {
@@ -77,67 +87,89 @@ const NewInteraction = (props) => {
                 ccpLoadTimeout: 10000 //optional, defaults to 5000 (ms)
             });
 
+            initiateConnectApp(connect)
+            getSnapShot(connect)
 
-
-            connect.contact(function (contact) {
-                contact.onIncoming(function (contact) {
-                    console.log("onIncoming", contact);
-                });
-
-                contact.onRefresh(function (contact) {
-                    console.log("onRefresh", contact);
-                });
-
-                contact.onAccepted(function (contact) {
-                    console.log("onAccepted", contact);
-                    var contactData = contact._getData()
-                    var contactAttributes = { ...contactData }
-                    delete contactAttributes.connections
-                    delete contactAttributes.contactFeatures
-                    delete contactAttributes.queue
-                    setState({ ...state, showWrapButton: true })
-                    createChannel(contactAttributes)
-                });
-
-                contact.onEnded(function () {
-                    console.log("onEnded", contact);
-                    var _getData = contact._getData()
-                    console.log({ data: _getData, });
-                });
-
-                contact.onConnected(function () {
-                    console.log(`onConnected(${contact.getContactId()})`);
-                });
-            });
         }
 
     }, [])
 
-    const getSnapShot = () => {
-        const snapshot = setInterval(() => {
-            console.log("******************************************** Polling");
-            if (connect.agent.initialized) {
-                console.log("******************************************** completed *********************");
-                connect.agent((agent) => {
-                    let agentData=agent._getData()
-                    console.log("************************************");
-                    console.log({ agent })
-                    console.log({ agentData })
-                    console.log("************************************");
-                });
-                clearInterval(snapshot);
-            }
+    const initiateConnectApp = (connectx) => {
+        connectx.contact(function (contact) {
+            contact.onIncoming(function (contact) {
+                console.log("onIncoming", contact);
+            });
 
-        }, 1000);
+            contact.onRefresh(function (contact) {
+                console.log("onRefresh", contact);
+            });
+
+            contact.onAccepted(function (contact) {
+                console.log("onAccepted", contact);
+                var contactData = contact._getData()
+                var contactAttributes = { ...contactData }
+                delete contactAttributes.connections
+                delete contactAttributes.contactFeatures
+                delete contactAttributes.queue
+                setState({ ...state, showWrapButton: true })
+                createChannel(contactAttributes, user)
+
+            });
+
+            contact.onEnded(function () {
+                console.log("onEnded", contact);
+                var _getData = contact._getData()
+                console.log({ data: _getData, });
+            });
+
+            contact.onConnected(function () {
+                console.log(`onConnected(${contact.getContactId()})`);
+            });
+        });
     }
 
-    const createChannel = (contactData) => {
+
+
+    const getSnapShot = (connectx) => {
+        /*   const snapshot = setInterval(() => {
+              console.log("::Gettting loged in Agent information::");
+              if (connect.agent.initialized) {
+                  connect.agent((agent) => {
+                      let agentData = agent._getData()
+                      dispatch(updateUser(agentData.configuration))
+                      let name = agentData.configuration.name
+                      let userName = agentData.configuration.username
+                      Modal.success({
+                          content: `Welcome ${name}(${userName})`
+                      })
+                      console.log("::completed loading the Agent information::");
+                  });
+                  clearInterval(snapshot);
+              }
+          }, 1000); */
+        console.log("::Gettting loged in Agent information::");
+        connectx.agent((agent) => {
+            let agentData = agent._getData()
+            dispatch(updateUser(agentData.configuration))
+            let name = agentData.configuration.name
+            let userName = agentData.configuration.username
+            Modal.success({
+                content: `Welcome ${name}(${userName})`
+            })
+            console.log("::completed loading the Agent information::");
+        });
+    }
+
+    const createChannel = (contactData, user) => {
+        /* {id,assignTo,contactID,channelType,contactAttributes} */
+        let agent = username.current.value
         const newChannel = {
+            assignTo: agent,
             contactID: contactData.contactId,
             channelType: contactData.type,
             contactAttributes: JSON.stringify({ ...contactData })
         }
-        console.log({ newChannel })
+        console.log({ newChannel, agent })
 
         API.graphql({ query: mutations.createChannel, variables: { input: newChannel } }).then((result) => {
             let currentChannelRawData = result.data.createChannel
@@ -151,11 +183,15 @@ const NewInteraction = (props) => {
     }
 
     const saveTask = (taskData) => {
+        /* {id,assignTo,channelID,contactID,channelType,Name,taskAttributes,status} */
+        let agent = username.current.value
         const newtask = {
+            assignTo:agent,
             contactID: state.channel.contactID,
             channelID: state.channel.id,
             channelType: state.channel.channelType,
             Name: taskData.name,
+            status: 'pending',
             taskAttributes: JSON.stringify(taskData.attrinutes)
         }
         console.log({ newtask })
@@ -225,10 +261,11 @@ const NewInteraction = (props) => {
 
     return (
         <section className="interaction">
+            <input type='hidden' id="username" ref={username} value={user.username || state.user.username } />
             <Row gutter={[16, 16]}>
                 <Col span={18}>
                     <PageHeader ghost={false} className="site-page-header" onBack={() => window.history.back()}
-                        title={<span>Interaction : <em>{id}</em></span>} subTitle=" New Interaction" extra={[                           
+                        title={<span>Interaction : <em>{id}</em></span>} subTitle=" New Interaction" extra={[
                             <Dropdown overlay={
                                 <Menu items={
                                     config.templates.data.map((tasks) => {
@@ -241,7 +278,7 @@ const NewInteraction = (props) => {
                                     onClick={({ key }) => addTask(key)}
                                 />}
                                 placement="bottomLeft" arrow>
-                                <Button icon={<PlusCircleOutlined />} >Add Task</Button>
+                                <Button icon={<PlusCircleOutlined />}  >Add Task</Button>
                             </Dropdown>,
                             state.showWrapButton && <Button type='primary' shape='round' icon={<CheckCircleOutlined />} onClick={() => form.submit()} >WrapCall</Button>
 
@@ -262,7 +299,7 @@ const NewInteraction = (props) => {
                             <Tabs.TabPane tab="Search Customer" key="search_customer">
                                 <Row style={{ marginTop: 30 }}>
                                     <Col span={24}>
-                                        <Card title="search Customer">
+                                        <Card title="search Customer" >                                           
                                             <CustomerProile props={props} />
                                         </Card>
                                     </Col>
@@ -301,9 +338,7 @@ const NewInteraction = (props) => {
                                                         <Col span={24}>
                                                             <Form.Item wrapperCol={{ span: 8 }} label="Assign Task to" name={["case", "task", index, "assignTo"]}>
                                                                 <Select  >
-                                                                    <option value="khizar">Khizar</option>
-                                                                    <option value="kasdfashizar">Khiasdfzar</option>
-                                                                    <option value="wqedc">wqedc</option>
+                                                                    <option value="p3fusion">p3fusion</option>
                                                                 </Select>
                                                             </Form.Item>
                                                         </Col>
@@ -383,6 +418,22 @@ export const IRenderField = ({ data, index, taskIndex }) => {
                 name={["case", "task", taskIndex, 'attrinutes', data.name]}>
                 <DatePicker format="MM/DD/YYYY" allowClear
                     defaultValue={moment(moment().subtract(data?.defaultValue.split("days")[0] || 7, 'days'), 'MM/DD/YYYYY')} />
+            </Form.Item>
+        </Col>
+    }
+    if (data.type === 'select') {
+        return <Col span={24} key={index}>
+            <Form.Item
+                rules={
+                    [{
+                        required: data.required | false,
+                        message: data.description,
+                    }]
+                }
+                help={data.description}
+                label={data.name}
+                name={["case", "task", taskIndex, 'attrinutes', data.name]}>
+                <Select defaultValue={[data.defaultValue]} options={data.options.map((rec) => { return { value: rec } })} />
             </Form.Item>
         </Col>
     }

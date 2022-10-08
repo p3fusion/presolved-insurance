@@ -1,10 +1,10 @@
 {
   "version": "1",
   "cognitoConfig": {
-    "identityPoolName": "presolvedinsurance_identitypool_1ffa866a",
+    "identityPoolName": "presolvedinsurance_identitypool_23183491",
     "allowUnauthenticatedIdentities": false,
-    "resourceNameTruncated": "presol1ffa866a",
-    "userPoolName": "presolvedinsurance_userpool_1ffa866a",
+    "resourceNameTruncated": "presol23183491",
+    "userPoolName": "presolvedinsurance_userpool_23183491",
     "autoVerifiedAttributes": [
       "email"
     ],
@@ -31,11 +31,11 @@
     "userpoolClientReadAttributes": [
       "email"
     ],
-    "userpoolClientLambdaRole": "presol1ffa866a_userpoolclient_lambda_role",
+    "userpoolClientLambdaRole": "presol23183491_userpoolclient_lambda_role",
     "userpoolClientSetAttributes": false,
     "authSelections": "identityPoolAndUserPool",
     "resourceName": "presolvedinsurance",
-    "sharedId": "1ffa866a",
+    "sharedId": "23183491",
     "serviceName": "Cognito",
     "useDefault": "manual"
   }

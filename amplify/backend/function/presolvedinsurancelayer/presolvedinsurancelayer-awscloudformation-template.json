@@ -20,7 +20,7 @@
     }
   },
   "Resources": {
-    "LambdaLayerVersion04e18d33": {
+    "LambdaLayerVersion57403c84": {
       "Type": "AWS::Lambda::LayerVersion",
       "Properties": {
         "CompatibleRuntimes": {
@@ -39,7 +39,7 @@
         },
         "LayerName": {
           "Fn::Sub": [
-            "presolvedinsuranceConnectSDK-${env}",
+            "presolvedinsurancelayer-${env}",
             {
               "env": {
                 "Ref": "env"
@@ -51,12 +51,12 @@
       "DeletionPolicy": "Delete",
       "UpdateReplacePolicy": "Retain"
     },
-    "LambdaLayerPermissionPrivate04e18d33": {
+    "LambdaLayerPermissionPrivate57403c84": {
       "Type": "AWS::Lambda::LayerVersionPermission",
       "Properties": {
         "Action": "lambda:GetLayerVersion",
         "LayerVersionArn": {
-          "Ref": "LambdaLayerVersion04e18d33"
+          "Ref": "LambdaLayerVersion57403c84"
         },
         "Principal": {
           "Ref": "AWS::AccountId"
@@ -67,7 +67,7 @@
   "Outputs": {
     "Arn": {
       "Value": {
-        "Ref": "LambdaLayerVersion04e18d33"
+        "Ref": "LambdaLayerVersion57403c84"
       }
     }
   }
