@@ -10,6 +10,7 @@ import DashboardIndexPage from "./dashboard";
 import { Amplify } from 'aws-amplify';
 import awsExports from './aws-exports';
 import './gc-components/connect-streams'
+import AgentLoginPage from "./agent_login";
 
 Amplify.configure(awsExports);
 
@@ -19,6 +20,7 @@ ReactDOM.render(
       <DefaultErrorBoundary>
         <Router basepath="/">
           <DashboardIndexPage path="/*" />
+          <AgentLoginPage path="/login/*" />
         </Router>
       </DefaultErrorBoundary>
     </Provider>
