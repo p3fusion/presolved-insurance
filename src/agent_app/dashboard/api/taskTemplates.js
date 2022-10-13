@@ -4,7 +4,6 @@ import { TaskTemplate } from '../../../models/'
 
 export const getTaskTemplates = async () => {
     try {
-
         let result = await API.graphql({
             query: listTaskTemplates,
             authMode: 'API_KEY',
@@ -13,7 +12,6 @@ export const getTaskTemplates = async () => {
         //let taskTemplates = await DataStore.query(TaskTemplate)
         console.log({ result });
         return result.data
-
     } catch (error) {
         console.error({ getTaskTemplates: error })
         throw error

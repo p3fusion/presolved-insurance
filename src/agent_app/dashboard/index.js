@@ -74,7 +74,7 @@ const APP = () => {
             <Layout className="site-layout">
                 <DashboardHeader setCollapsed={setCollapsed} collapsed={collapsed} />
                 <Content className="main" style={{ minHeight: '100vh', }}>
-                    <Router basepath='/'>
+                    <Router>
                         <DashboardIndexPage path="/" />
                         <OutboundCallsPage path="/outbound-calls" />
                         <TemplateBuilder path="/template-builder" />

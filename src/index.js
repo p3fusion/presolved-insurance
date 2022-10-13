@@ -2,30 +2,22 @@ import React from "react";
 import ReactDOM from "react-dom";
 
 import { Router } from "@reach/router";
-import { store } from './agent_app/store'
-import { Provider } from 'react-redux'
-import reportWebVitals from "./gc-components/reportWebVitals";
-import DefaultErrorBoundary from "./gc-components/errorBoundary";
-import DashboardIndexPage from "./agent_app/dashboard";
 import { Amplify } from 'aws-amplify';
+import AgentApp from "./agent_app/";
 import awsExports from './aws-exports';
-import './gc-components/connect-streams'
-import AgentLoginPage from "./agent_app/agent_login";
-import AppAuthLoginPage from "./agent_app/user_login";
+import './gc-components/connect-streams';
+import DefaultErrorBoundary from "./gc-components/errorBoundary";
+import reportWebVitals from "./gc-components/reportWebVitals";
 
 Amplify.configure(awsExports);
 
 ReactDOM.render(
   <React.StrictMode>
-    <Provider store={store}>
-      <DefaultErrorBoundary>
-        <Router basepath="/">
-          <DashboardIndexPage path="/*" />
-          <AgentLoginPage path="/login/*" />
-          <AppAuthLoginPage path="/applogin/*" />
-        </Router>
-      </DefaultErrorBoundary>
-    </Provider>
+    <DefaultErrorBoundary>
+      <Router basepath="/">
+        <AgentApp path="/agent/*" />
+      </Router>
+    </DefaultErrorBoundary>
   </React.StrictMode>,
   document.getElementById("root")
 );
