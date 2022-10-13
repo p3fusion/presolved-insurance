@@ -8,6 +8,7 @@ import awsExports from './aws-exports';
 import './gc-components/connect-streams';
 import DefaultErrorBoundary from "./gc-components/errorBoundary";
 import reportWebVitals from "./gc-components/reportWebVitals";
+import OnboardAddIndexPage from "./onboard_app";
 
 Amplify.configure(awsExports);
 
@@ -16,6 +17,7 @@ ReactDOM.render(
     <DefaultErrorBoundary>
       <Router basepath="/">
         <AgentApp path="/agent/*" />
+        <OnboardAddIndexPage path="/signup/*" />
       </Router>
     </DefaultErrorBoundary>
   </React.StrictMode>,
