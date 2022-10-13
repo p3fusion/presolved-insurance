@@ -3,16 +3,16 @@ import { Button, Input, PageHeader, Row, Tabs, Menu, Radio, Col, Card, Space, Co
 import { CheckCircleOutlined, PlusCircleOutlined, SettingOutlined, MinusSquareOutlined, InsuranceOutlined, PropertySafetyOutlined, CloseOutlined } from '@ant-design/icons';
 
 import { API } from 'aws-amplify';
-import * as mutations from '../../graphql/mutations'
+import * as mutations from '../../../graphql/mutations'
 import { filter, find } from 'lodash'
 import { useDispatch, useSelector, useStore } from 'react-redux';
 import { updateUser } from '../../store/reducers/user';
 import moment from 'moment-timezone';
 
 import '../assets/style/interaction.less'
-import '../../gc-components/connect-streams'
-import '../../gc-components/amazon-connect-customer-profiles'
-import '../../gc-components/amazon-connect-task'
+import '../../../gc-components/connect-streams'
+import '../../../gc-components/amazon-connect-customer-profiles'
+import '../../../gc-components/amazon-connect-task'
 
 
 const { TabPane } = Tabs;

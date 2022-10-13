@@ -2,8 +2,8 @@
 // this is an auto generated file. This will be overwritten
 
 export const onCreateChannel = /* GraphQL */ `
-  subscription OnCreateChannel($filter: ModelSubscriptionChannelFilterInput) {
-    onCreateChannel(filter: $filter) {
+  subscription OnCreateChannel {
+    onCreateChannel {
       id
       assignTo
       contactID
@@ -30,8 +30,8 @@ export const onCreateChannel = /* GraphQL */ `
   }
 `;
 export const onUpdateChannel = /* GraphQL */ `
-  subscription OnUpdateChannel($filter: ModelSubscriptionChannelFilterInput) {
-    onUpdateChannel(filter: $filter) {
+  subscription OnUpdateChannel {
+    onUpdateChannel {
       id
       assignTo
       contactID
@@ -58,8 +58,8 @@ export const onUpdateChannel = /* GraphQL */ `
   }
 `;
 export const onDeleteChannel = /* GraphQL */ `
-  subscription OnDeleteChannel($filter: ModelSubscriptionChannelFilterInput) {
-    onDeleteChannel(filter: $filter) {
+  subscription OnDeleteChannel {
+    onDeleteChannel {
       id
       assignTo
       contactID
@@ -86,10 +86,8 @@ export const onDeleteChannel = /* GraphQL */ `
   }
 `;
 export const onCreateTaskTemplate = /* GraphQL */ `
-  subscription OnCreateTaskTemplate(
-    $filter: ModelSubscriptionTaskTemplateFilterInput
-  ) {
-    onCreateTaskTemplate(filter: $filter) {
+  subscription OnCreateTaskTemplate {
+    onCreateTaskTemplate {
       id
       name
       description
@@ -100,10 +98,8 @@ export const onCreateTaskTemplate = /* GraphQL */ `
   }
 `;
 export const onUpdateTaskTemplate = /* GraphQL */ `
-  subscription OnUpdateTaskTemplate(
-    $filter: ModelSubscriptionTaskTemplateFilterInput
-  ) {
-    onUpdateTaskTemplate(filter: $filter) {
+  subscription OnUpdateTaskTemplate {
+    onUpdateTaskTemplate {
       id
       name
       description
@@ -114,10 +110,8 @@ export const onUpdateTaskTemplate = /* GraphQL */ `
   }
 `;
 export const onDeleteTaskTemplate = /* GraphQL */ `
-  subscription OnDeleteTaskTemplate(
-    $filter: ModelSubscriptionTaskTemplateFilterInput
-  ) {
-    onDeleteTaskTemplate(filter: $filter) {
+  subscription OnDeleteTaskTemplate {
+    onDeleteTaskTemplate {
       id
       name
       description
@@ -128,8 +122,8 @@ export const onDeleteTaskTemplate = /* GraphQL */ `
   }
 `;
 export const onCreateTask = /* GraphQL */ `
-  subscription OnCreateTask($filter: ModelSubscriptionTaskFilterInput) {
-    onCreateTask(filter: $filter) {
+  subscription OnCreateTask {
+    onCreateTask {
       id
       assignTo
       channelID
@@ -156,8 +150,8 @@ export const onCreateTask = /* GraphQL */ `
   }
 `;
 export const onUpdateTask = /* GraphQL */ `
-  subscription OnUpdateTask($filter: ModelSubscriptionTaskFilterInput) {
-    onUpdateTask(filter: $filter) {
+  subscription OnUpdateTask {
+    onUpdateTask {
       id
       assignTo
       channelID
@@ -184,8 +178,8 @@ export const onUpdateTask = /* GraphQL */ `
   }
 `;
 export const onDeleteTask = /* GraphQL */ `
-  subscription OnDeleteTask($filter: ModelSubscriptionTaskFilterInput) {
-    onDeleteTask(filter: $filter) {
+  subscription OnDeleteTask {
+    onDeleteTask {
       id
       assignTo
       channelID
@@ -212,10 +206,8 @@ export const onDeleteTask = /* GraphQL */ `
   }
 `;
 export const onCreateEmailMessage = /* GraphQL */ `
-  subscription OnCreateEmailMessage(
-    $filter: ModelSubscriptionEmailMessageFilterInput
-  ) {
-    onCreateEmailMessage(filter: $filter) {
+  subscription OnCreateEmailMessage {
+    onCreateEmailMessage {
       id
       channelID
       from
@@ -231,10 +223,8 @@ export const onCreateEmailMessage = /* GraphQL */ `
   }
 `;
 export const onUpdateEmailMessage = /* GraphQL */ `
-  subscription OnUpdateEmailMessage(
-    $filter: ModelSubscriptionEmailMessageFilterInput
-  ) {
-    onUpdateEmailMessage(filter: $filter) {
+  subscription OnUpdateEmailMessage {
+    onUpdateEmailMessage {
       id
       channelID
       from
@@ -250,10 +240,8 @@ export const onUpdateEmailMessage = /* GraphQL */ `
   }
 `;
 export const onDeleteEmailMessage = /* GraphQL */ `
-  subscription OnDeleteEmailMessage(
-    $filter: ModelSubscriptionEmailMessageFilterInput
-  ) {
-    onDeleteEmailMessage(filter: $filter) {
+  subscription OnDeleteEmailMessage {
+    onDeleteEmailMessage {
       id
       channelID
       from
@@ -269,8 +257,8 @@ export const onDeleteEmailMessage = /* GraphQL */ `
   }
 `;
 export const onCreateAudit = /* GraphQL */ `
-  subscription OnCreateAudit($filter: ModelSubscriptionAuditFilterInput) {
-    onCreateAudit(filter: $filter) {
+  subscription OnCreateAudit {
+    onCreateAudit {
       id
       reference
       performedBy
@@ -281,8 +269,8 @@ export const onCreateAudit = /* GraphQL */ `
   }
 `;
 export const onUpdateAudit = /* GraphQL */ `
-  subscription OnUpdateAudit($filter: ModelSubscriptionAuditFilterInput) {
-    onUpdateAudit(filter: $filter) {
+  subscription OnUpdateAudit {
+    onUpdateAudit {
       id
       reference
       performedBy
@@ -293,8 +281,8 @@ export const onUpdateAudit = /* GraphQL */ `
   }
 `;
 export const onDeleteAudit = /* GraphQL */ `
-  subscription OnDeleteAudit($filter: ModelSubscriptionAuditFilterInput) {
-    onDeleteAudit(filter: $filter) {
+  subscription OnDeleteAudit {
+    onDeleteAudit {
       id
       reference
       performedBy
@@ -305,8 +293,8 @@ export const onDeleteAudit = /* GraphQL */ `
   }
 `;
 export const onCreateConfig = /* GraphQL */ `
-  subscription OnCreateConfig($filter: ModelSubscriptionConfigFilterInput) {
-    onCreateConfig(filter: $filter) {
+  subscription OnCreateConfig {
+    onCreateConfig {
       id
       name
       type
@@ -318,8 +306,8 @@ export const onCreateConfig = /* GraphQL */ `
   }
 `;
 export const onUpdateConfig = /* GraphQL */ `
-  subscription OnUpdateConfig($filter: ModelSubscriptionConfigFilterInput) {
-    onUpdateConfig(filter: $filter) {
+  subscription OnUpdateConfig {
+    onUpdateConfig {
       id
       name
       type
@@ -331,8 +319,8 @@ export const onUpdateConfig = /* GraphQL */ `
   }
 `;
 export const onDeleteConfig = /* GraphQL */ `
-  subscription OnDeleteConfig($filter: ModelSubscriptionConfigFilterInput) {
-    onDeleteConfig(filter: $filter) {
+  subscription OnDeleteConfig {
+    onDeleteConfig {
       id
       name
       type

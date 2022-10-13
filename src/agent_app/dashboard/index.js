@@ -18,7 +18,7 @@ import { getTaskTemplates, getAllChannels, getAllUsersFromConnect } from './api/
 import { updateTemplates } from '../store/reducers/config';
 import { updateChannels } from '../store/reducers/channels';
 
-import '../gc-components/chat'
+import '../../gc-components/chat'
 import DND from './task_builder/dnd';
 
 

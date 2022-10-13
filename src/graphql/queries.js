@@ -29,41 +29,6 @@ export const getChannel = /* GraphQL */ `
     }
   }
 `;
-
-
-export const listChannelsWithTasks = /* GraphQL */ `
-  query ListChannels(
-    $filter: ModelChannelFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listChannels(filter: $filter, limit: $limit, nextToken: $nextToken) {
-      items {
-        assignTo
-        channelType
-        contactAttributes
-        contactID
-        createdAt
-        id
-        tasks {
-          items {
-            Name
-            assignTo
-            channelID
-            channelType
-            contactID
-            createdAt
-            id
-            status
-            taskAttributes
-            updatedAt
-          }
-        }
-      }
-    }
-  }
-`;
-
 export const listChannels = /* GraphQL */ `
   query ListChannels(
     $filter: ModelChannelFilterInput

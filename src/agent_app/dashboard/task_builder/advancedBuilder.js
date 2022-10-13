@@ -4,8 +4,8 @@ import { Button, Card, Col, Dropdown, Form, Input, Layout, Menu, Modal, PageHead
 import { API } from 'aws-amplify';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import * as mutations from '../../graphql/mutations';
-import * as queries from '../../graphql/queries';
+import * as mutations from '../../../graphql/mutations';
+import * as queries from '../../../graphql/queries';
 import { updateTemplates } from '../../store/reducers/config';
 import { getTaskTemplates } from '../api/taskTemplates';
 import './style/advanced.less';

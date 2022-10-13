@@ -5,7 +5,7 @@ import { Link } from '@reach/router';
 import { v1 as uuidv4 } from 'uuid';
 import '../assets/style/dashboard.less'
 import NewInteraction from './newinteraction';
-import { GraphConfig } from '../../gc-components/dummyGraph';
+import { GraphConfig } from '../../../gc-components/dummyGraph';
 
 
 const { Content } = Layout;

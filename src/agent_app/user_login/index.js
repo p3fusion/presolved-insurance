@@ -13,7 +13,7 @@ import logo from '../dashboard/assets/images/new-big-logo.png'
 import { updateAppUser } from '../store/reducers/user';
 
 
-
+ 
 
 
 const AppAuthLoginPage = () => {
