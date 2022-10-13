@@ -140,6 +140,14 @@
             {
               "Effect": "Allow",
               "Action": [
+                "connect:SearchUsers",
+                "connect:DescribeUser"
+              ],
+              "Resource": "*"
+            },
+            {
+              "Effect": "Allow",
+              "Action": [
                 "logs:CreateLogGroup",
                 "logs:CreateLogStream",
                 "logs:PutLogEvents"

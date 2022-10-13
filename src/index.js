@@ -11,6 +11,7 @@ import { Amplify } from 'aws-amplify';
 import awsExports from './aws-exports';
 import './gc-components/connect-streams'
 import AgentLoginPage from "./agent_login";
+import AppAuthLoginPage from "./user_login";
 
 Amplify.configure(awsExports);
 
@@ -21,6 +22,7 @@ ReactDOM.render(
         <Router basepath="/">
           <DashboardIndexPage path="/*" />
           <AgentLoginPage path="/login/*" />
+          <AppAuthLoginPage path="/applogin/*" />
         </Router>
       </DefaultErrorBoundary>
     </Provider>
