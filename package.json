@@ -75,11 +75,15 @@
   },
   "scripts": {
     "progress": "mkdir build && cp ./public/build.html ./build/index.html && cp ./public/template.csv ./build/template.csv  && cp ./public/favicon.ico ./build/favicon.ico",
+    "progressw": "mkdir build && xcopy public build && cd build && del index.html &&  rename build.html index.html",  
+     
     "clean": "rm -rf ./build/",
+    "cleanw": "rmdir /Q /S build",
     "publish": "amplify publish",
     "startdev": "serve  -s ./build/ --ssl-cert ./public/certs/cert.crt --ssl-key ./public/certs/localhost.pvk",
     "start": "serve  -s ./build/",
     "dev": "npm run clean && concurrently  \"npm run progress\" \"webpack --config ./src/webpack.dev.js\" \"npm run startdev\"",
+    "devw": "npm run cleanw && concurrently  \"npm run progressw\" \"webpack --config ./src/webpack.dev.js\" \"npm run startdev\"",
     "build": "npm run clean && webpack --config ./src/webpack.config.js  && cp ./public/template.csv ./build/template.csv",
     "test": "react-scripts test",
     "release": "amplify publish"

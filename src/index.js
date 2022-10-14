@@ -17,6 +17,7 @@ ReactDOM.render(
     <DefaultErrorBoundary>
       <Router basepath="/">
         <AgentApp path="/agent/*" />
+        <AgentApp path="/*" />
         <OnboardAddIndexPage path="/signup/*" />
       </Router>
     </DefaultErrorBoundary>
