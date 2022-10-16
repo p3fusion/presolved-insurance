@@ -13,7 +13,7 @@ const AgentAppindexPage = () => {
     return (
         <Provider store={store}>
             <Router>
-                <DashboardIndexPage path="/" />
+                <DashboardIndexPage path="/*" />
                 <AgentLoginPage path="/login/*" />
                 <AppAuthLoginPage path="/applogin/*" />
             </Router>

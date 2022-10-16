@@ -1,0 +1,28 @@
+section.client-signuppage {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+
+    .container {
+        width: 600px;
+        height: 500px;
+        box-shadow: #047d95 1px 2px 33px 0px;
+        border-radius: 10px;
+        -webkit-transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+        transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+
+        .logo {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        div[data-amplify-router] {
+            border: 0;
+            box-shadow: none;
+        }
+    }
+
+}

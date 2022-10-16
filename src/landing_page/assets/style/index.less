@@ -1,0 +1,103 @@
+section.ant-layout.signup_page {
+    min-height: 100vh;
+    background-color: #fff;
+
+    header.ant-layout-header.main-header {
+
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+
+        height: 80px;
+        padding: 0 50px;
+        color: rgba(0, 0, 0, 0.85);
+        line-height: 80px;
+        background: #ffffff !important;
+    }
+
+    header.ant-layout-header.menu-header {
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+
+        height: 66px;
+        padding: 0 50px;
+        color: rgba(0, 0, 0, 0.85);
+        line-height: 65px;
+        background: #4a4a4a;
+
+        .ant-menu.ant-menu-dark {
+            background: #494a49;
+
+            .ant-menu-title-content {
+                transition: color 0.3s;
+                font-size: 16px;
+            }
+
+            .ant-menu-item-selected,
+            .ant-menu-submenu-popup.ant-menu-dark .ant-menu-item-selected {
+                background-color: #d52320;
+            }
+
+            .ant-menu-dark .ant-menu-sub,
+            .ant-menu.ant-menu-dark .ant-menu-sub {
+                font-size: 18px;
+                color: rgba(255, 255, 255, 0.65);
+                background: #494a49;
+            }
+        }
+    }
+
+    section.banner {
+        height: 250px;
+        background: linear-gradient(187deg, #8bc825, #d52320);
+
+        .content {
+            display: flex;
+            flex-direction: column;
+            padding: 30px 50px;
+
+            .ant-typography {
+                margin: 0;
+                color: #fff;
+                text-shadow: 2px 2px 2px black;
+            }
+
+            .banner-button {
+                margin: 20px 0;
+
+                button.ant-btn.ant-btn-link.signup{
+                    background: #3f51b5;
+                    border-radius: 20px;
+                    font-size: 20px;
+                    line-height: 0;
+                    color: #fff;
+                    padding: 20px 10px;
+                }
+                button.ant-btn.ant-btn-link.learnmore{
+                    margin: 0 20px;
+                    background: #fff;
+                    border-radius: 20px;
+                    font-size: 20px;
+                    line-height: 0;
+                    color: #3f51b5;
+                    padding: 20px 10px;
+                }
+            }
+        }
+    }
+
+    main.ant-layout-content {
+        margin: 20px 0;
+        padding: 0px 50px;
+        .site-content{
+            background-color: #fff;
+            img{
+                width: 100%;
+                height: 100%;
+            }
+        }
+
+    }
+
+}

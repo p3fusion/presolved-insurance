@@ -8,7 +8,7 @@ import { Layout, notification } from 'antd';
 import { Router } from '@reach/router';
 import DashboardHeader from './layout/header';
 import DashboardSidebar from './layout/sidebar';
-import DashboardIndexPage from './pages';
+import AgentIndexPage from './pages';
 import OutboundCallsPage from './pages/outboundCalls';
 import TemplateBuilder from './task_builder';
 import CreateNewTemplate from './task_builder/newTemplate';
@@ -75,7 +75,7 @@ const APP = () => {
                 <DashboardHeader setCollapsed={setCollapsed} collapsed={collapsed} />
                 <Content className="main" style={{ minHeight: '100vh', }}>
                     <Router>
-                        <DashboardIndexPage path="/" />
+                        <AgentIndexPage path="/" />
                         <OutboundCallsPage path="/outbound-calls" />
                         <TemplateBuilder path="/template-builder" />
                         <CreateNewTemplate path="/new-template" />

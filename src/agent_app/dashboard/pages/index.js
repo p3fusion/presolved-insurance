@@ -16,7 +16,7 @@ const getID = () => {
     return id;
 }
 
-const DashboardIndexPAge = () => {
+const AgentIndexPage = () => {
 
     let initialState = {
         interactions: [
@@ -191,4 +191,4 @@ const DashboardIndexPAge = () => {
     )
 }
 
-export default DashboardIndexPAge
+export default AgentIndexPage
