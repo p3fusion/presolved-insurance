@@ -1,10 +1,40 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import { Auth, Hub } from "aws-amplify";
 import { Authenticator, Button, Flex, Heading, ThemeProvider, View } from '@aws-amplify/ui-react';
+import { updateAppUser } from '../store/reducers/user';
+import { navigate } from '@reach/router';
+
 import logo from '../assets/images/logo.png'
 import '@aws-amplify/ui-react/styles.css';
 import '../assets/style/index.less'
 const OnboardClientSignupPage = () => {
+    
+    const dispatch = useDispatch()
+    const [state, setState] = useState({
+        isLoggedin: false,
+        user: null
+    })
+
+    useEffect(() => {
+        Auth.currentAuthenticatedUser().then((login) => {
+            setState({ ...state, isLoggedin: true })
+            const loginData = login?.attributes
+            
+            dispatch(updateAppUser({ ...loginData }))
+            navigate("/signup/onboard")
+        })
+    }, [state.isLoggedin])
+
+    Hub.listen('auth', (data) => {
+        const event = data.payload.event;
+        console.log({ event });
+        if (event === 'signIn') {
+            setState({ ...state, isLoggedin: true })
+        }
+    });
+
+
     return (
         <section className="client-signuppage">
             <div className='container'>

@@ -13,8 +13,8 @@ const composeEnhancers = typeof window === 'object' && window.__REDUX_DEVTOOLS_E
 export const store = configureStore({
     reducer: combineReducers({
         user:userSlice,
-        channels:channelsReducer,
-        config:configReducer,
+        //channels:channelsReducer,
+        //config:configReducer,
     }),
     middleware: (getDefaultMiddleware) => getDefaultMiddleware({
         serializableCheck: false
