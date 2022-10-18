@@ -4,6 +4,7 @@ import { Provider } from 'react-redux';
 import { store } from './store';
 import Suspence from "../suspence";
 import OnBoardPage from "./pages/onboard-page";
+import 'antd/dist/antd.css'; 
 
 const SignupPage = React.lazy(() => import('./pages/signup'))
 
