@@ -23,6 +23,8 @@ const OnboardClientSignupPage = () => {
             
             dispatch(updateAppUser({ ...loginData }))
             navigate("/signup/onboard")
+        }).catch((ex)=>{
+            console.info("No auth data available")
         })
     }, [state.isLoggedin])
 
