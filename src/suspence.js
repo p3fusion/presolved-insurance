@@ -11,7 +11,7 @@ const Suspence = () => {
 
     return (
         <div style={{...style, minHeight: '99vh',}}>
-            <div style={{...style, width:900, boxShadow:'#0e2161 1px 2px 33px 0px', borderRadius:10, padding:'10px 20px', fontFamily:'arial'}}>
+            <div  id="loader"  style={{...style, width:900, boxShadow:'#0e2161 1px 2px 33px 0px', borderRadius:10, padding:'10px 20px', fontFamily:'arial'}}>
 
                 <img src={lazy} width={640} />
                 <h2>Please wait . . .</h2>
