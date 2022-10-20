@@ -22,8 +22,8 @@ describe('Launch the landing page', () => {
         cy.wait(1000)
         cy.get('.cognito').should('have.length', 1)
         cy.screenshot('login page')
-        cy.get('input#amplify-id-0').type("khizaras")
-        cy.get('input#amplify-id-2').type("Shower@123")
+        cy.get('input#amplify-id-0').type("username")
+        cy.get('input#amplify-id-2').type("password")
         cy.get('button.amplify-button.amplify-field-group__control.amplify-button--primary.amplify-button--fullwidth').click()
     })
 
