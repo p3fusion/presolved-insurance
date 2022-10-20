@@ -14,7 +14,7 @@ export const store = configureStore({
     reducer: combineReducers({
         user:userSlice,
         //channels:channelsReducer,
-        //config:configReducer,
+        config:configReducer,
     }),
     middleware: (getDefaultMiddleware) => getDefaultMiddleware({
         serializableCheck: false

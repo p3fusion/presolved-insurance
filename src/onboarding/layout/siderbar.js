@@ -14,7 +14,7 @@ const { Sider } = Layout;
 
 const OnBoardSidebar = ({ collapsed }) => {
     return (
-        <Sider theme='light' className='main-sidebar' trigger={null} collapsible collapsed={collapsed}>
+        <Sider theme='light' className='main-sidebar' trigger={null} collapsible collapsed={collapsed} style={{ height:'100vh'}}>
             <div className="logo" style={{margin:'20px'}}>
                     <img src={collapsed ? p3fsmall : p3flogo} height={collapsed ? 50 : 100} className={collapsed ? 'collapsed logo' : 'logo'} />
             </div>

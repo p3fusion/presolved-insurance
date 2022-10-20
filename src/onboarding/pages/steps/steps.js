@@ -1,59 +1,76 @@
 import { Button, message, Steps } from 'antd';
 import { Content } from 'antd/lib/layout/layout';
 import React, { useState } from 'react';
-import OnBoardStep1Content from './onboardStep1Content';
-import OnBoardStep2Content from './onboardStep2Content';
-import OnBoardStep3Content from './onboardStep3Content';
-import OnBoardStep4Content from './onboardStep4Content';
-import OnBoardStep5Content from './onboardStep5Content';
+import SelectAccount from './selectAccount';
+import ChooseChannel from './chooseChannel';
+import OnBoardStep3Content from './configureChannel';
+import ConfigureChannel from './configureCases';
+import Review from './review';
 
 const { Step } = Steps;
 
-const steps = [
-  {
-    title: 'Step1',
-    content: <OnBoardStep1Content/>,
-  },
-  {
-    title: 'Step2',
-    content: <OnBoardStep2Content/>,
-  },
-  {
-    title: 'Step3',
-    content: <OnBoardStep3Content/>,
-  },
-  {
-    title: 'Step4',
-    content: <OnBoardStep4Content/>,
-  },
-  {
-    title: 'Step5',
-    content: <OnBoardStep5Content/>,
-  },
-];
+
+
 
 
 const OnBoardSteps = () => {
 
+  const [state1, setState1] = useState();
+  const [state2, setState2] = useState();
+  const [state3, setState3] = useState();
+  const [state4, setState4] = useState();
+  const [state5, setState5] = useState();
+
+
   const [current, setCurrent] = useState(0);
+
   const next = () => {
+    console.log("next")
     setCurrent(current + 1);
   };
   const prev = () => {
     setCurrent(current - 1);
   };
 
+  const selectAccount=(value)=>{
+    console.log(value);
+  }
+
+  const steps = [
+    {
+      title: 'Select Account',
+      content: <SelectAccount selectAccount={selectAccount} next={next} />,
+    },
+    {
+      title: 'Choose channel',
+      content: <ChooseChannel />,
+    },
+    {
+      title: 'Configure channel',
+      content: <OnBoardStep3Content />,
+    },
+    {
+      title: 'Configure cases',
+      content: <ConfigureChannel />,
+    },
+    {
+      title: 'Review',
+      content: <Review />,
+    },
+  ];
+
+
   return (
-    <Content className= 'Steps' style={{margin:'15px 15px 10px 10px'}}>
+    <Content className='Steps' style={{ margin: '15px 15px 10px 10px' }}>
       <Steps current={current}>
         {steps.map((item) => (
           <Step key={item.title} title={item.title} />
         ))}
       </Steps>
-      <div className="steps-content" style={{margin:'50px 3px 50px 3px', background:'#ececec'}}>{steps[current].content}</div>
-      <div className="steps-action">
+      <div className="steps-content" style={{ margin: '50px 3px 50px 3px' }}>{steps[current].content}</div>
+      {/* <div className="steps-action">
         {current < steps.length - 1 && (
-          <Button type="primary" onClick={() => next()}>
+          <Button type="primary">
             Next
           </Button>
         )}
@@ -72,7 +89,7 @@ const OnBoardSteps = () => {
             Previous
           </Button>
         )}
-      </div>
+      </div> */}
     </Content>
   );
 };
