@@ -17,7 +17,7 @@ describe('Launch the landing page', () => {
         cy.login();
     })
     
-    
+    /*
     it('should login to cognito', () => {
         cy.wait(1000)
         cy.get('.cognito').should('have.length', 1)
@@ -27,5 +27,12 @@ describe('Launch the landing page', () => {
         cy.get('button.amplify-button.amplify-field-group__control.amplify-button--primary.amplify-button--fullwidth').click()
     })
 
+    */
 
+    // click a menu in navigation bar
+    it('should click a menu in navigation bar', () => {
+        cy.get('.ant-menu-item').contains('Dashboard').click()
+        cy.get('.ant-menu-item').contains('Dashboard').should('have.class', 'ant-menu-item-selected')
+        cy.screenshot('Dashboard')
+    } ) 
 })
