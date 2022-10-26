@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Form, Input, Button } from 'antd';
 
 const SelectAccount = (props) => {
+    
     const [value, setValue] = useState('Self Managed AWS account');
     const options = [
         { label: 'Self Managed AWS account', value: 'Self Managed AWS account' },
@@ -11,7 +12,6 @@ const SelectAccount = (props) => {
     const [showOption, setShowOption] = useState(true);
 
     const onChange = ({ target: { value } }) => {
-        console.log('radio checked', value);
         setValue(value);
         if (value === 'Self Managed AWS account') {
             setShowOption(true);
@@ -20,7 +20,8 @@ const SelectAccount = (props) => {
     };
 
     const onFinish = (values) => {
-        props.selectAccount(values);
+        let data = {...values, accountType:showOption?'Self Managed AWS account':'Presolved Managed AWS account'}
+        props.selectAccount(data);
         props.next();
     };
 
@@ -49,7 +50,7 @@ const SelectAccount = (props) => {
                     {showOption &&
                         <Form.Item
                             label="Account ID"
-                            name="accountId"
+                            name="selfAccountId"
                             rules={[{ required: true, message: 'Please input your account id!' }]}
                         >
                             <Input />
@@ -58,7 +59,7 @@ const SelectAccount = (props) => {
                     {!showOption &&
                         <Form.Item
                             label="Account Name"
-                            name="accountName"
+                            name="presolvedAccountName"
                             rules={[{ required: true, message: 'Please input your Account Name!' }]}
                         >
                             <Input />
@@ -68,18 +69,13 @@ const SelectAccount = (props) => {
                     {!showOption &&
                         <Form.Item
                             label="Email Id"
-                            name="emailId"
+                            name="presolvedEmailId"
                             rules={[{ required: true, message: 'Please input your email id!' }]}
                         >
                             <Input />
                         </Form.Item>
                     }
-                    <Form.Item
-                        wrapperCol={{
-                            offset: 8,
-                            span: 16,
-                        }}
-                    >
+                    <Form.Item>
                         <Button type="primary" htmlType="submit">
                             Next
                         </Button>

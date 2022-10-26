@@ -1,7 +1,7 @@
 import React from 'react';
 import CreateNewTemplate from '../../../agent_app/dashboard/task_builder/newTemplate';
 
-const ConfigureChannel = () => {
+const ConfigureCases = () => {
 
 
     return (
@@ -20,4 +20,4 @@ const ConfigureChannel = () => {
     );
 };
 
-export default ConfigureChannel;
+export default ConfigureCases;
