@@ -1,4 +1,4 @@
-import { Checkbox,  Radio, Card } from 'antd';
+import { Checkbox, Radio, Form, Button, Space } from 'antd';
 import React, { useState } from 'react';
 
 
@@ -6,7 +6,7 @@ const CheckboxGroup = Checkbox.Group;
 const plainOptions = ['Phone', 'Chat', 'Email'];
 const defaultCheckedList = ['Phone'];
 
-const ChooseChannel = () => {
+const ChooseChannel = (props) => {
 
     const [value, setValue] = useState(1);
     const [checkedList, setCheckedList] = useState(defaultCheckedList);
@@ -14,7 +14,6 @@ const ChooseChannel = () => {
 
     const onChange = (list) => {
         setCheckedList(list);
-       
         if (list.some(val => (val === 'Phone'))) {
             setIsSelectPhone(true);
         }
@@ -29,28 +28,63 @@ const ChooseChannel = () => {
     ];
 
     const onChangeRadio = (e) => {
-        console.log('radio checked', e.target.value);
         setValue(e.target.value);
     }
 
+    const onFinish = (values) => {
+        props.chooseChannel(values);
+        props.next();
+    };
+
+    const onPrev = () => {
+        props.prev();
+    }
+
+    const onFinishFailed = (errorInfo) => {
+        console.log('Failed:', errorInfo);
+    };
+
+
     return (
-        <Card
-            title="Channel selection"
-            bordered={true}
-            style={{
-                width: '100%',
-                height: '100%',
-            }}
+        <Form
+            name="step2"
+            layout='vertical'
+            labelCol={{ span: 8 }}
+            wrapperCol={{ span: 14 }}
+            onFinish={onFinish}
+            onFinishFailed={onFinishFailed}
+            autoComplete="off"
         >
 
-            <div>
-                <CheckboxGroup options={plainOptions} value={checkedList} onChange={onChange} style={{display:'flex', flexDirection:'column'}} />
-            </div>
-            <div style={{ marginTop: '20px' }}>
-                { isSelectPhone && <h5>Select phone type</h5> }
-                { isSelectPhone && <Radio.Group onChange={onChangeRadio} value={value} optionType='button' options={options}/> }
-            </div>
-        </Card>
+            <Form.Item
+                initialValue={['Phone']}
+                label="Select channel"
+                name="channel"
+                rules={[{ required: true, message: 'Please select channel!' }]}
+            >
+                <CheckboxGroup options={plainOptions} value={checkedList} onChange={onChange} style={{ display: 'flex', flexDirection: 'column' }} />
+            </Form.Item>
+            {isSelectPhone &&
+            <Form.Item
+                label="Select phone type"
+                name="phoneType"
+                rules={[{ required: true, message: 'Please select type!' }]}
+            >
+                 <Radio.Group onChange={onChangeRadio} value={value} optionType='button' options={options} />
+            </Form.Item>
+            }
+            <Form.Item>
+                <Space>
+                <Button type="primary" htmlType="submit" >
+                    Next
+                </Button>
+                <Button type="secondary" htmlType="button" onClick={onPrev}>
+                    Previous
+                </Button>
+                </Space>
+            </Form.Item>
+
+        </Form>
     );
 };
 
