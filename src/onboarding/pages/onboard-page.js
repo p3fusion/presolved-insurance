@@ -5,7 +5,7 @@ import OnBoardHeader from '../layout/header';
 import { Content } from 'antd/lib/layout/layout';
 import OnBoardSteps from './steps/steps';
 import { useSelector } from 'react-redux';
-import { navigate } from '@reach/router';
+import { navigate } from '@gatsbyjs/reach-router';
 
 const OnBoardPage = () => {
 
