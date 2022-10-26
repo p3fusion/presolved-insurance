@@ -1,11 +1,11 @@
 /*
     ./webpack.config.js
 */
-require("dotenv").config()
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+//const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
-const NODE_ENV ="development"
+const NODE_ENV = "development"
 const HtmlWebpackPluginConfig = new HtmlWebpackPlugin({
   template: path.join(__dirname, '../public/index.html'), 
   filename: "index.html",
@@ -18,7 +18,18 @@ console.info({
 })
 console.log("---------------------- WEBPACK ------------------")
 module.exports = {
-  devtool:'source-map',
+  resolve: {
+    fallback: {
+      "crypto": require.resolve("crypto-browserify"),
+      "buffer": require.resolve("buffer"),
+      "stream": require.resolve('stream-browserify')
+    },
+  },
+  stats: {
+    errorDetails: true
+  },
+
+  devtool: 'source-map',
   mode: NODE_ENV,//"production",
   watch: true,
   entry: {
@@ -45,18 +56,13 @@ module.exports = {
             options: {
               lessOptions: {
                 /* modifyVars: {
-                  '@ant-theme-file': "; @import '" + path.join(__dirname, '/theme/index.less',) + "'",
+                  '@ant-theme-file': "; @import '" + path.resolve(__dirname, './client/src/fci/assets/css/index.less',) + "'",
                 }, */
                 javascriptEnabled: true
               },
             },
           },
         ],
-      },
-      {
-        parser: {
-          amd: false
-        }
       },
       {
         test: /\.css$/,
@@ -66,7 +72,9 @@ module.exports = {
           {
             loader: "postcss-loader",
             options: {
-              plugins: () => [require("autoprefixer")]
+              postcssOptions: {
+                plugins: () => [require("autoprefixer")]
+              }
             }
           }
         ]
@@ -92,41 +100,23 @@ module.exports = {
       },
       {
         test: /\.(js|jsx)$/,
+        exclude: /node_modules/,
         use: {
           loader: "babel-loader",
           options: {
             presets: ['@babel/react']
           }
         }
-      }, 
-      {
-        test: /\.(svg)(\?v=\d+\.\d+\.\d+)?$/,
-        use: [
-          {
-            loader: 'file-loader',
-            options: {
-              esModule: false,
-              name: '[name].[ext]',
-              outputPath: 'svg/'
-            }
-          }
-        ]
-      },    
-      {
-        test: /\.(woff(2)?|ttf|eot)(\?v=\d+\.\d+\.\d+)?$/,
-        use: [
-          {
-            loader: 'file-loader',
-            options: {
-              esModule: false,
-              name: '[name].[ext]',
-              outputPath: 'fonts/'
-            }
-          }
-        ]
       },
       {
-        test: /\.(png|jpe?g|gif)$/i,
+          test: /\.(woff|woff2|eot|ttf|otf|svg)$/i,
+          type: 'asset/resource',
+          generator: {
+            filename: 'fonts/[name].[ext]',
+          }
+      },
+      {
+        test: /\.(png|jpe?g|gif|svg)$/i,
         loader: 'file-loader',
         options: {
           name(resourcePath, resourceQuery) {
@@ -168,7 +158,7 @@ module.exports = {
     },
     minimizer: [
       new UglifyJsPlugin({
-        parallel: 20,
+        parallel: 10,
         test: /\.js($|\?)/i,
         sourceMap: true,
         uglifyOptions: {
