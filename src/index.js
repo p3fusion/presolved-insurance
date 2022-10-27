@@ -1,7 +1,7 @@
 import React, { Suspense } from 'react';
 import ReactDOM from "react-dom";
 
-import { Router } from "@reach/router";
+import { Router } from "@gatsbyjs/reach-router";
 import { Amplify } from 'aws-amplify';
 import awsExports from './aws-exports';
 import './gc-components/connect-streams';
