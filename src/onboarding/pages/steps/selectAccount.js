@@ -53,7 +53,7 @@ const SelectAccount = (props) => {
                             name="selfAccountId"
                             rules={[{ required: true, message: 'Please input your account id!' }]}
                         >
-                            <Input />
+                            <Input style={{width: '60%'}}/>
                         </Form.Item>
                     }
                     {!showOption &&
@@ -62,7 +62,7 @@ const SelectAccount = (props) => {
                             name="presolvedAccountName"
                             rules={[{ required: true, message: 'Please input your Account Name!' }]}
                         >
-                            <Input />
+                            <Input style={{width: '60%'}}/>
                         </Form.Item>
 
                     }
@@ -72,7 +72,7 @@ const SelectAccount = (props) => {
                             name="presolvedEmailId"
                             rules={[{ required: true, message: 'Please input your email id!' }]}
                         >
-                            <Input />
+                            <Input style={{width: '60%'}}/>
                         </Form.Item>
                     }
                     <Form.Item>
