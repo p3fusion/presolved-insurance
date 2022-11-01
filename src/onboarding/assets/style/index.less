@@ -10,7 +10,7 @@ section.client-signuppage {
     min-height: 90vh;
 
     .container {
-        
+
         width: 600px;
         height: 500px;
         box-shadow: #047d95 1px 2px 33px 0px;
@@ -30,6 +30,61 @@ section.client-signuppage {
         }
     }
 
-  
+
+
+}
+
+section.onboard-page {
+    header.ant-layout-header {
+        background-color: #fff;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    main.ant-layout-content.main-onboard-page {
+        background: #fff;
+        min-height: 100vh;
+        margin: 20px 30px;
+
+        .Steps {
+            .ant-steps.ant-steps-horizontal.ant-steps-label-horizontal {
+                background-color: #e5e5e5;
+                padding: 20px;
+                border-bottom: #d7d7d7 solid 1px;
+            }
+
+            .steps-content {
+                .sideimg {
+                    width: 100%;
+                }
+
+                .channels {
+                    * {
+                        color: #6c63ff !important;
+                    }
+
+                   
+                    display: flex;
+                    flex-direction: row;
+                    row-gap: 0;
+                    column-gap: 15px;
+                
+                
+
+                    .ant-card.ant-card-bordered.channel-item {
+                        width: 200px;
+                        box-shadow: 0 0 6px 0 #b2aeff;
+                        border-radius: 20px;
+
+                        .ant-switch-checked {
+                            background-color: #6c63ff;
+                        }
+                    }
+                }
+            }
+        }
+
+    }
 
 }

@@ -86,11 +86,14 @@ const OnBoardSteps = () => {
       content: <Review />,
     },
   ];
+  const onChange = (value) => {
 
+    setCurrent(value);
+  };
 
   return (
-    <Content className='Steps' style={{ margin: '15px 15px 10px 10px' }}>
-      <Steps current={current}>
+    <Content className='Steps' >
+      <Steps current={current} onChange={onChange} >
         {steps.map((item) => (
           <Step key={item.title} title={item.title} />
         ))}
