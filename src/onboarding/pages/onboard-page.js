@@ -14,7 +14,7 @@ const OnBoardPage = () => {
 
 
   useEffect(() => {
-    if (!user.AppAuth.isLoggedin) {
+    if (!user.isLoggedin) {
       navigate("/signup")
     }
   }, []);

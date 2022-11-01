@@ -1,7 +1,7 @@
 import { Router } from "@gatsbyjs/reach-router";
 import { Amplify } from 'aws-amplify';
 import React, { Suspense } from 'react';
-import ReactDOM from "react-dom/client";
+import ReactDOM from "react-dom";
 import awsExports from './aws-exports';
 import './gc-components/connect-streams';
 import DefaultErrorBoundary from "./gc-components/errorBoundary";
@@ -13,12 +13,12 @@ const AgentApp = React.lazy(() => import('./agent_app/'));
 const OnboardAddIndexPage = React.lazy(() => import('./onboarding'));
 const LandingPage = React.lazy(() => import('./landing_page'));
 
-const root = ReactDOM.createRoot(document.getElementById("root"));
+const root =  document.getElementById("root");
 
 Amplify.configure(awsExports);
 
 
-root.render(
+ReactDOM.render(
   <React.StrictMode>
     <Suspense fallback={<Suspence />}>
       <DefaultErrorBoundary>
@@ -30,7 +30,8 @@ root.render(
         </Router>
       </DefaultErrorBoundary>
     </Suspense>
-  </React.StrictMode>
+  </React.StrictMode>,
+  root
 );
 
 reportWebVitals();

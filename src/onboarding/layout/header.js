@@ -12,14 +12,14 @@ const OnBoardHeader = ({ setCollapsed, collapsed }) => {
     const user = useSelector((state) => state.user)
 
     useEffect(() => {
-        if (user.AppAuth.isLoggedin) {
-            setState({ ...state, ...user.AppAuth })
+        if (user.isLoggedin) {
+            setState({ ...state, ...user })
         }
     }, [user])
 
 
     return (
-
+ 
 
         <Header>
             <div className='logo'>
