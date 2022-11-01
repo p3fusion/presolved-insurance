@@ -36,7 +36,7 @@ const SelectAccount = (props) => {
                 padding: '15px',
             }}
         >
-            <Radio.Group onChange={onChange} value={value} options={options} optionType="button" />
+            <Radio.Group className='radioMain' onChange={onChange} value={value} options={options} optionType="button" />
             <div style={{ justify: 'start', alignContent: 'center', margin: '25px 0 25px 0' }}>
                 <Form
                     name="step1"
