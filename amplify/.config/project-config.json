@@ -1,8 +1,5 @@
 {
-  "providers": [
-    "awscloudformation"
-  ],
-  "projectName": "presolvedinsurance",
+  "projectName": "presolvedadmin",
   "version": "3.1",
   "frontend": "javascript",
   "javascript": {
@@ -10,8 +7,11 @@
     "config": {
       "SourceDir": "src",
       "DistributionDir": "build",
-      "BuildCommand": "npm run build",
-      "StartCommand": "npm run start"
+      "BuildCommand": "npm run-script build",
+      "StartCommand": "npm run-script start"
     }
-  }
+  },
+  "providers": [
+    "awscloudformation"
+  ]
 }
