@@ -1,15 +1,16 @@
 {
   "dev": {
     "awscloudformation": {
-      "AuthRoleName": "amplify-presolvedadmin-dev-120657-authRole",
-      "UnauthRoleArn": "arn:aws:iam::039289871235:role/amplify-presolvedadmin-dev-120657-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::039289871235:role/amplify-presolvedadmin-dev-120657-authRole",
+      "AuthRoleName": "amplify-presolvedinsurance-dev-211801-authRole",
+      "UnauthRoleArn": "arn:aws:iam::039289871235:role/amplify-presolvedinsurance-dev-211801-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::039289871235:role/amplify-presolvedinsurance-dev-211801-authRole",
       "Region": "us-east-1",
-      "DeploymentBucketName": "amplify-presolvedadmin-dev-120657-deployment",
-      "UnauthRoleName": "amplify-presolvedadmin-dev-120657-unauthRole",
-      "StackName": "amplify-presolvedadmin-dev-120657",
-      "StackId": "arn:aws:cloudformation:us-east-1:039289871235:stack/amplify-presolvedadmin-dev-120657/da341340-612a-11ed-ac2d-12bd8a12c373",
-      "AmplifyAppId": "d1pr4g95eoq85h"
+      "DeploymentBucketName": "amplify-presolvedinsurance-dev-211801-deployment",
+      "UnauthRoleName": "amplify-presolvedinsurance-dev-211801-unauthRole",
+      "StackName": "amplify-presolvedinsurance-dev-211801",
+      "StackId": "arn:aws:cloudformation:us-east-1:039289871235:stack/amplify-presolvedinsurance-dev-211801/9a18f6c0-4269-11ed-9fd4-0e9fd2770e1b",
+      "AmplifyAppId": "d2psmfmze7bmwp",
+      "APIGatewayAuthURL": "https://s3.amazonaws.com/amplify-presolvedinsurance-dev-211801-deployment/amplify-cfn-templates/api/APIGatewayAuthStack.json"
     },
     "categories": {
       "hosting": {
