@@ -39,6 +39,7 @@ amplify/backend/.temp
 build/
 dist/
 node_modules/
+cypress/screenshots
 aws-exports.js
 awsconfiguration.json
 amplifyconfiguration.json
