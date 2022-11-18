@@ -89,5 +89,12 @@
       "providerPlugin": "awscloudformation",
       "type": "manual"
     }
+  },
+  "custom": {
+    "PSEventBridge": {
+      "service": "customCloudformation",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": []
+    }
   }
 }
