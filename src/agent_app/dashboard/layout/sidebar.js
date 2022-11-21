@@ -3,6 +3,7 @@ import {
     PhoneOutlined, UploadOutlined,
     UserOutlined,
     AimOutlined,
+    ShoppingOutlined,
     VideoCameraOutlined
 } from '@ant-design/icons';
 import { Layout, Menu } from 'antd';
@@ -39,6 +40,11 @@ const DashboardSidebar = ({ collapsed }) => {
                         key: 'outbound',
                         icon: <PhoneOutlined />,
                         label: <Link to='/outbound-calls'>Outbound Calls</Link>,
+                    },
+                    {
+                        key: 'ShoppingOutlined',
+                        icon: <ShoppingOutlined />,
+                        label: <Link to='/signup'>Complete Signup</Link>,
                     },
                     {
                         key: '2',

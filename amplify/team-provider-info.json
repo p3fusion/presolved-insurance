@@ -27,11 +27,11 @@
         },
         "presolvedinsurancemsgraph": {
           "deploymentBucketName": "amplify-presolvedinsurance-dev-211801-deployment",
-          "s3Key": "amplify-builds/presolvedinsurancemsgraph-LambdaLayerVersion36d9c7bf-build.zip"
+          "s3Key": "amplify-builds/presolvedinsurancemsgraph-LambdaLayerVersion7afbcd06-build.zip"
         },
         "GetMails": {
           "deploymentBucketName": "amplify-presolvedinsurance-dev-211801-deployment",
-          "s3Key": "amplify-builds/GetMails-315a333779516c564959-build.zip"
+          "s3Key": "amplify-builds/GetMails-33343779394238794449-build.zip"
         }
       },
       "api": {
