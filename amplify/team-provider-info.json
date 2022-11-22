@@ -13,6 +13,31 @@
       "APIGatewayAuthURL": "https://s3.amazonaws.com/amplify-presolvedinsurance-dev-211801-deployment/amplify-cfn-templates/api/APIGatewayAuthStack.json"
     },
     "categories": {
+      "auth": {
+        "presolvedinsurance": {}
+      },
+      "function": {
+        "presolvedinsurancelayer": {
+          "deploymentBucketName": "amplify-presolvedinsurance-dev-211801-deployment",
+          "s3Key": "amplify-builds/presolvedinsurancelayer-LambdaLayerVersion57403c84-build.zip"
+        },
+        "GetUsersList": {
+          "deploymentBucketName": "amplify-presolvedinsurance-dev-211801-deployment",
+          "s3Key": "amplify-builds/GetUsersList-685534566c496d64666b-build.zip"
+        },
+        "presolvedinsurancemsgraph": {
+          "deploymentBucketName": "amplify-presolvedinsurance-dev-211801-deployment",
+          "s3Key": "amplify-builds/presolvedinsurancemsgraph-LambdaLayerVersion7afbcd06-build.zip"
+        },
+        "GetMails": {
+          "deploymentBucketName": "amplify-presolvedinsurance-dev-211801-deployment",
+          "s3Key": "amplify-builds/GetMails-33343779394238794449-build.zip"
+        }
+      },
+      "api": {
+        "presolvedinsurance": {},
+        "ConnectAPI": {}
+      },
       "hosting": {
         "amplifyhosting": {
           "appId": "d1pr4g95eoq85h",
