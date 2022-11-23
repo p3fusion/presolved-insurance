@@ -54,6 +54,22 @@
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda",
+      "dependsOn": [
+        {
+          "category": "api",
+          "resourceName": "presolvedinsurance",
+          "attributes": [
+            "GraphQLAPIIdOutput",
+            "GraphQLAPIEndpointOutput",
+            "GraphQLAPIKeyOutput"
+          ]
+        }
+      ]
+    },
+    "DownloadEmail": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda",
       "dependsOn": []
     }
   },
@@ -92,9 +108,31 @@
   },
   "custom": {
     "PSEventBridge": {
-      "service": "customCloudformation",
+      "service": "customCDK",
       "providerPlugin": "awscloudformation",
-      "dependsOn": []
+      "dependsOn": [
+        {
+          "category": "function",
+          "resourceName": "GetMails",
+          "attributes": [
+            "Name",
+            "Arn",
+            "Region",
+            "LambdaExecutionRole",
+            "CloudWatchEventRule"
+          ]
+        },
+        {
+          "category": "function",
+          "resourceName": "DownloadEmail",
+          "attributes": [
+            "Name",
+            "Arn",
+            "Region",
+            "LambdaExecutionRole"
+          ]
+        }
+      ]
     }
   }
 }

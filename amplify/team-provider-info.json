@@ -27,11 +27,15 @@
         },
         "presolvedinsurancemsgraph": {
           "deploymentBucketName": "amplify-presolvedinsurance-dev-211801-deployment",
-          "s3Key": "amplify-builds/presolvedinsurancemsgraph-LambdaLayerVersion7afbcd06-build.zip"
+          "s3Key": "amplify-builds/presolvedinsurancemsgraph-LambdaLayerVersion89bdf29f-build.zip"
         },
         "GetMails": {
           "deploymentBucketName": "amplify-presolvedinsurance-dev-211801-deployment",
-          "s3Key": "amplify-builds/GetMails-33343779394238794449-build.zip"
+          "s3Key": "amplify-builds/GetMails-6e583774476847526269-build.zip"
+        },
+        "DownloadEmail": {
+          "deploymentBucketName": "amplify-presolvedinsurance-dev-211801-deployment",
+          "s3Key": "amplify-builds/DownloadEmail-6b634e66703278647942-build.zip"
         }
       },
       "api": {
@@ -43,6 +47,16 @@
           "appId": "d1pr4g95eoq85h",
           "type": "manual"
         }
+      },
+      "custom": {
+        "PSEventBridge": {}
+      }
+    }
+  },
+  "release": {
+    "categories": {
+      "auth": {
+        "presolvedinsurance": {}
       }
     }
   }
