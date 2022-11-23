@@ -248,3 +248,46 @@ export const listConfigs = /* GraphQL */ `
     }
   }
 `;
+export const getClient = /* GraphQL */ `
+  query GetClient($id: ID!) {
+    getClient(id: $id) {
+      id
+      name
+      company
+      email
+      phone
+      isSignedup
+      intents
+      templates
+      instanceURL
+      connectInstanceURL
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listClients = /* GraphQL */ `
+  query ListClients(
+    $filter: ModelClientFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listClients(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        name
+        company
+        email
+        phone
+        isSignedup
+        intents
+        templates
+        instanceURL
+        connectInstanceURL
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;

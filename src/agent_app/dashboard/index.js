@@ -5,7 +5,7 @@ import 'antd/lib/style/themes/default.less';
 import './assets/style/theme.less';
 
 import { Layout, notification } from 'antd';
-import { Router } from '@gatsbyjs/reach-router';
+import { navigate, Router } from '@gatsbyjs/reach-router';
 import DashboardHeader from './layout/header';
 import DashboardSidebar from './layout/sidebar';
 import AgentIndexPage from './pages';
@@ -25,6 +25,7 @@ import DND from './task_builder/dnd';
 const { Content } = Layout;
 const APP = () => {
     const dispatch = useDispatch()
+    const user = useSelector((state) => state.user)
     const config = useSelector((state) => state.config)
     const channels = useSelector((state) => state.channels)
     const [collapsed, setCollapsed] = useState(true);
@@ -65,6 +66,9 @@ const APP = () => {
 
                 })
             })
+        }
+        if(!user.AppAuth.isLoggedin){
+            navigate("/applogin")
         }
     }, []);
 
