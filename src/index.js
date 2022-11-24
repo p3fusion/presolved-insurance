@@ -1,23 +1,22 @@
 import { Router } from "@gatsbyjs/reach-router";
-import { Amplify } from 'aws-amplify';
-import React, { Suspense } from 'react';
+import { Amplify } from "aws-amplify";
+import React, { Suspense } from "react";
 import ReactDOM from "react-dom";
-import awsExports from './aws-exports';
-import './gc-components/connect-streams';
+import awsExports from "./aws-exports";
+import "./gc-components/connect-streams";
 import DefaultErrorBoundary from "./gc-components/errorBoundary";
 import reportWebVitals from "./gc-components/reportWebVitals";
 import PresolvedOnboardIndexPage from "./signupPage";
+import EmailPage from "./emailViewer";
 import Suspence from "./suspence";
 
-
-const AgentApp = React.lazy(() => import('./agent_app/'));
+const AgentApp = React.lazy(() => import("./agent_app/"));
 /* const OnboardAddIndexPage = React.lazy(() => import('./onboarding'));
 const LandingPage = React.lazy(() => import('./landing_page')); */
 
-const root =  document.getElementById("root");
+const root = document.getElementById("root");
 
 Amplify.configure(awsExports);
-
 
 ReactDOM.render(
   <React.StrictMode>
@@ -26,9 +25,10 @@ ReactDOM.render(
         <Router basepath="/">
           <AgentApp path="/*" />
           <AgentApp path="/agent/*" />
-       {/*    <LandingPage path="/site/*" />
+          {/*    <LandingPage path="/site/*" />
           <OnboardAddIndexPage path="/signup/*" /> */}
           <PresolvedOnboardIndexPage path="/signup/*" />
+          <EmailPage path="/email/*" />
         </Router>
       </DefaultErrorBoundary>
     </Suspense>
@@ -37,8 +37,3 @@ ReactDOM.render(
 );
 
 reportWebVitals();
-
-
-
-
-
