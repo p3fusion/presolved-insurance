@@ -27,29 +27,29 @@
         },
         "presolvedinsurancemsgraph": {
           "deploymentBucketName": "amplify-presolvedinsurance-dev-211801-deployment",
-          "s3Key": "amplify-builds/presolvedinsurancemsgraph-LambdaLayerVersion89bdf29f-build.zip"
+          "s3Key": "amplify-builds/presolvedinsurancemsgraph-LambdaLayerVersion71307527-build.zip"
         },
         "GetMails": {
           "deploymentBucketName": "amplify-presolvedinsurance-dev-211801-deployment",
-          "s3Key": "amplify-builds/GetMails-6e583774476847526269-build.zip"
+          "s3Key": "amplify-builds/GetMails-414b34356b7a7a317562-build.zip"
         },
         "DownloadEmail": {
           "deploymentBucketName": "amplify-presolvedinsurance-dev-211801-deployment",
-          "s3Key": "amplify-builds/DownloadEmail-6b634e66703278647942-build.zip"
+          "s3Key": "amplify-builds/DownloadEmail-46355070436551655033-build.zip"
         }
       },
       "api": {
         "presolvedinsurance": {},
         "ConnectAPI": {}
       },
-      "hosting": {
-        "amplifyhosting": {
-          "appId": "d1pr4g95eoq85h",
-          "type": "manual"
-        }
-      },
       "custom": {
         "PSEventBridge": {}
+      },
+      "hosting": {
+        "S3AndCloudFront": {}
+      },
+      "storage": {
+        "psemailbucket": {}
       }
     }
   },

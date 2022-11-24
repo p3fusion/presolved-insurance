@@ -1,0 +1,14 @@
+{
+  "resourceName": "psemailbucket",
+  "policyUUID": "5f5455a9",
+  "bucketName": "psemail",
+  "storageAccess": "auth",
+  "guestAccess": [],
+  "authAccess": [
+    "CREATE_AND_UPDATE",
+    "READ",
+    "DELETE"
+  ],
+  "triggerFunction": "NONE",
+  "groupAccess": {}
+}

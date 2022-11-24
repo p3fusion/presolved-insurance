@@ -4,12 +4,13 @@ import { AmplifyDependentResourcesAttributes } from '../../types/amplify-depende
 import * as events from '@aws-cdk/aws-events'
 import * as targets  from '@aws-cdk/aws-events-targets';
 import * as lambda from '@aws-cdk/aws-lambda';
-//import * as iam from '@aws-cdk/aws-iam';
+import * as iam from '@aws-cdk/aws-iam';
 //import * as sns from '@aws-cdk/aws-sns';
 //import * as subs from '@aws-cdk/aws-sns-subscriptions';
 //import * as sqs from '@aws-cdk/aws-sqs';
 import { Rule, Schedule } from '@aws-cdk/aws-events';
 import { Duration } from '@aws-cdk/core';
+import { CfnPermission } from '@aws-cdk/aws-lambda';
 
 export class cdkStack extends cdk.Stack {
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps, amplifyResourceProps?: AmplifyHelpers.AmplifyResourceProps) {
@@ -49,41 +50,58 @@ export class cdkStack extends cdk.Stack {
       retryAttempts:3,
       maxEventAge: Duration.hours(2),
     });
-
-    const DownloadEmailArn = cdk.Fn.ref(retVal.function.DownloadEmail.Arn);
-
-    const importedDownloadEmailFromArn = lambda.Function.fromFunctionArn (
-      this,
-      'DownloadEmail',
-      DownloadEmailArn
-    );
-
-    const lambdaTargetDownloadEmail = new targets.LambdaFunction(importedDownloadEmailFromArn, {
-      retryAttempts:3,
-      maxEventAge: Duration.hours(2),
-    });
     
 
     //Create a evebtbridge rule
     const rule1 = new Rule(this, 'ScheduleMailFetch', {
-      schedule: events.Schedule.cron({ minute: '0', hour: '1' }),
+      schedule: events.Schedule.rate(cdk.Duration.minutes(3)),
       targets: [lambdaTarget],
     });
+
+    //importedLambdaFromArn.grantInvoke(new iam.ServicePrincipal('events.amazonaws.com'));
+
+    new CfnPermission(this, 'ScheduleMailFetchPermission', {
+      action: 'lambda:InvokeFunction',
+      functionName: importedLambdaFromArn.functionName,
+      principal: 'events.amazonaws.com',
+      sourceArn: rule1.ruleArn,
+      });
+
+      const DownloadEmailArn = cdk.Fn.ref(retVal.function.DownloadEmail.Arn);
+
+      const importedDownloadEmailFromArn = lambda.Function.fromFunctionArn (
+        this,
+        'DownloadEmail',
+        DownloadEmailArn
+      );
+  
+      const lambdaTargetDownloadEmail = new targets.LambdaFunction(importedDownloadEmailFromArn, {
+        retryAttempts:0,
+        maxEventAge: Duration.hours(2),
+      });      
+
 
     const rule2 = new Rule(this, 'DownloadMail', {     
       targets: [lambdaTargetDownloadEmail],
       eventPattern: {
-        source: ['aws.lambda'],
+        source: ['PS.GetMails'],
         detailType: ['DownloadEmail'],
       }
     });
 
-    const rule3 = new Rule(this, 'DownloadAttachments', {     
-      targets: [lambdaTarget],
-      eventPattern: {
-        source: ['aws.lambda'],
-      }
-    });    
+       
+    new CfnPermission(this, 'DownloadMailPermission', {
+      action: 'lambda:InvokeFunction',
+      functionName: importedDownloadEmailFromArn.functionName,
+      principal: 'events.amazonaws.com',
+      sourceArn: rule2.ruleArn,
+      });
+
+
+ 
+
+        // allow the Event Rule to invoke the Lambda function
+        //targets.addLambdaPermission(rule3, importedDownloadEmailFromArn);        
 
 
     /* AWS CDK code goes here - learn more: https://docs.aws.amazon.com/cdk/latest/guide/home.html */

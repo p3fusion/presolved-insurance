@@ -42,13 +42,33 @@ exports.handler = async (event) => {
 
     const variables = {
       input: {
-        id: message.id,
+        messageID: message.id,
         subject: message.subject,
         from: message.from.emailAddress.name,
         receivedDateTime: message.receivedDateTime,
-        isRead: message.isRead,
       },
     };
+
+    const createEmailMessage = /* GraphQL */ `
+      mutation CreateEmailMessage(
+        $input: CreateEmailMessageInput!
+        $condition: ModelEmailMessageConditionInput
+      ) {
+        createEmailMessage(input: $input, condition: $condition) {
+          id
+          channelID
+          from
+          to
+          messageID
+          body
+          subject
+          attachments
+          receivedTime
+          createdAt
+          updatedAt
+        }
+      }
+    `;
 
     const options = {
       method: "POST",
@@ -61,21 +81,21 @@ exports.handler = async (event) => {
 
     const request = new Request(GRAPHQL_ENDPOINT, options);
 
-    try {
+    /*try {
       const response = await fetch(request);
       const json = await response.json();
       console.log("Response: ", json);
     } catch (error) {
       console.log("Error: ", error);
-    }
+    }*/
 
     //Publish an event to EventBridge
     let params = {
       Entries: [
         {
-          Detail: JSON.stringify(message.id),
+          Detail: JSON.stringify({ messageId: message.id }),
           DetailType: "DownloadEmail",
-          Source: "GetMails",
+          Source: "PS.GetMails",
         },
       ],
     };
@@ -84,7 +104,7 @@ exports.handler = async (event) => {
     eventBridge.putEvents(params, function (err, data) {
       if (err) console.log(err, err.stack);
       // an error occurred
-      else console.log(data); // successful response
+      else console.log("Successfuly posted an event"); // successful response
     });
   }
 
@@ -99,24 +119,3 @@ exports.handler = async (event) => {
     body: JSON.stringify(messages),
   };
 };
-
-const createEmailMessage = /* GraphQL */ `
-  mutation CreateEmailMessage(
-    $input: CreateEmailMessageInput!
-    $condition: ModelEmailMessageConditionInput
-  ) {
-    createEmailMessage(input: $input, condition: $condition) {
-      id
-      channelID
-      from
-      to
-      messageID
-      body
-      subject
-      attachments
-      receivedTime
-      createdAt
-      updatedAt
-    }
-  }
-`;
