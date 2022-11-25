@@ -80,7 +80,7 @@ const APP = () => {
       <Layout className="site-layout">
         <DashboardHeader setCollapsed={setCollapsed} collapsed={collapsed} />
         <Content className="main" style={{ minHeight: "100vh" }}>
-          <h1>Presolved Administration Portal</h1>
+          <h1>Presolved Tenant Portal</h1>
         </Content>
       </Layout>
     </Layout>

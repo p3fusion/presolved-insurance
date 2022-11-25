@@ -31,11 +31,11 @@
         },
         "GetMails": {
           "deploymentBucketName": "amplify-presolvedinsurance-dev-211801-deployment",
-          "s3Key": "amplify-builds/GetMails-414b34356b7a7a317562-build.zip"
+          "s3Key": "amplify-builds/GetMails-46644c566b7a51685674-build.zip"
         },
         "DownloadEmail": {
           "deploymentBucketName": "amplify-presolvedinsurance-dev-211801-deployment",
-          "s3Key": "amplify-builds/DownloadEmail-46355070436551655033-build.zip"
+          "s3Key": "amplify-builds/DownloadEmail-686f426d765655775158-build.zip"
         }
       },
       "api": {

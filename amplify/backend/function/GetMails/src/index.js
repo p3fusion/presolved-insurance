@@ -79,6 +79,9 @@ exports.handler = async (event) => {
       body: JSON.stringify({ createEmailMessage, variables }),
     };
 
+    console.log("GraphQL options", options);
+    console.log("GraphQL endpoint", GRAPHQL_ENDPOINT);
+
     const request = new Request(GRAPHQL_ENDPOINT, options);
 
     /*try {

@@ -62,8 +62,10 @@ exports.handler = async (event) => {
           image.indexOf(attachment.name) > -1 && attachment.isInline === true
       );
       console.log("Matching Attachment", matchingAttachment);
-      let newSrc = `src="${matchingAttachment.name}"`;
-      content = content.replace(image, newSrc);
+      if (matchingAttachment) {
+        let newSrc = `src="${matchingAttachment.name}"`;
+        content = content.replace(image, newSrc);
+      }
     });
   }
 
