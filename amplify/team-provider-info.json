@@ -31,11 +31,15 @@
         },
         "GetMails": {
           "deploymentBucketName": "amplify-presolvedinsurance-dev-211801-deployment",
-          "s3Key": "amplify-builds/GetMails-46644c566b7a51685674-build.zip"
+          "s3Key": "amplify-builds/GetMails-303354576965756d6f33-build.zip"
         },
         "DownloadEmail": {
           "deploymentBucketName": "amplify-presolvedinsurance-dev-211801-deployment",
-          "s3Key": "amplify-builds/DownloadEmail-686f426d765655775158-build.zip"
+          "s3Key": "amplify-builds/DownloadEmail-3233456347554f4c6139-build.zip"
+        },
+        "assetsHandler": {
+          "deploymentBucketName": "amplify-presolvedinsurance-dev-211801-deployment",
+          "s3Key": "amplify-builds/assetsHandler-34327554427a33383159-build.zip"
         }
       },
       "api": {

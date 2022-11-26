@@ -9,26 +9,23 @@ Amplify.configure(awsconfig);
 
 const AgentLoginPage = () => {
   const [state, setState] = useState({
-    messageURL: null,
+    messageBody: null,
   });
 
   const signedURL = async () => {
     let result = await Storage.get(
-      "AAMkADU2NTAyNzRjLWM4NGItNDFiOC05YjI3LTZkMTE4ZmE1NmJhOQBGAAAAAACNmbfOVSBeSZLolS9HcGUgBwD8QPSHhHFzR7i-WdKSMMgBAAAAAAEMAAD8QPSHhHFzR7i-WdKSMMgBAAAeph2tAAA=/",
-      { expires: 60 }
+      "AAMkADU2NTAyNzRjLWM4NGItNDFiOC05YjI3LTZkMTE4ZmE1NmJhOQBGAAAAAACNmbfOVSBeSZLolS9HcGUgBwD8QPSHhHFzR7i-WdKSMMgBAAAAAAEMAAD8QPSHhHFzR7i-WdKSMMgBAAA0PfuPAAA=/message.html",
+      { level: "public", download: true }
     );
     return result;
   };
 
-  signedURL().then((result) => {
-    console.log(result);
-  });
-
-  console.log("signedURL", signedURL);
-
   useEffect(() => {
     signedURL().then((result) => {
-      setState({ messageURL: result });
+      console.log({ result });
+      result.Body.text().then((text) => {
+        setState({ messageBody: text });
+      });
     });
   }, []);
 
@@ -41,9 +38,16 @@ const AgentLoginPage = () => {
       <Content style={{ padding: "0 50px" }}>
         <div className="site-layout-content">
           <Typography.Title level={2}>Agent Login</Typography.Title>
-          {state.messageURL && (
+          {state.messageBody && (
             <div>
-              <iframe src={state.messageURL} width="100%" height="1000px" />
+              <iframe
+                srcDoc={state.messageBody}
+                style={{
+                  width: "100%",
+                  height: "600px",
+                  pointerEvents: "all",
+                }}
+              />
             </div>
           )}
         </div>

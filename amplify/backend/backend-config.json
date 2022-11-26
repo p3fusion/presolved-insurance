@@ -29,6 +29,14 @@
             "Name",
             "Arn"
           ]
+        },
+        {
+          "category": "function",
+          "resourceName": "assetsHandler",
+          "attributes": [
+            "Name",
+            "Arn"
+          ]
         }
       ]
     }
@@ -67,6 +75,20 @@
       ]
     },
     "DownloadEmail": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda",
+      "dependsOn": [
+        {
+          "category": "storage",
+          "resourceName": "psemailbucket",
+          "attributes": [
+            "BucketName"
+          ]
+        }
+      ]
+    },
+    "assetsHandler": {
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda",

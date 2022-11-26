@@ -54,7 +54,7 @@ export class cdkStack extends cdk.Stack {
 
     //Create a evebtbridge rule
     const rule1 = new Rule(this, 'ScheduleMailFetch', {
-      schedule: events.Schedule.rate(cdk.Duration.minutes(3)),
+      schedule: events.Schedule.rate(cdk.Duration.minutes(1)),
       targets: [lambdaTarget],
     });
 

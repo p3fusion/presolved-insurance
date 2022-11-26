@@ -63,7 +63,7 @@ exports.handler = async (event) => {
       );
       console.log("Matching Attachment", matchingAttachment);
       if (matchingAttachment) {
-        let newSrc = `src="${matchingAttachment.name}"`;
+        let newSrc = `src="/assets/${messageId}/${matchingAttachment.name}"`;
         content = content.replace(image, newSrc);
       }
     });
@@ -73,7 +73,7 @@ exports.handler = async (event) => {
   const s3 = new AWS.S3();
   const params = {
     Bucket: process.env.STORAGE_PSEMAILBUCKET_BUCKETNAME,
-    Key: `${messageId}/message.html`,
+    Key: `public/${messageId}/message.html`,
     Body: content,
   };
 
@@ -102,7 +102,7 @@ exports.handler = async (event) => {
       const s3 = new AWS.S3();
       const params = {
         Bucket: process.env.STORAGE_PSEMAILBUCKET_BUCKETNAME,
-        Key: `${messageId}/${attachmentItem.name}`,
+        Key: `public/${messageId}/${attachmentItem.name}`,
         Body: Buffer.from(buffer),
       };
 
