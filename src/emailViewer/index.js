@@ -20,10 +20,47 @@ const AgentLoginPage = () => {
     return result;
   };
 
+  const getImageURL = async (imageName) => {
+    if (imageName.indexOf("image002") > -1) {
+      let result = await Storage.get(
+        `AAMkADU2NTAyNzRjLWM4NGItNDFiOC05YjI3LTZkMTE4ZmE1NmJhOQBGAAAAAACNmbfOVSBeSZLolS9HcGUgBwD8QPSHhHFzR7i-WdKSMMgBAAAAAAEMAAD8QPSHhHFzR7i-WdKSMMgBAAA0PfuPAAA=/image002.png`,
+        { level: "public" }
+      );
+
+      console.log("New Image Result", result);
+      return result;
+    } else {
+      console.log("Image Result", imageName);
+      return imageName;
+    }
+  };
+
   useEffect(() => {
     signedURL().then((result) => {
       console.log({ result });
       result.Body.text().then((text) => {
+        //Replace Image
+
+        //reg ex expression to get the src of image
+        let regex = /src="([^"]*)"/g;
+
+        // Replace cid:image in the email body with the actual image URL
+        let cidImage = text.match(regex);
+        if (cidImage) {
+          cidImage.forEach((image) => {
+            console.log("Cid", image);
+            if (image.indexOf("https:") > -1) {
+              return;
+            }
+            getImageURL(image).then((newSrc) => {
+              console.log("New Src", newSrc);
+              let newImage = `src="${newSrc}"`;
+              text = text.replace(image, newImage);
+              setState({ messageBody: text });
+            });
+          });
+          setState({ messageBody: text });
+        }
         setState({ messageBody: text });
       });
     });
