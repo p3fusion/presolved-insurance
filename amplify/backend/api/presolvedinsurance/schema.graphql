@@ -57,3 +57,18 @@ type Config @model  @auth(rules: [{ allow: public }]) {
   ARNReference: String!
   parameters: AWSJSON
 }
+
+
+
+type Client @model  @auth(rules: [{ allow: public }]) {
+  id: ID!
+  name: String!
+  company: String!
+  email: String!
+  phone: String!
+  isSignedup: String!,
+  intents: AWSJSON!,
+  templates: AWSJSON!,
+  instanceURL:String!,
+  connectInstanceURL:String!
+}

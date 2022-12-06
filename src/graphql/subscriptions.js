@@ -335,3 +335,57 @@ export const onDeleteConfig = /* GraphQL */ `
     }
   }
 `;
+export const onCreateClient = /* GraphQL */ `
+  subscription OnCreateClient {
+    onCreateClient {
+      id
+      name
+      company
+      email
+      phone
+      isSignedup
+      intents
+      templates
+      instanceURL
+      connectInstanceURL
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdateClient = /* GraphQL */ `
+  subscription OnUpdateClient {
+    onUpdateClient {
+      id
+      name
+      company
+      email
+      phone
+      isSignedup
+      intents
+      templates
+      instanceURL
+      connectInstanceURL
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onDeleteClient = /* GraphQL */ `
+  subscription OnDeleteClient {
+    onDeleteClient {
+      id
+      name
+      company
+      email
+      phone
+      isSignedup
+      intents
+      templates
+      instanceURL
+      connectInstanceURL
+      createdAt
+      updatedAt
+    }
+  }
+`;
