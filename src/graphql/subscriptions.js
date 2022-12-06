@@ -91,9 +91,7 @@ export const onCreateTaskTemplate = /* GraphQL */ `
       id
       name
       description
-      email
-      mobile
-      company
+      attributes
       createdAt
       updatedAt
     }
@@ -103,11 +101,9 @@ export const onUpdateTaskTemplate = /* GraphQL */ `
   subscription OnUpdateTaskTemplate {
     onUpdateTaskTemplate {
       id
-      adminname
+      name
       description
-      email
-      mobile
-      company
+      attributes
       createdAt
       updatedAt
     }
@@ -117,7 +113,7 @@ export const onDeleteTaskTemplate = /* GraphQL */ `
   subscription OnDeleteTaskTemplate {
     onDeleteTaskTemplate {
       id
-      adminname
+      name
       description
       attributes
       createdAt
@@ -335,17 +331,18 @@ export const onDeleteConfig = /* GraphQL */ `
     }
   }
 `;
-export const onCreateClient = /* GraphQL */ `
-  subscription OnCreateClient {
-    onCreateClient {
+export const onCreateTenantConfig = /* GraphQL */ `
+  subscription OnCreateTenantConfig {
+    onCreateTenantConfig {
       id
       name
       company
-      email
+      adminEmail
       phone
       isSignedup
       intents
       templates
+      Channels
       instanceURL
       connectInstanceURL
       createdAt
@@ -353,17 +350,18 @@ export const onCreateClient = /* GraphQL */ `
     }
   }
 `;
-export const onUpdateClient = /* GraphQL */ `
-  subscription OnUpdateClient {
-    onUpdateClient {
+export const onUpdateTenantConfig = /* GraphQL */ `
+  subscription OnUpdateTenantConfig {
+    onUpdateTenantConfig {
       id
       name
       company
-      email
+      adminEmail
       phone
       isSignedup
       intents
       templates
+      Channels
       instanceURL
       connectInstanceURL
       createdAt
@@ -371,17 +369,18 @@ export const onUpdateClient = /* GraphQL */ `
     }
   }
 `;
-export const onDeleteClient = /* GraphQL */ `
-  subscription OnDeleteClient {
-    onDeleteClient {
+export const onDeleteTenantConfig = /* GraphQL */ `
+  subscription OnDeleteTenantConfig {
+    onDeleteTenantConfig {
       id
       name
       company
-      email
+      adminEmail
       phone
       isSignedup
       intents
       templates
+      Channels
       instanceURL
       connectInstanceURL
       createdAt

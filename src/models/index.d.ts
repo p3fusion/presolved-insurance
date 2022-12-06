@@ -24,6 +24,10 @@ type ConfigMetaData = {
   readOnlyFields: 'createdAt' | 'updatedAt';
 }
 
+type TenantConfigMetaData = {
+  readOnlyFields: 'createdAt' | 'updatedAt';
+}
+
 export declare class Channel {
   readonly id: string;
   readonly assignTo: string;
@@ -100,4 +104,22 @@ export declare class Config {
   readonly updatedAt?: string | null;
   constructor(init: ModelInit<Config, ConfigMetaData>);
   static copyOf(source: Config, mutator: (draft: MutableModel<Config, ConfigMetaData>) => MutableModel<Config, ConfigMetaData> | void): Config;
+}
+
+export declare class TenantConfig {
+  readonly id: string;
+  readonly name: string;
+  readonly company: string;
+  readonly adminEmail: string;
+  readonly phone: string;
+  readonly isSignedup: string;
+  readonly intents: string;
+  readonly templates: string;
+  readonly Channels: string;
+  readonly instanceURL: string;
+  readonly connectInstanceURL: string;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+  constructor(init: ModelInit<TenantConfig, TenantConfigMetaData>);
+  static copyOf(source: TenantConfig, mutator: (draft: MutableModel<TenantConfig, TenantConfigMetaData>) => MutableModel<TenantConfig, TenantConfigMetaData> | void): TenantConfig;
 }
