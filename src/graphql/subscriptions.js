@@ -91,7 +91,9 @@ export const onCreateTaskTemplate = /* GraphQL */ `
       id
       name
       description
-      attributes
+      email
+      mobile
+      company
       createdAt
       updatedAt
     }
@@ -101,9 +103,11 @@ export const onUpdateTaskTemplate = /* GraphQL */ `
   subscription OnUpdateTaskTemplate {
     onUpdateTaskTemplate {
       id
-      name
+      adminname
       description
-      attributes
+      email
+      mobile
+      company
       createdAt
       updatedAt
     }
@@ -113,7 +117,7 @@ export const onDeleteTaskTemplate = /* GraphQL */ `
   subscription OnDeleteTaskTemplate {
     onDeleteTaskTemplate {
       id
-      name
+      adminname
       description
       attributes
       createdAt

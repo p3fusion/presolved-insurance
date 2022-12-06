@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "storage": {
+      "psemailbucket": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ]
+    }
+  },
+  "lambdaLayers": []
+}

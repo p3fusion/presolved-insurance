@@ -20,16 +20,16 @@ const EmailConfigure=(props)=>{
                 onFinishFailed={onFinishFailed}
                 autoComplete="off"
             >
-                <Form.Item label='Email Address' name='emailAddress' rules={[{ required: true, message: 'Please input your Email address!' }]}>
+                <Form.Item label='Email Address' name='emailAddress' rules={[{ required: true, message: 'Please input your Email address!' }]} style={{width: '60%'}}>
                    <Input/>
                 </Form.Item>
-                <Form.Item label='Email Box' name='emailBox' rules={[{ required: true, message: 'Please input your Email box' }]}>
+                <Form.Item label='Email Box' name='emailBox' rules={[{ required: true, message: 'Please input your Email box' }]} style={{width: '60%'}}>
                    <Input/>
                 </Form.Item>
-                <Form.Item label='Microsoft graph Client identifier' name='clientIdentifier' rules={[{ required: true, message: 'Please input your Microsoft graph Client identifier!' }]}>
+                <Form.Item label='Microsoft graph Client identifier' name='clientIdentifier' rules={[{ required: true, message: 'Please input your Microsoft graph Client identifier!' }]} style={{width: '60%'}}>
                    <Input/>
                 </Form.Item>
-                <Form.Item label='Microsoft graph Client secret' name='clientSecret' rules={[{ required: true, message: 'Please input your Microsoft graph Client secret!' }]}>
+                <Form.Item label='Microsoft graph Client secret' name='clientSecret' rules={[{ required: true, message: 'Please input your Microsoft graph Client secret!' }]} style={{width: '60%'}}>
                    <Input/>
                 </Form.Item>
                 <Form.Item>

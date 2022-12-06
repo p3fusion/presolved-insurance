@@ -29,6 +29,7 @@ async function getMessages(emailId, clientId, secretName, region, tenantId) {
       console.log(`  From: ${message.from?.emailAddress?.name ?? "UNKNOWN"}`);
       console.log(`  Status: ${message.isRead ? "Read" : "Unread"}`);
       console.log(`  Received: ${message.receivedDateTime}`);
+      //publishMessages(message);
     }
 
     return messages;
@@ -36,6 +37,5 @@ async function getMessages(emailId, clientId, secretName, region, tenantId) {
     console.log(`Error getting Messages: ${err}`);
   }
 }
-// </ListUsersSnippet>
 
 module.exports.getMessages = getMessages;

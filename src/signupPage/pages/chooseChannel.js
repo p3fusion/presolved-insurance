@@ -1,4 +1,4 @@
-import { Button, Card, Col, Divider, Form, Input, List, Radio, Result, Row, Select, Space, Steps, Switch, Typography, Tabs, PageHeader, Transfer, Tag } from 'antd';
+import { Button, Card, Col, Divider, Form, Input, List, Radio, Result, Row, Select, Space, Steps, Switch, Typography, Tabs, PageHeader, Transfer, Tag, Checkbox } from 'antd';
 import React, { useState } from 'react';
 import { PlusOutlined, MailOutlined, MessageOutlined, PhoneOutlined, ApartmentOutlined, WechatOutlined, UnorderedListOutlined, CloseOutlined } from '@ant-design/icons';
 
@@ -146,180 +146,63 @@ const ChooseChannel = (props) => {
 const RenderChat = (props) => {
 
     const { next, state, setState, prev } = props
-    const [targetKeys, setTargetKeys] = useState(initialTargetKeys);
-    const [selectedKeys, setSelectedKeys] = useState([]);
-    const initialTargetKeys =[]
-    const onChange = (nextTargetKeys, direction, moveKeys) => {
-        console.log('targetKeys:', nextTargetKeys);
-        console.log('direction:', direction);
-        console.log('moveKeys:', moveKeys);
-        setTargetKeys(nextTargetKeys);
-    };
-    const onSelectChange = (sourceSelectedKeys, targetSelectedKeys) => {
-        console.log('sourceSelectedKeys:', sourceSelectedKeys);
-        console.log('targetSelectedKeys:', targetSelectedKeys);
-        setSelectedKeys([...sourceSelectedKeys, ...targetSelectedKeys]);
-    };
-    const onScroll = (direction, e) => {
-        console.log('direction:', direction);
-        console.log('target:', e.target);
-    };
+
+
+    const options = state.channel.chat.intents;
+
+    const [checkedList, setCheckedList] = useState(options);
+
+
     return (
-        <Row>
-            <Col span={24}>
-                <Card title="Intents / Category">
-
-                    {/*    <Row gutter={[16, 16]}>
-                        <Col span={10}>
-                            <p>Add Intents</p>
-                            <Space>
-                                <Input value={state.channel.chat.intent} placeholder='Add Intents' onChange={(e) => setState({
-                                    ...state,
-                                    channel: {
-                                        ...state.channel,
-                                        chat: {
-                                            ...state.channel.chat,
-                                            intent: e.target.value,
+        <Row gutter={[16,16]} >
+                <Col span={12}>
+                    <List
+                        header={<p>Intents</p>}
+                        itemLayout='horizontal'
+                        bordered
+                        dataSource={options}
+                        renderItem={(item) => (
+                            <List.Item >
+                                <Checkbox
+                                value={item.value}
+                                    onChange={(e) => {
+                                        console.log(e);
+                                        if (e.target.checked) {
+                                            setState({
+                                                ...state,
+                                                channel: {
+                                                    ...state.channel,
+                                                    chat: {
+                                                        ...state.channel.chat,
+                                                        intentSelected: item.value
+                                                    }
+                                                }
+                                            });
+                                            setCheckedList(list => [...list, item.value]);
                                         }
-                                    }
-                                })} />
-
-                                <Button type='primary' icon={< PlusOutlined />} onClick={() => {
-                                    let { intents } = state.channel.chat;
-                                    intents.push({ "label": state.channel.chat.intent, "value": state.channel.chat.intent })
-
-                                    setState({
-                                        ...state,
-                                        channel: {
-                                            ...state.channel,
-                                            chat: {
-                                                ...state.channel.chat,
-                                                intents: intents,
-                                                intentSelected: state.channel.chat.intent,
-                                                intent: null
-                                            }
-                                        }
-                                    })
-                                }} />
-                            </Space>
-                            <Divider > Available intents </Divider>
-                            <List
-                                itemLayout='horizontal'
-                                bordered
-                                dataSource={state.channel.chat.intents}
-                                renderItem={(item) => (
-                                    <List.Item onClick={() => setState({
-                                        ...state,
-                                        channel: {
-                                            ...state.channel,
-                                            chat: {
-                                                ...state.channel.chat,
-                                                intentSelected: item.value
-                                            }
-                                        }
-                                    })}
-                                        style={{
-                                            cursor: 'pointer',
-                                            background: state.channel.chat.intentSelected === item.value ? '#aaa5fa' : '#fff'
-                                        }}>
-                                        <Row>
-                                            <Space>
-                                                <Col >
-                                                    <Typography.Text><UnorderedListOutlined /> {item.label}</Typography.Text>
-                                                </Col>
-                                                <Col >
-                                                    <Button type='secondary' icon={<CloseOutlined />} shape='circle' size='small'
-                                                        onClick={() => {
-                                                            let newIntentList = state.channel.chat.intents.filter((ListItem) => ListItem.value !== item.value);
-                                                            setState(state.channel.chat.intents = newIntentList);
-                                                            let newUtteranceList = state.channel.chat.utterances.filter((ListItem) => ListItem.intents !== item.value);
-                                                            setState(state.channel.chat.utterances = newUtteranceList);
-                                                        }
-                                                        } />
-                                                </Col>
-                                            </Space>
-                                        </Row>
-
-                                    </List.Item>
-                                )}
-                            />
-                        </Col>
-
-                        <Col span={14}>
-                            <p>Utterncases for <em>{state.channel.chat.intentSelected}</em></p>
-                            <Space>
-                                <Input placeholder={`Add Utterances for ${state.channel.chat.intentSelected}`}
-                                    onChange={(e) => setState({
-                                        ...state,
-                                        channel: {
-                                            ...state.channel,
-                                            chat: {
-                                                ...state.channel.chat,
-                                                utterance: e.target.value,
-                                            }
-                                        }
-
-                                    })}
-                                />
-                                <Button type='primary' icon={< PlusOutlined />} onClick={() => {
-                                    let { utterances } = state.channel.chat;
-                                    utterances.push({ "intents": state.channel.chat.intentSelected, "value": state.channel.chat.utterance })
-                                    setState({
-                                        ...state,
-                                        channel: {
-                                            ...state.channel,
-                                            chat: {
-                                                ...state.channel.chat,
-                                                utterances: utterances,
-                                                utterance: null
-                                            }
-                                        }
-                                    })
-                                }} />
-                            </Space>
-                            <Divider > Available Utterances </Divider>
-                            <List
-                                header={<p>Utterances of {state.channel.chat.intentSelected} </p>}
-                                itemLayout='horizontal'
-                                bordered
-                                dataSource={state.channel.chat.utterances.filter((rec) => rec.intents == state.channel.chat.intentSelected)}
-                                renderItem={item => (
-                                    <List.Item>
-                                        <Typography.Text>{item.value}</Typography.Text>
-                                    </List.Item>
-                                )}
-                            />
-                        </Col>
-
-                    </Row> */}
-
-                    <Row gutter={[16, 16]}>
-                        <Col span={24}>
-                            <Transfer className='transfer'
-                             targetKeys={targetKeys}
-                                onChange={onChange}
-                                onSelectChange={onSelectChange}
-                                onScroll={onScroll}
-                                dataSource={
-                                    state.channel.chat.intents.map((rec) => {
-                                        return {
-                                            key: rec.value,
-                                            title: rec.value,
-                                            children: [{
-                                                key: rec.value,
-                                                title: rec.value,
-                                            }]
-                                        }
-                                    })}
-                                titles={['Available Intents', 'Selected Intents']}
-
-                                render={(item) => item.title}
-                            />
-                        </Col>
-                    </Row>
-
-                </Card>
-            </Col>
+                                    }}
+                                >
+                                    {item.label}
+                                </Checkbox>
+                            </List.Item>
+                        )}
+                    >
+                    </List>
+                </Col>
+                <Col span={12}>
+                    <List
+                        header={<p>Utterances of {state.channel.chat.intentSelected} </p>}
+                        itemLayout='horizontal'
+                        bordered
+                        dataSource={state.channel.chat.utterances.filter((rec) => rec.intents == state.channel.chat.intentSelected)}
+                        renderItem={item => (
+                            <List.Item>
+                                <Typography.Text>{item.value}</Typography.Text>
+                            </List.Item>
+                        )}
+                    />
+                </Col>
+            
         </Row>
     )
 }
@@ -502,3 +385,157 @@ const RenderPhone = (props) => {
 }
 
 export default ChooseChannel;
+
+
+{/*    <Row gutter={[16, 16]}>
+                        <Col span={10}>
+                            <p>Add Intents</p>
+                            <Space>
+                                <Input value={state.channel.chat.intent} placeholder='Add Intents' onChange={(e) => setState({
+                                    ...state,
+                                    channel: {
+                                        ...state.channel,
+                                        chat: {
+                                            ...state.channel.chat,
+                                            intent: e.target.value,
+                                        }
+                                    }
+                                })} />
+
+                                <Button type='primary' icon={< PlusOutlined />} onClick={() => {
+                                    let { intents } = state.channel.chat;
+                                    intents.push({ "label": state.channel.chat.intent, "value": state.channel.chat.intent })
+
+                                    setState({
+                                        ...state,
+                                        channel: {
+                                            ...state.channel,
+                                            chat: {
+                                                ...state.channel.chat,
+                                                intents: intents,
+                                                intentSelected: state.channel.chat.intent,
+                                                intent: null
+                                            }
+                                        }
+                                    })
+                                }} />
+                            </Space>
+                            <Divider > Available intents </Divider>
+                            <List
+                                itemLayout='horizontal'
+                                bordered
+                                dataSource={state.channel.chat.intents}
+                                renderItem={(item) => (
+                                    <List.Item onClick={() => setState({
+                                        ...state,
+                                        channel: {
+                                            ...state.channel,
+                                            chat: {
+                                                ...state.channel.chat,
+                                                intentSelected: item.value
+                                            }
+                                        }
+                                    })}
+                                        style={{
+                                            cursor: 'pointer',
+                                            background: state.channel.chat.intentSelected === item.value ? '#aaa5fa' : '#fff'
+                                        }}>
+                                        <Row>
+                                            <Space>
+                                                <Col >
+                                                    <Typography.Text><UnorderedListOutlined /> {item.label}</Typography.Text>
+                                                </Col>
+                                                <Col >
+                                                    <Button type='secondary' icon={<CloseOutlined />} shape='circle' size='small'
+                                                        onClick={() => {
+                                                            let newIntentList = state.channel.chat.intents.filter((ListItem) => ListItem.value !== item.value);
+                                                            setState(state.channel.chat.intents = newIntentList);
+                                                            let newUtteranceList = state.channel.chat.utterances.filter((ListItem) => ListItem.intents !== item.value);
+                                                            setState(state.channel.chat.utterances = newUtteranceList);
+                                                        }
+                                                        } />
+                                                </Col>
+                                            </Space>
+                                        </Row>
+
+                                    </List.Item>
+                                )}
+                            />
+                        </Col>
+
+                        <Col span={14}>
+                            <p>Utterncases for <em>{state.channel.chat.intentSelected}</em></p>
+                            <Space>
+                                <Input placeholder={`Add Utterances for ${state.channel.chat.intentSelected}`}
+                                    onChange={(e) => setState({
+                                        ...state,
+                                        channel: {
+                                            ...state.channel,
+                                            chat: {
+                                                ...state.channel.chat,
+                                                utterance: e.target.value,
+                                            }
+                                        }
+
+                                    })}
+                                />
+                                <Button type='primary' icon={< PlusOutlined />} onClick={() => {
+                                    let { utterances } = state.channel.chat;
+                                    utterances.push({ "intents": state.channel.chat.intentSelected, "value": state.channel.chat.utterance })
+                                    setState({
+                                        ...state,
+                                        channel: {
+                                            ...state.channel,
+                                            chat: {
+                                                ...state.channel.chat,
+                                                utterances: utterances,
+                                                utterance: null
+                                            }
+                                        }
+                                    })
+                                }} />
+                            </Space>
+                            <Divider > Available Utterances </Divider>
+                            <List
+                                header={<p>Utterances of {state.channel.chat.intentSelected} </p>}
+                                itemLayout='horizontal'
+                                bordered
+                                dataSource={state.channel.chat.utterances.filter((rec) => rec.intents == state.channel.chat.intentSelected)}
+                                renderItem={item => (
+                                    <List.Item>
+                                        <Typography.Text>{item.value}</Typography.Text>
+                                    </List.Item>
+                                )}
+                            />
+                        </Col>
+
+                    </Row> */}
+
+{/* <Row gutter={[16, 16]}>
+                        <Col span={24}>
+                            <Transfer className='transfer'
+                             targetKeys={targetKeys}
+                                onChange={onChange}
+                                onSelectChange={onSelectChange}
+                                onScroll={onScroll}
+                                dataSource={
+                                    state.channel.chat.intents.map((rec) => {
+                                        return {
+                                            key: rec.value,
+                                            title: rec.value,
+                                            children: [{
+                                                key: rec.value,
+                                                title: rec.value,
+                                            }]
+                                        }
+                                    })}
+                                titles={['Available Intent', 'Selected Intents']}
+
+                                render={(item) => item.title}
+                            />
+                        </Col>
+                    </Row>
+
+                </Card>
+            </Col>
+        </Row> */}

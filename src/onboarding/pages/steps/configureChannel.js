@@ -54,7 +54,7 @@ const ConfigureChannel = (props) => {
     const chatConfigure = (value) => {
         console.log(value);
     }
-    
+
     const emailConfigure = (value) => {
         setStateEmail(() => ({
             ...stateEmail,
@@ -63,6 +63,14 @@ const ConfigureChannel = (props) => {
             clientIdentifier: value.clientIdentifier,
             clientSecret: value.clientSecret
         }));
+    }
+
+    const handleNext=()=>{
+        props.next();
+    }
+
+    const handlePrevious=()=>{
+        props.prev();
     }
 
     useEffect(() => {
@@ -93,8 +101,8 @@ const ConfigureChannel = (props) => {
                 }
             </Tabs>
             <Space>
-                <Button type="primary">Next</Button>
-                <Button type="primary">Previous</Button>
+                <Button type="primary" onClick={handleNext}>Next</Button>
+                <Button type="primary" onClick={handlePrevious}>Previous</Button>
             </Space>
         </div>
     );

@@ -10,6 +10,16 @@
           "read"
         ]
       }
+    },
+    "/assets": {
+      "name": "/assets",
+      "lambdaFunction": "assetsHandler",
+      "permissions": {
+        "setting": "private",
+        "auth": [
+          "read"
+        ]
+      }
     }
   }
 }

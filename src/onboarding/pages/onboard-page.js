@@ -12,11 +12,13 @@ const OnBoardPage = () => {
 
   const user = useSelector((state) => state.user)
 
+
   useEffect(() => {
     if (!user.isLoggedin) {
       navigate("/signup")
     }
   }, []);
+
 
   const [collapsed, setCollapsed] = useState(true);
 

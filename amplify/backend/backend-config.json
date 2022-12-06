@@ -29,6 +29,14 @@
             "Name",
             "Arn"
           ]
+        },
+        {
+          "category": "function",
+          "resourceName": "assetsHandler",
+          "attributes": [
+            "Name",
+            "Arn"
+          ]
         }
       ]
     }
@@ -54,7 +62,45 @@
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda",
-      "dependsOn": []
+      "dependsOn": [
+        {
+          "category": "api",
+          "resourceName": "presolvedinsurance",
+          "attributes": [
+            "GraphQLAPIIdOutput",
+            "GraphQLAPIEndpointOutput",
+            "GraphQLAPIKeyOutput"
+          ]
+        }
+      ]
+    },
+    "DownloadEmail": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda",
+      "dependsOn": [
+        {
+          "category": "storage",
+          "resourceName": "psemailbucket",
+          "attributes": [
+            "BucketName"
+          ]
+        }
+      ]
+    },
+    "assetsHandler": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda",
+      "dependsOn": [
+        {
+          "category": "storage",
+          "resourceName": "psemailbucket",
+          "attributes": [
+            "BucketName"
+          ]
+        }
+      ]
     }
   },
   "auth": {
@@ -84,10 +130,44 @@
     }
   },
   "hosting": {
-    "amplifyhosting": {
-      "service": "amplifyhosting",
+    "S3AndCloudFront": {
+      "service": "S3AndCloudFront",
+      "providerPlugin": "awscloudformation"
+    }
+  },
+  "custom": {
+    "PSEventBridge": {
+      "service": "customCDK",
       "providerPlugin": "awscloudformation",
-      "type": "manual"
+      "dependsOn": [
+        {
+          "category": "function",
+          "resourceName": "GetMails",
+          "attributes": [
+            "Name",
+            "Arn",
+            "Region",
+            "LambdaExecutionRole"
+          ]
+        },
+        {
+          "category": "function",
+          "resourceName": "DownloadEmail",
+          "attributes": [
+            "Name",
+            "Arn",
+            "Region",
+            "LambdaExecutionRole"
+          ]
+        }
+      ]
+    }
+  },
+  "storage": {
+    "psemailbucket": {
+      "service": "S3",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": []
     }
   }
 }
