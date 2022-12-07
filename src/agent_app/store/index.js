@@ -2,6 +2,7 @@ import { configureStore } from '@reduxjs/toolkit'
 import userSlice  from './reducers/user'
 import promise from 'redux-promise';
 import { combineReducers, compose } from 'redux';
+import  emailReducer  from './reducers/emails';
 import  channelsReducer  from './reducers/channels';
 import  configReducer  from './reducers/config';
 
@@ -15,6 +16,7 @@ export const store = configureStore({
         user:userSlice,
         channels:channelsReducer,
         config:configReducer,
+        emails:emailReducer
     }),
     middleware: (getDefaultMiddleware) => getDefaultMiddleware({
         serializableCheck: false

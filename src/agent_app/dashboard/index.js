@@ -20,17 +20,41 @@ import { updateChannels } from '../store/reducers/channels';
 
 import '../../gc-components/chat'
 import DND from './task_builder/dnd';
+import EmailViewer from './pages/email-viewer';
+import { getAllEmails } from './api/emails';
+import { updateEmails } from '../store/reducers/emails';
+import { uniqBy } from 'lodash';
 
 
 const { Content } = Layout;
 const APP = () => {
     const dispatch = useDispatch()
     const user = useSelector((state) => state.user)
+    const emails = useSelector((state) => state.emails)
     const config = useSelector((state) => state.config)
     const channels = useSelector((state) => state.channels)
     const [collapsed, setCollapsed] = useState(true);
 
+
+
     useEffect(() => {
+
+        if (!emails.isLoaded) {
+            getAllEmails().then((allEmails) => {
+                let uniqEMails= uniqBy(allEmails,'messageID')
+                dispatch(updateEmails(uniqEMails))
+                console.log({ uniqEMails })
+            }).catch((error) => {
+                notification.error({
+                    description: error.message,
+                    duration:10,
+                    message: "Unable to load  getAllEmails",
+                    type: 'error'
+
+                })
+            })
+        }
+
         if (!config.templates.isLoaded) {
             getAllUsersFromConnect().then((allUsers) => {
                 console.log({ allUsers })
@@ -81,6 +105,7 @@ const APP = () => {
                     <Router>
                         <AgentIndexPage path="/" />
                         <OutboundCallsPage path="/outbound-calls" />
+                        <EmailViewer path="/email-channels" />
                         <TemplateBuilder path="/template-builder" />
                         <CreateNewTemplate path="/new-template" />
                         <AdvancedBuilder path="/advanced-template" />
