@@ -64,6 +64,11 @@ const DashboardSidebar = ({ collapsed }) => {
             label: <Link to="/signup">Complete Signup</Link>,
           },
           {
+            key: "Email channels",
+            icon: <MailOutlined />,
+            label: <Link to="/email-channels">Email Channels</Link>,
+          },
+          {
             key: "Email Viewer",
             icon: <MailOutlined />,
             label: <Link to="/email">Email Viewer</Link>,
