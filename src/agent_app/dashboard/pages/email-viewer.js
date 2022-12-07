@@ -8,17 +8,20 @@ const { Content } = Layout;
 import { API, Auth, Storage } from 'aws-amplify'
 import CSVReader from 'react-csv-reader'
 import { useSelector } from 'react-redux';
+import { LoadEmail } from '../../store/reducers/emails';
+import { useDispatch } from 'react-redux';
 
 
 
 const EmailViewer = () => {
+    const dispatch = useDispatch()
     const emails = useSelector((state) => state.emails)
     const inputFile = useRef(null)
     const [form] = Form.useForm();
     const initialState = {
         selected: null,
         isLoaded: false,
-        messageBody:null,
+        messageBody: null,
         details: {}
 
     }
@@ -27,7 +30,6 @@ const EmailViewer = () => {
         if (emails.isLoaded) {
             setState({ ...state, isLoaded: true })
         }
-
     }, [emails])
 
     const signedURL = async (id) => {
@@ -50,44 +52,47 @@ const EmailViewer = () => {
     };
 
     const getMail = (item) => {
-        let id = item.messageID;     
 
-        signedURL(id).then((result) => {
-            console.log({ result });
+        if(emails.body[item.messageID]){
+            setState({
+                ...state,
+                selected: item.messageID,
+                messageBody: emails.body[item.messageID]
+            });
+        }
+        else{
+        signedURL(item.messageID).then((result) => {
             result.Body.text().then((text) => {
-                //Replace Image
-
-                //reg ex expression to get the src of image
                 let regex = /src="([^"]*)"/g;
-
-                // Replace cid:image in the email body with the actual image URL
                 let cidImage = text.match(regex);
                 if (cidImage) {
                     cidImage.forEach((image) => {
-                        console.log("Cid", image);
                         if (image.indexOf("https:") > -1) {
                             return;
                         }
                         getImageURL(image).then((newSrc) => {
-                            console.log("New Src", newSrc);
                             let newImage = `src="${newSrc}"`;
                             text = text.replace(image, newImage);
                             setState({
                                 ...state,
-                                selected: item.messageID,                             
+                                selected: item.messageID,
                                 messageBody: text
                             });
+                            dispatch(LoadEmail({id:item.messageID, body:text}))
                         });
                     });
-                   
-                }
+                } 
+                
                 setState({
                     ...state,
-                    selected: item.messageID,                
+                    selected: item.messageID,
                     messageBody: text
                 });
+                dispatch(LoadEmail({id:item.messageID, body:text}))
+                
             });
         });
+    }
 
     }
 
@@ -131,7 +136,7 @@ const EmailViewer = () => {
                                     srcDoc={state.messageBody}
                                     style={{
                                         width: "100%",
-                                        height: "600px",
+                                        height: "100vh",
                                         pointerEvents: "all",
                                     }}
                                 />
