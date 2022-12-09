@@ -94,6 +94,10 @@ const APP = () => {
         if(!user.AppAuth.isLoggedin){
             navigate("/applogin")
         }
+        if(!user.connect.isLoggedin){
+            navigate("/login")
+        }
+
     }, []);
 
     return (

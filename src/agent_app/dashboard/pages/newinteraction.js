@@ -6,7 +6,7 @@ import { API } from 'aws-amplify';
 import * as mutations from '../../../graphql/mutations'
 import { filter, find } from 'lodash'
 import { useDispatch, useSelector, useStore } from 'react-redux';
-import { updateUser } from '../../store/reducers/user';
+import { updateConnectUser } from '../../store/reducers/user';
 import moment from 'moment-timezone';
 
 import '../assets/style/interaction.less'
@@ -50,11 +50,7 @@ const NewInteraction = (props) => {
         },
         showWrapButton: false
     })
-
-    useEffect(() => {
-
-    }, [])
-
+    
     useEffect(() => {
         const connectUrl = "https://p3fusion-uat.my.connect.aws/ccp-v2"
         if (divCCP.current) {
@@ -63,7 +59,7 @@ const NewInteraction = (props) => {
                 loginPopup: true, // optional, defaults to `true`
                 loginPopupAutoClose: true, // optional, defaults to `false`
                 loginOptions: {
-                    // optional, if provided opens login in new window
+                    // optional, if provided opens login in new window 
                     autoClose: true, // optional, defaults to `false`
                     height: 600, // optional, defaults to 578
                     width: 400, // optional, defaults to 433
@@ -89,7 +85,6 @@ const NewInteraction = (props) => {
 
             initiateConnectApp(connect)
             getSnapShot(connect)
-
         }
 
     }, [])
@@ -150,7 +145,7 @@ const NewInteraction = (props) => {
         console.log("::Gettting loged in Agent information::");
         connectx.agent((agent) => {
             let agentData = agent._getData()
-            dispatch(updateUser(agentData.configuration))
+            dispatch(updateConnectUser(agentData.configuration))
             let name = agentData.configuration.name
             let userName = agentData.configuration.username
             Modal.success({

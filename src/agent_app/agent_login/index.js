@@ -8,9 +8,12 @@ import '../../gc-components/connect-streams';
 
 import logo from '../dashboard/assets/images/new-big-logo.png'
 import { navigate } from '@gatsbyjs/reach-router';
+import { useDispatch } from 'react-redux';
+import { updateConnectUser } from '../store/reducers/user';
 
 
 const AgentLoginPage = () => {
+    const dispatch=useDispatch()
     const loginContainer = useRef(null);
     const connectUrl = "https://p3fusion-uat.my.connect.aws/ccp-v2"
     const masterTopics = {
@@ -55,18 +58,16 @@ const AgentLoginPage = () => {
             });
             initializeLogin()
         }
-
-
         console.log("::AgentLoginPage Rerendering::");
-    }, [connect.agent.initialized])
+    }, [])
 
     const initializeLogin = () => {
         const snapshot = setInterval(() => {
             
             if (connect.agent.initialized) {
                 console.log("::Success::");
-                navigate("/")
-
+                getSnapShot(connect)
+           
             } else {
                 console.log("opening login popup ");
                 connect.core.getPopupManager().clear(masterTopics.LOGIN_POPUP);
@@ -74,7 +75,6 @@ const AgentLoginPage = () => {
                 AuthStatus()
                 clearInterval(snapshot);
             }
-
         }, 1000)
     }
 
@@ -84,10 +84,21 @@ const AgentLoginPage = () => {
             console.log("::Polling for auth status::");
             if (connect.agent.initialized) {
                 console.log("::Success::");
-                navigate("/")
+                getSnapShot(connect)
                 clearInterval(snapshot);
             }
         }, 1000)
+    }
+
+    const getSnapShot = (connectx) => {
+
+        console.log("::Gettting loged in Agent information::");
+        connectx.agent((agent) => {
+            let agentData = agent._getData()
+            dispatch(updateConnectUser(agentData.configuration))
+            connectx.core.terminate();
+            navigate("/");
+        });
     }
 
     return (
@@ -101,11 +112,7 @@ const AgentLoginPage = () => {
                 </div>
                 <div></div>
                 <div className="containerDiv" ref={loginContainer} />
-
             </div>
-
-
-
         </Layout>
     )
 }

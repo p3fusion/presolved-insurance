@@ -10,10 +10,14 @@ const DashboardHeader = ({ setCollapsed, collapsed }) => {
     const user = useSelector((state) => state.user)
 
     useEffect(() => {
-        if (user.isLoggedin) {
-            setState({ ...state, ...user })
+        if (user.connect.isLoggedin) {
+            setState({ 
+                isLoggedin:true, 
+                ...user 
+            })
         }
-    }, [user])
+        console.log({user:user.connect});
+    }, [user.connect])
 
 
     return (
@@ -39,8 +43,8 @@ const DashboardHeader = ({ setCollapsed, collapsed }) => {
                                 :
                                 <Space>
                                     <Avatar icon={<UserOutlined />} style={{ backgroundColor: '#87d068' }} />
-                                    <Typography.Text>{state.name} - {state.username}</Typography.Text>
-                                    <div id="username" style={{display:'none'}}>{state.username}</div>
+                                    <Typography.Text>{state.connect.name} - {state.connect.username}</Typography.Text>
+                                    <div id="username" style={{display:'none'}}>{state.connect.username}</div>
                                 </Space>
                         }
                     </div>
