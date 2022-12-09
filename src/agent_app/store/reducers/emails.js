@@ -35,6 +35,10 @@ export const emails = createSlice({
 
   },
 })
+
+//generate randomid ?
+
+
 // Action creators are generated for each case reducer function
 export const { updateEmails,LoadEmail } = emails.actions
 
