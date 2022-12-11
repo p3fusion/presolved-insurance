@@ -40,6 +40,10 @@
         "assetsHandler": {
           "deploymentBucketName": "amplify-presolvedinsurance-dev-211801-deployment",
           "s3Key": "amplify-builds/assetsHandler-34327554427a33383159-build.zip"
+        },
+        "GetTokens": {
+          "deploymentBucketName": "amplify-presolvedinsurance-dev-211801-deployment",
+          "s3Key": "amplify-builds/GetTokens-2f384358766f69635432-build.zip"
         }
       },
       "api": {
