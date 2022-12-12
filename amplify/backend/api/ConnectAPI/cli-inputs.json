@@ -20,16 +20,6 @@
           "read"
         ]
       }
-    },
-    "/tokens": {
-      "name": "/tokens",
-      "lambdaFunction": "GetTokens",
-      "permissions": {
-        "setting": "private",
-        "auth": [
-          "read"
-        ]
-      }
     }
   }
 }
