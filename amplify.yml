@@ -2,13 +2,6 @@ version: 1
 env:
   variables:
     AMPLIFY_DIFF_BACKEND: true
-backend:
-  phases:
-    build:
-      commands:
-        - npm install -g @aws-amplify/cli
-        - amplify --version
-        - amplifyPush
 frontend:
   phases:
     preBuild:
