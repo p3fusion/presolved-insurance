@@ -6,6 +6,7 @@ import { v1 as uuidv4 } from 'uuid';
 import '../assets/style/dashboard.less'
 import NewInteraction from './newinteraction';
 import { GraphConfig } from '../../../gc-components/dummyGraph';
+import ChannelDetails from './channelDetails';
 
 
 const { Content } = Layout;
@@ -148,7 +149,8 @@ const AgentIndexPage = () => {
                             </Col>
                             <Col span={24}>
                                 <Card bodyStyle={{ minHeight: 450 }}>
-                                    <Table size='large' borderRadius={10} columns={columns} dataSource={dataSource} />
+                                   {/*  <Table size='large' borderRadius={10} columns={columns} dataSource={dataSource} /> */}
+                                   <ChannelDetails />
                                 </Card>
                             </Col>
                         </Row>
