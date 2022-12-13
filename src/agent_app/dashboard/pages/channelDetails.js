@@ -1,4 +1,4 @@
-import { Tabs, Card, Col, Table, Drawer, Layout } from 'antd';
+import { Tabs, Card, Table, Drawer, Layout, Typography, Row, Col } from 'antd';
 import React, { useState } from "react";
 import { Link } from "@gatsbyjs/reach-router";
 import { data } from "./data";
@@ -221,17 +221,7 @@ const ChannelDetails = () => {
                                 <Table
                                     rowKey="id"
                                     expandable={{
-                                        expandedRowRender: (record) => (
-                                            DynamicTable(record.contactAttributes)
-                                            // <p
-                                            //     style={{
-                                            //         margin: 0,
-                                            //     }}
-                                            // >
-                                            //     {record.contactAttributes}
-                                            // </p>
-                                            
-                                        ),
+                                        expandedRowRender: (record) => <DynamicTable record={record} />,
                                         rowExpandable: (record) => record.id !== 'Not Expandable',
                                     }}
                                     size='large'
@@ -291,43 +281,35 @@ const ChannelDetails = () => {
 export default ChannelDetails;
 
 
-function DynamicTable(TableData){
-    
-    console.log(TableData)
-    // get table column
-     const column = Object.keys(TableData[0]);
-     // get table heading data
-     
-     console.log('column', column)
-     const ThData =()=>{
-        
-         return column.map((data)=>{
-             return <th key={data}>{data}</th>
-         })
-     }
-    // get table row data
-    const tdData =() =>{
-       
-         return TableData.map((data)=>{
-           return(
-               <tr>
-                    {
-                       column.map((v)=>{
-                           return <td>{data[v]}</td>
-                       })
-                    }
-               </tr>
-           )
-         })
-    }
-      return (
-          <table className="table">
-            <thead>
-             <tr>{ThData()}</tr>
-            </thead>
-            <tbody>
-            {tdData()}
-            </tbody>
-           </table>
-      )
-    }
+const DynamicTable = ({ record }) => {
+
+    //task releated columns and data
+    const { tasks } = record
+    const column = Object.keys(tasks.items[0]);
+    const columns = column.map((data) => {
+        return {
+            title: data,
+            dataIndex: data,
+            key: data,
+        }
+    })
+
+
+   /*  const { contactAttributes } = record
+    let attrib = JSON.parse(contactAttributes);
+    const attribKeys = Object.keys(attrib);
+    //contact Attributes releated data
+    console.log({attrib, attribKeys }); */
+
+
+    return (
+        <section style={{ padding: '10px 20px', background: '#fff' }}>
+            <Row>
+                <Col span={18}>
+                    <Typography.Title level={4}>Task Details</Typography.Title>
+                    <Table columns={columns} dataSource={tasks.items} />
+                </Col>
+            </Row>
+        </section>
+    )
+}
