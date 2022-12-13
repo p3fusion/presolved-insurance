@@ -82,7 +82,7 @@ const DashboardSidebar = ({ collapsed }) => {
           {
             key: "3",
             icon: <UploadOutlined />,
-            label: "Reports",
+            label: "Report",
           },
         ]}
       />
