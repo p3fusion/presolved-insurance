@@ -6,6 +6,7 @@ import { Storage } from 'aws-amplify'
 import { useSelector } from 'react-redux';
 import { LoadEmail } from '../../store/reducers/emails';
 import { useDispatch } from 'react-redux';
+import moment from 'moment-timezone';
 
 
 
@@ -125,11 +126,13 @@ const ChannelDetails = () => {
             title: 'CreatedAt',
             dataIndex: 'createdAt',
             key: 'createdAt',
+            render:(t)=>moment(t).format('MM/DD/YYYY HH:mm')
         },
         {
             title: 'UpdatedAt',
             dataIndex: 'updatedAt',
             key: 'updatedAt',
+            render:(t)=>moment(t).format('ll')
         },
     ];
 
