@@ -18,17 +18,12 @@ import { Footer } from 'antd/lib/layout/layout';
 import ChooseChannel from './pages/chooseChannel';
 import ConfigureCases from './pages/configureCases';
 import Review from './pages/review';
-
+import { payload } from './pages/payload';
 
 const PresolvedOnboardPage = () => {
 
     const [state, setState] = useState({
         current: 0,
-        accounts: [
-            { label: 'Self Managed AWS account', value: 0 },
-            { label: 'Presolved Managed AWS account', value: 1 }
-        ],
-        accountType: null,
         channel: {
             isPhoneSelected: true,
             isEmailSelected: false,
@@ -36,17 +31,18 @@ const PresolvedOnboardPage = () => {
             phone: {
                 isInbound: true,
                 isOutbound: true,
-                numberType: "existing",
+                existingNumber:"",
                 isnew: false,
-                new: "tfn",
+                new: "TFN",
                 phoneNumberOptions: [
-                    { label: 'Use your existing phone number', value: 'oldNumber' },
-                    { label: 'Allocate new number', value: 'newNumber' }
+                    { label: 'Use your existing phone number', value: 'existing' },
+                    { label: 'Allocate new number', value: 'new' }
                 ],
                 phoneNumberSubOptions: [
                     { label: 'TFN', value: 'TFN' },
                     { label: 'DID', value: 'DID' }
-                ]
+                ],
+                noOfLines:"",
             },
             email: {},
             chat: {
@@ -54,13 +50,22 @@ const PresolvedOnboardPage = () => {
                 intent: null,
                 utterance: null,
                 intents: [
-                    { "label": "Greetings", "value": "greetings" },
-                    { "label": "Welcome", "value": "welcome" },
-                    { "label": "Inquiry", "value": "inquiry" },
-                    { "label": "Operator", "value": "operator" },
-                    { "label": "Renewal", "value": "renewal" },
+                    { "label": "Greetings", "value": "greetings","selected": true },
+                    { "label": "Welcome", "value": "welcome","selected": true },
+                    { "label": "Inquiry", "value": "inquiry","selected": true },
+                    { "label": "Operator", "value": "operator","selected": true },
+                    { "label": "Renewal", "value": "renewal","selected": true },
+                    { "label": "Raise claim", "value": "raise claim","selected": true },
+                    { "label": "Claim status", "value": "claim status","selected": true },
+                    { "label": "Certificate of insurance", "value": "certificate","selected": true },
                 ],
                 utterances: [
+                    { "intents": "greetings", "value": "Hello there" },
+                    { "intents": "greetings", "value": "How are you" },
+                    { "intents": "greetings", "value": "How may i help" },
+                    { "intents": "greetings", "value": "Hello there" },
+                    { "intents": "greetings", "value": "How are you" },
+                    { "intents": "greetings", "value": "How may i help" },
                     { "intents": "greetings", "value": "Hello there" },
                     { "intents": "greetings", "value": "How are you" },
                     { "intents": "greetings", "value": "How may i help" },
@@ -70,13 +75,14 @@ const PresolvedOnboardPage = () => {
                     { "intents": "renewal", "value": "When is next due date" },
                     { "intents": "renewal", "value": "want to renew" },
                     { "intents": "renewal", "value": "remind me for next" },
-                ]
+                ],
+                
             },
 
         },
+        templates:payload.templates,
         step1: {},
         step2: {},
-        step3: {},
 
     })
 
@@ -137,4 +143,3 @@ const PresolvedOnboardPage = () => {
 }
 
 export default PresolvedOnboardPage
-

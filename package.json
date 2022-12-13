@@ -47,6 +47,7 @@
     "react-error-boundary": "^3.1.4",
     "react-form-builder2": "^0.14.0",
     "react-highcharts": "^16.1.0",
+    "react-infinite-scroll-component": "^6.1.0",
     "react-redux": "^8.0.4",
     "react-simple-line-icons": "^1.0.8",
     "redux": "^4.2.0",

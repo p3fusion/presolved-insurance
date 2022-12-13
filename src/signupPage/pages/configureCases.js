@@ -1,12 +1,12 @@
-import { Col, Row, Typography, Divider, Menu, Form, Card, Space, Button, Input,Select,DatePicker     } from 'antd';
-import React, { useState } from 'react';
+import { Col, Row, Typography, Divider, Menu, Form, Card, Space, Button, Input, Select, DatePicker, List, Checkbox } from 'antd';
+import React, { useState, useEffect } from 'react';
 import CreateNewTemplate from './newTemplate';
 import moment from 'moment-timezone'
 import { payload } from './payload';
 import { useDispatch } from 'react-redux';
-import { updateStep3 } from '../store/reducers/steps';
+import { updateStep2 } from '../store/reducers/steps';
 import {
-    CloseOutlined ,
+    CloseOutlined,
     MailOutlined,
     MessageOutlined,
     UploadOutlined,
@@ -18,9 +18,27 @@ const ConfigureCases = (props) => {
 
     const { next, state, setState, prev } = props
     const dispatch = useDispatch()
-    const [task, setTask] = useState();
-    const index=0
-    console.log({task});
+    let record = payload.templates.filter((rec) => rec.id == 1)
+    let format = {
+        ...record[0],
+        attributes: JSON.parse(record[0].attributes)
+    }
+    const [task, setTask] = useState(format);
+    const index = 0
+    console.log({ task });
+
+    const [options,setOptions] = useState([]);
+    
+    useEffect(() => {
+        getOptions()
+       },[]);
+ 
+       const getOptions=()=>{
+         setOptions( state.templates )
+       }
+ 
+
+
     return (
         <div className='template-section'>
 
@@ -28,8 +46,8 @@ const ConfigureCases = (props) => {
 
                 <Col span={6} style={{ padding: "50px 10px" }}>
 
-                    <Typography.Title level={4}>Choose Pre Template</Typography.Title>
-                    <Menu
+                    {/* <Typography.Title level={4}>Choose Pre Template</Typography.Title> */}
+                    {/* <Menu
                         items={payload.templates.map((template) => {
                             return {
                                 label: template.name, key: template.id
@@ -46,10 +64,60 @@ const ConfigureCases = (props) => {
                             setTask(format)
                         }}
 
-                    />
+                    /> */}
+
+                    <List
+                        header={<Typography.Title level={4}>Choose Task Template</Typography.Title>}
+                        itemLayout='horizontal'
+                        dataSource={options}
+                        renderItem={(item) => (
+                            <List.Item >
+                                <Checkbox
+                                    defaultChecked={item.selected}
+                                    value={item.label}
+                                    onChange={(e) => {
+
+                                        let newRecord = state.templates.filter((ListItem) => ListItem.id !== item.id);
+                                        newRecord.push({
+                                            "selected": e.target.checked,
+                                            "id": item.id,
+                                            "name": item.name,
+                                            "description": item.description,
+                                            "attributes": item.attributes
+                                        })
+
+                                        console.log('newRecord', newRecord)
+
+                                        setState({
+                                            ...state,
+                                           templates:newRecord
+                                        });
+                                    }}
+
+
+                                >
+                                    <Button
+                                        type='text'
+                                        onClick={() => {
+                                            let record = state.templates.filter((rec) => rec.id == item.id)
+                                            let format = {
+                                                ...record[0],
+                                                attributes: JSON.parse(record[0].attributes)
+                                            }
+                                            console.log({ format });
+                                            setTask(format)
+                                        }}
+                                    >{item.name}</Button>
+                                </Checkbox>
+
+                            </List.Item>
+                        )}
+                    >
+                    </List>
+
                 </Col>
                 <Col span={18}>
-                {task &&
+                    {task &&
                         <Form layout="vertical">
                             <Col span={24}>
                                 <Card title={task.name} extra={[
@@ -70,9 +138,9 @@ const ConfigureCases = (props) => {
                                     <Typography.Title level={3}>{task.description}</Typography.Title>
                                     <Row gutter={[16, 16]}>
                                         {
-                                        task.attributes.map((field, findex) =>
-                                            <IRenderField key={findex} data={field} index={findex} taskIndex={index} />
-                                        ) 
+                                            task.attributes.map((field, findex) =>
+                                                <IRenderField key={findex} data={field} index={findex} taskIndex={index} />
+                                            )
                                         }
                                         <Col span={24}>
                                             <Form.Item wrapperCol={{ span: 8 }} label="Assign Task to" name={["case", "task", index, "assignTo"]}>
@@ -85,12 +153,12 @@ const ConfigureCases = (props) => {
                                 </Card>
                             </Col>
                         </Form>
-                        }
+                    }
                     {
-                        task ==null ? <Typography.Title level={3}>Please Choose the template</Typography.Title> : null
+                        task == null ? <Typography.Title level={3}>Please Choose the template</Typography.Title> : null
                     }
 
-                    
+
                     {/* <CreateNewTemplate location={{"state": {id: st ? 2 : null,edit: st ? true : false,record: st ? st : {}}}}/> */}
 
                 </Col>
@@ -100,7 +168,7 @@ const ConfigureCases = (props) => {
                     <Button type="ghost" size='large' onClick={() => prev()} >Previous</Button>
                     <Button type="primary" size='large'
                         onClick={() => {
-                            dispatch(updateStep3(payload.templates)),
+                            dispatch(updateStep2(state.templates)),
                                 next()
                         }}
                     >Next</Button>
@@ -123,9 +191,9 @@ export const IRenderField = ({ data, index, taskIndex }) => {
                         message: data.description,
                     }]
                 }
-                help={data.description}
+                //help={data.description}
                 label={data.name}
-                name={["case", "task", taskIndex, 'attrinutes', data.name]}>
+                name={["case", "task", taskIndex, 'attributes', data.name]}>
                 <Input />
             </Form.Item>
         </Col>
@@ -139,9 +207,9 @@ export const IRenderField = ({ data, index, taskIndex }) => {
                         message: data.description,
                     }]
                 }
-                help={data.description}
+                //help={data.description}
                 label={data.name}
-                name={["case", "task", taskIndex, 'attrinutes', data.name]}>
+                name={["case", "task", taskIndex, 'attributes', data.name]}>
                 <Input.TextArea rows={data.rows} />
             </Form.Item>
         </Col>
@@ -155,9 +223,9 @@ export const IRenderField = ({ data, index, taskIndex }) => {
                         message: data.description,
                     }]
                 }
-                help={data.description}
+                //help={data.description}
                 label={data.name}
-                name={["case", "task", taskIndex, 'attrinutes', data.name]}>
+                name={["case", "task", taskIndex, 'attributes', data.name]}>
                 <DatePicker format="MM/DD/YYYY" allowClear
                     defaultValue={moment(moment().subtract(data?.defaultValue.split("days")[0] || 7, 'days'), 'MM/DD/YYYYY')} />
             </Form.Item>
@@ -172,9 +240,9 @@ export const IRenderField = ({ data, index, taskIndex }) => {
                         message: data.description,
                     }]
                 }
-                help={data.description}
+                //help={data.description}
                 label={data.name}
-                name={["case", "task", taskIndex, 'attrinutes', data.name]}>
+                name={["case", "task", taskIndex, 'attributes', data.name]}>
                 <Select defaultValue={[data.defaultValue]} options={data.options.map((rec) => { return { value: rec } })} />
             </Form.Item>
         </Col>

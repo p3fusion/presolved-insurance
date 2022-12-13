@@ -1,34 +1,79 @@
 import { Button, Card, Col, Divider, Form, Input, List, Radio, Result, Row, Select, Space, Steps, Switch, Typography, Tabs, PageHeader, Transfer, Tag, Checkbox } from 'antd';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { PlusOutlined, MailOutlined, MessageOutlined, PhoneOutlined, ApartmentOutlined, WechatOutlined, UnorderedListOutlined, CloseOutlined } from '@ant-design/icons';
-
+import InfiniteScroll from 'react-infinite-scroll-component';
 import { useDispatch } from 'react-redux';
-import { updateStep2 } from '../store/reducers/steps';
+import { updateStep1 } from '../store/reducers/steps';
 import '../assets/style/channel.less'
 import { Children } from 'react';
 
 const { Step } = Steps;
 const { CheckableTag } = Tag;
 
+
 const ChooseChannel = (props) => {
 
     const dispatch = useDispatch()
     const channels = ["Phone", "E-Mail", "Chat"]
     const { next, state, setState, prev } = props
-    const [tab, activeTab] = useState("phone")
+    const [tab, activeTab] = useState('phone')
+    const newUtteranceList = []
 
+    useEffect(() => {
+       setActiveTab()
+      },[]);
+
+      const setActiveTab=()=>{
+        activeTab( state.channel.isPhoneSelected?'phone':state.channel.isChatSelected?'chat':'email')
+      }
 
     const onFinish = (values) => {
+
+        if(state.channel.isPhoneSelected)
+        state.channel.phone.isnew !== true ?
+            setState({
+                ...state,
+                channel: {
+                    ...state.channel,
+                    phone: {
+                        ...state.channel.phone,
+                        existingNumber: values.channel.phone.existing
+                    }
+                }
+            })
+            :
+            setState({
+                ...state,
+                channel: {
+                    ...state.channel,
+                    phone: {
+                        ...state.channel.phone,
+                        noOfLines: values.channel.phone.noOfLines
+                    }
+                }
+            })
+
+            state.channel.chat.intents.map(intent => {
+            if(intent.selected===true)
+            state.channel.chat.utterances.map(utterance => {
+                if (intent.value === utterance.intents) {
+                    newUtteranceList.push(utterance);
+                }
+            })
+        });
+
         let data = {
             ...values,
+            IsInbound: state.channel.phone.IsInbound,
+            IsOutbound: state.channel.phone.IsOutbound,
             EnablePhoneChannel: state.channel.isPhoneSelected,
             EnableChatChannel: state.channel.isChatSelected,
             EnableEmailChannel: state.channel.isEmailSelected,
             intents: state.channel.chat.intents,
-            utterances: state.channel.chat.utterances,
-
+            utterances: newUtteranceList,
         }
-        dispatch(updateStep2({ data }))
+
+        dispatch(updateStep1({ data }))
         //setState({...state,step2: values })
         next();
     }
@@ -55,31 +100,52 @@ const ChooseChannel = (props) => {
                     <Row gutter={[16, 16]} align='top'>
                         <Col span={4} className="channels">
                             <Button shape='round' block size='large' icon={<PhoneOutlined />} type={state.channel.isPhoneSelected ? 'primary' : 'dashed'}
-                                onClick={() => setState({
-                                    ...state,
-                                    channel: {
-                                        ...state.channel,
-                                        isPhoneSelected: !state.channel.isPhoneSelected
-                                    }
-                                })}
+                                onClick={() => {
+                                    if (state.channel.isPhoneSelected)
+                                        state.channel.isEmailSelected ? activeTab('email') : activeTab('chat')
+                                    else
+                                        activeTab('phone')
+                                    setState({
+                                        ...state,
+                                        channel: {
+                                            ...state.channel,
+                                            isPhoneSelected: !state.channel.isPhoneSelected
+                                        }
+                                    })
+                                }
+                                }
                             > Phone </Button>
                             <Button shape='round' block size='large' icon={<MailOutlined />} type={state.channel.isEmailSelected ? 'primary' : 'dashed'}
-                                onClick={() => setState({
-                                    ...state,
-                                    channel: {
-                                        ...state.channel,
-                                        isEmailSelected: !state.channel.isEmailSelected
-                                    }
-                                })}
+                                onClick={() => {
+                                    if (state.channel.isEmailSelected)
+                                        state.channel.isPhoneSelected ? activeTab('phone') : activeTab('chat')
+                                    else
+                                        activeTab('email')
+                                    setState({
+                                        ...state,
+                                        channel: {
+                                            ...state.channel,
+                                            isEmailSelected: !state.channel.isEmailSelected
+                                        }
+                                    })
+                                }
+                                }
                             > E-Mail </Button>
                             <Button shape='round' block size='large' icon={<MessageOutlined />} type={state.channel.isChatSelected ? 'primary' : 'dashed'}
-                                onClick={() => setState({
-                                    ...state,
-                                    channel: {
-                                        ...state.channel,
-                                        isChatSelected: !state.channel.isChatSelected
-                                    }
-                                })}
+                                onClick={() => {
+                                    if (state.channel.isChatSelected)
+                                        state.channel.isPhoneSelected ? activeTab('phone') : activeTab('email')
+                                    else
+                                        activeTab('chat')
+                                    setState({
+                                        ...state,
+                                        channel: {
+                                            ...state.channel,
+                                            isChatSelected: !state.channel.isChatSelected
+                                        }
+                                    })
+                                }
+                                }
                             >Chat</Button>
 
 
@@ -87,13 +153,22 @@ const ChooseChannel = (props) => {
                         </Col>
                         <Col span={18} offset={2} style={{ marginTop: 60 }}>
                             <Form name="form2" layout='vertical' size='large' onFinish={onFinish} onFinishFailed={onFinishFailed}
-                                initialValues={{
-                                    channel: {
-                                        number: state.channel.phone.numberType
+                            initialValues={{
+                                channel: {
+                                    phone:{
+                                        numberType: state.channel.phone.isnew ? "new" : "existing",
+                                        existing: state.channel.phone.existingNumber,
+                                        services:{
+                                            IsOutbound: state.channel.phone.isOutbound,
+                                            IsInbound:state.channel.phone.isInbound,
+                                        },
+                                        new:state.channel.phone.new,
+                                        noOfLines:state.channel.phone.noOfLines
                                     }
-                                }}
+                                }
+                            }}
                             >
-                                <Tabs activeKey={tab ? tab : null} onChange={(e) => activeTab(e)}>
+                                <Tabs defaultactiveKey={"phone"} activeKey={tab} onChange={(e) => activeTab(e)}>
                                     {state.channel.isPhoneSelected &&
                                         <Tabs.TabPane tab="Phone" key="phone"  >
                                             <RenderPhone {...props} />
@@ -106,26 +181,26 @@ const ChooseChannel = (props) => {
 
                                     }
                                     {state.channel.isChatSelected &&
-                                        <Tabs.TabPane tab="Chat" key="chat" className='chat-tabpane'  >
+                                        <Tabs.TabPane tab="Chat" key="chat"   >
                                             <RenderChat {...props} />
                                         </Tabs.TabPane>
 
                                     }
-                                    {
-                                        !state.channel.isPhoneSelected &&
-                                        !state.channel.isEmailSelected &&
-                                        !state.channel.isChatSelected &&
-                                        <Tabs.TabPane tab="Chat" key="chat"  >
-                                            <Result title="Choose atleast 1 services to proceed further" status="500" />
-                                        </Tabs.TabPane>
-
-
-                                    }
                                 </Tabs>
+
+                                {
+                                    !state.channel.isPhoneSelected &&
+                                    !state.channel.isEmailSelected &&
+                                    !state.channel.isChatSelected &&
+                                    <Card >
+                                        <Result title="Choose atleast 1 services to proceed further" status="500" />
+                                    </Card>
+
+
+                                }
 
                                 <Card style={{ margin: '10px 0' }}>
                                     <Space>
-                                        <Button type="ghost" size='large' onClick={() => prev()} >Previous</Button>
                                         <Button type="primary" htmlType="submit" size='large'>Next</Button>
                                     </Space>
                                 </Card>
@@ -146,28 +221,67 @@ const ChooseChannel = (props) => {
 const RenderChat = (props) => {
 
     const { next, state, setState, prev } = props
-
-
-    const options = state.channel.chat.intents;
-
-    const [checkedList, setCheckedList] = useState(options);
-
+    const [options,setOptions] = useState([]);
+    
+    useEffect(() => {
+        getOptions()
+       },[]);
+ 
+       const getOptions=()=>{
+         setOptions( state.channel.chat.intents )
+       }
+ 
 
     return (
-        <Row gutter={[16,16]} >
-                <Col span={12}>
+        <Row gutter={[16, 16]} >
+            <Col span={10}
+                id="scrollableIntents"
+                style={{
+                    height: 400,
+                    overflow: 'auto',
+                    padding: '0 16px',
+                    border: '1px solid rgba(140, 140, 140, 0.35)',
+                }}>
+                <InfiniteScroll
+                    dataLength={options.length}
+                    hasMore={options.length < 50}
+                    endMessage={<Divider plain>-- End --</Divider>}
+                    scrollableTarget="scrollableIntents"
+
+                >
                     <List
-                        header={<p>Intents</p>}
+                        header={<Typography.Title level={5}>Intents</Typography.Title>}
                         itemLayout='horizontal'
-                        bordered
                         dataSource={options}
                         renderItem={(item) => (
                             <List.Item >
+
                                 <Checkbox
-                                value={item.value}
+                                    defaultChecked={item.selected}
+                                    value={item.value}
                                     onChange={(e) => {
-                                        console.log(e);
-                                        if (e.target.checked) {
+
+                                        let newIntentList = state.channel.chat.intents.filter((ListItem) => ListItem.value !== item.value);
+                                        newIntentList.push({"label": item.label, "value": item.value, "selected": e.target.checked})
+                                        
+                                        console.log('newList', newIntentList)
+                                        
+                                        setState({
+                                            ...state,
+                                            channel: {
+                                                ...state.channel,
+                                                chat: {
+                                                    ...state.channel.chat,
+                                                    intents:newIntentList,
+                                                    intentSelected: item.value
+                                                }
+                                            }
+                                        });
+
+                                    }}
+                                >
+                                    <Typography
+                                        onMouseEnter={() => {
                                             setState({
                                                 ...state,
                                                 channel: {
@@ -178,22 +292,38 @@ const RenderChat = (props) => {
                                                     }
                                                 }
                                             });
-                                            setCheckedList(list => [...list, item.value]);
-                                        }
-                                    }}
-                                >
-                                    {item.label}
+                                        }}
+                                    >
+                                        {item.label}
+                                    </Typography>
+
                                 </Checkbox>
+
                             </List.Item>
                         )}
                     >
                     </List>
-                </Col>
-                <Col span={12}>
+                </InfiniteScroll>
+            </Col >
+            <Col span={2}></Col>
+            <Col
+                span={10}
+                id="scrollableUtterance"
+                style={{
+                    height: 400,
+                    overflow: 'auto',
+                    padding: '0 16px',
+                    border: '1px solid rgba(140, 140, 140, 0.35)',
+                }}>
+                <InfiniteScroll
+                    dataLength={(state.channel.chat.utterances.filter((rec) => rec.intents == state.channel.chat.intentSelected)).length}
+                    hasMore={(state.channel.chat.utterances.filter((rec) => rec.intents == state.channel.chat.intentSelected)).length < 50}
+                    endMessage={<Divider plain>-- End --</Divider>}
+                    scrollableTarget="scrollableUtterance"
+                >
                     <List
-                        header={<p>Utterances of {state.channel.chat.intentSelected} </p>}
+                        header={<Typography.Title level={5}>Utterances of {state.channel.chat.intentSelected} </Typography.Title>}
                         itemLayout='horizontal'
-                        bordered
                         dataSource={state.channel.chat.utterances.filter((rec) => rec.intents == state.channel.chat.intentSelected)}
                         renderItem={item => (
                             <List.Item>
@@ -201,9 +331,10 @@ const RenderChat = (props) => {
                             </List.Item>
                         )}
                     />
-                </Col>
-            
-        </Row>
+                </InfiniteScroll>
+            </Col>
+
+        </Row >
     )
 }
 
@@ -214,18 +345,18 @@ const RenderEmail = (props) => {
         <Row>
             <Col span={24}>
                 <Card>
-                    <Form.Item name={["channel", "email", "address"]} label="Email Box / Address ID" rules={[{ required: true, message: 'Please input your E-Mail Address' }]}>
+                    <Form.Item name={["channel", "email", "address"]} label="Email Box / Address ID" rules={[{ required: true, message: 'Please provide your E-Mail Address' }]}>
                         <Input
                             inputMode='email'
                         />
                     </Form.Item>
-                    <Form.Item name={["channel", "email", "clientID"]} label="client identifier / Client ID" rules={[{ required: true, message: 'Please input your  client identifier' }]}>
+                    <Form.Item name={["channel", "email", "clientID"]} label="client identifier / Client ID" rules={[{ required: true, message: 'Please provide your  client identifier' }]}>
                         <Input
                             inputMode='email'
                         />
                     </Form.Item>
-                    <Form.Item name={["channel", "email", "clientSecret"]} label="client secret " rules={[{ required: true, message: 'Please input your  client secret' }]}>
-                        <Input
+                    <Form.Item name={["channel", "email", "clientSecret"]} label="client secret" rules={[{ required: true, message: 'Please povide your  client secret' }]}>
+                        <Input.Password
                             inputMode='email'
                         />
                     </Form.Item>
@@ -238,145 +369,214 @@ const RenderEmail = (props) => {
 const RenderPhone = (props) => {
     const { next, state, setState, prev } = props
 
+
     return (
         <Row>
             <Col span={24}>
                 <Card>
-                    <Form.Item name={["channel", "phone", "services"]} label="">
-                        <Row style={{ marginBottom: 20 }}>
-                            <Col span={8}>Outbound</Col>
-                            <Col span={16}>
+
+                    <Row style={{ marginBottom: 20 }}>
+                        <Col span={8}>Outbound</Col>
+                        <Col span={16}>
+                            <Form.Item name={["channel", "phone", "services", "IsOutbound"]} label="">
                                 <Switch
                                     title='Outbound'
-                                    defaultChecked
-                                    onChange={() => setState({
-                                        ...state,
-                                        channel: {
-                                            ...state.channel,
-                                            phone: {
-                                                ...state.channel.phone,
-                                                isOutbound: !state.channel.phone.isOutbound
+                                    defaultChecked={state.channel.phone.isOutbound}
+                                    onChange={() => {
+                                        setState({
+                                            ...state,
+                                            channel: {
+                                                ...state.channel,
+                                                phone: {
+                                                    ...state.channel.phone,
+                                                    isOutbound: !state.channel.phone.isOutbound
+                                                }
                                             }
-                                        }
-                                    })}
-                                /></Col>
-
-                        </Row>
-                        <Row>
-                            <Col span={8}>Inbound</Col>
-                            <Col span={16}>
+                                        })
+                                    }
+                                    }
+                                />
+                            </Form.Item>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col span={8}>Inbound</Col>
+                        <Col span={16}>
+                            <Form.Item
+                             name={["channel", "phone", "services", "IsInbound"]} 
+                             label=""
+                             
+                             >
                                 <Switch
                                     title='Inbound'
-                                    defaultChecked
-                                    onChange={() => setState({
+                                    defaultChecked={state.channel.phone.isInbound}
+                                    onChange={() => {
+                                        setState({
+                                            ...state,
+                                            channel: {
+                                                ...state.channel,
+                                                phone: {
+                                                    ...state.channel.phone,
+                                                    isInbound: !state.channel.phone.isInbound
+                                                }
+                                            }
+                                        })
+                                    }
+                                    }
+
+                                />
+                            </Form.Item>
+                        </Col>
+                    </Row>
+
+
+
+                    <Form.Item
+                        name={["channel", "phone", "numberType"]}
+                        label="Which number do you want to use ?"
+                    >
+                        <Radio.Group defaultValue={state.channel.phone.isnew ? "new" : "existing"} >
+                            <Radio.Button
+                                value="existing"
+                                onChange={() =>
+                                    setState({
                                         ...state,
                                         channel: {
                                             ...state.channel,
                                             phone: {
                                                 ...state.channel.phone,
-                                                isInbound: !state.channel.phone.isInbound
+                                                isnew: false
                                             }
                                         }
-                                    })}
-
-                                /></Col>
-
-                        </Row>
-
-
-                    </Form.Item>
-                    <Form.Item name={["channel", "phone", "numberType"]} label="Which number do you want to use ?">
-                        <Radio.Group>
-                            <Radio.Button
-                                defaultChecked={state.channel.phone.numberType === 'existing' ? true : false}
-                                onChange={() => setState({
-                                    ...state,
-                                    channel: {
-                                        ...state.channel,
-                                        phone: {
-                                            ...state.channel.phone,
-                                            numberType: "existing"
+                                    })
+                                }>Use your existing phone number</Radio.Button >
+                            <Radio.Button value="new" onChange={
+                                () => {
+                                    setState({
+                                        ...state,
+                                        channel: {
+                                            ...state.channel,
+                                            phone: {
+                                                ...state.channel.phone,
+                                                isnew: true
+                                            }
                                         }
-                                    }
-                                })}
-                                type='primary' value="existing">Use your existing phone number</Radio.Button >
-                            <Radio.Button
-                                onChange={() => setState({
-                                    ...state,
-                                    channel: {
-                                        ...state.channel,
-                                        phone: {
-                                            ...state.channel.phone,
-                                            numberType: "new"
-                                        }
-                                    }
-                                })}
-
-                                value="newnumber">Allocate new number</Radio.Button >
-
+                                    })
+                                }
+                            }>Allocate new number</Radio.Button >
                         </Radio.Group>
                     </Form.Item>
-                    <Divider />
 
-                    {state.channel.phone.numberType === 'existing' &&
-                        <Form.Item label='Enter your number' name={["channel", "phone", "existing"]}
-                            rules={[{ required: true, message: 'Please input your old number' }]} style={{ marginTop: '20px' }}>
+
+                    {!state.channel.phone.isnew &&
+                        <Form.Item
+                            label='Enter your number'
+                            name={["channel", "phone", "existing"]}
+                            rules={[
+                                {
+                                    required: true,
+                                    message: 'Please provide valid phone number',
+                                },
+                                {
+                                    pattern: /^[0-9]*$/, message: "Enter valid characters"
+                                },
+                                {
+                                    max: 10, message: 'Phone number must have 10 digits'
+                                }
+                            ]}
+                            style={{ marginTop: '20px' }}
+                            onChange={(e) => {
+                                setState({
+                                    ...state,
+                                    channel: {
+                                        ...state.channel,
+                                        phone: {
+                                            ...state.channel.phone,
+                                            existingNumber: e.target.value
+                                        }
+                                    }
+                                })
+                            }}
+                        >
+
                             <Input />
                         </Form.Item>
                     }
 
-                    {state.channel.phone.numberType == 'new' &&
+                    {state.channel.phone.isnew &&
                         <div>
 
-                            <Form.Item label='Choose New number options' name={["channel", "phone", "new"]}
-                                rules={[{ required: true, message: 'Choose New number options' }]} style={{ marginTop: '20px' }}>
-                                <Radio.Group defaultValue="tfn">
+                            <Form.Item
+                                label='Choose New number options'
+                                name={["channel", "phone", "new"]}
+                                style={{ marginTop: '20px' }}
+                            >
+                                <Radio.Group defaultValue={state.channel.phone.new}>
                                     <Radio.Button
-                                        onChange={() => setState({
-                                            ...state,
-                                            channel: {
-                                                ...state.channel,
-                                                phone: {
-                                                    ...state.channel.phone,
-                                                    isnew: true,
-                                                    new: "tfn"
+                                        value="TFN"
+                                        onChange={
+                                            () => setState({
+                                                ...state,
+                                                channel: {
+                                                    ...state.channel,
+                                                    phone: {
+                                                        ...state.channel.phone,
+                                                        new: "TFN"
+                                                    }
                                                 }
-                                            }
-                                        })}
-                                        type='primary' value="TFN">Toll Free Number</Radio.Button >
+                                            })
+                                        }>
+                                        Toll Free Number
+                                    </Radio.Button >
                                     <Radio.Button
-                                        onChange={() => setState({
-                                            ...state,
-                                            channel: {
-                                                ...state.channel,
-                                                phone: {
-                                                    ...state.channel.phone,
-                                                    isnew: true,
-                                                    new: "did"
+                                        value="DID"
+                                        onChange={
+                                            () => setState({
+                                                ...state,
+                                                channel: {
+                                                    ...state.channel,
+                                                    phone: {
+                                                        ...state.channel.phone,
+                                                        new: "DID"
+                                                    }
                                                 }
-                                            }
-                                        })}
-                                        value="DID">Direct Inward Dialing</Radio.Button >
-
+                                            })
+                                        }>
+                                        Direct Inward Dialing
+                                    </Radio.Button >
                                 </Radio.Group>
                             </Form.Item>
-                            {state.channel.phone.new === 'tfn' &&
-                                <Form.Item label='Number of Phone lines' name={["channel", "phone", "tfn"]}
-                                    rules={[{ required: true, message: 'Please input your number of TFN required' }]} style={{ marginTop: '20px' }}>
-                                    <Input />
-                                </Form.Item>
-                            }
-                            {state.channel.phone.new === 'did' &&
-                                <Form.Item label='Enter DID number' name={["channel", "phone", "did"]}
-                                    rules={[{ required: true, message: 'Please input your DID number' }]} style={{ marginTop: '20px' }}>
-                                    <Input />
-                                </Form.Item>
-                            }
+                            <Form.Item
+                                label='Number of Phone lines'
+                                name={["channel", "phone", "noOfLines"]}
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: 'Please enter a valid number',
+                                    },
+                                    {
+                                        pattern: /^[0-9]*$/, message: "Enter valid characters"
+                                    }
+                                ]}
+                                style={{ marginTop: '20px' }}
+                                onChange={(e) => {
+                                    setState({
+                                        ...state,
+                                        channel: {
+                                            ...state.channel,
+                                            phone: {
+                                                ...state.channel.phone,
+                                                noOfLines: e.target.value
+                                            }
+                                        }
+                                    })
+                                }}
+                            >
 
+                                <Input />
+                            </Form.Item>
                         </div>
                     }
-
-
                 </Card>
 
             </Col>

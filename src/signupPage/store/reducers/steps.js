@@ -3,7 +3,6 @@ import { createSlice } from '@reduxjs/toolkit'
 const initialState = {
     step1: [],
     step2: [],
-    step3: []
 }
 
 export const stepsSlice = createSlice({
@@ -22,16 +21,9 @@ export const stepsSlice = createSlice({
                 step2: action.payload
             }
         },
-        updateStep3: (state, action) => {
-            return {
-                ...state,
-                step3: action.payload
-
-            }
-        },
     },
 })
 // Action creators are generated for each case reducer function
-export const { updateStep1,updateStep2,updateStep3 } = stepsSlice.actions
+export const { updateStep1,updateStep2 } = stepsSlice.actions
 
 export default stepsSlice.reducer

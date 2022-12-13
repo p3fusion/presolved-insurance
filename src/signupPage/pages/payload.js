@@ -3,12 +3,14 @@ export const payload = {
     templates:
         [
             {
+                "selected":true,
                 "id":1,
                 "name": "Change of address",
                 "description": "Please provide all required informations",
                 "attributes": "[{\"type\":\"text\",\"order\":\"1\",\"name\":\"Building Number\",\"description\":\"please enter Building Number\",\"required\":true,\"defaultValue\":\"\"},{\"type\":\"textarea\",\"order\":1,\"name\":\"Street name\",\"description\":\"Please enter Street name\",\"required\":true},{\"type\":\"text\",\"order\":2,\"name\":\"Address\",\"description\":\"please enter full address\",\"required\":true},{\"type\":\"text\",\"order\":3,\"name\":\"City\",\"description\":\"please enter city\",\"required\":true},{\"type\":\"select\",\"order\":4,\"name\":\"State\",\"description\":\"please choose state\",\"options\":[\"Alabama\",\"Texas\",\"Arizona\",\"washington\"],\"required\":true,\"defaultValue\":\"Texas\"},{\"type\":\"date\",\"order\":5,\"name\":\"Address changed \",\"description\":\"please choose the date you chagned the address\",\"options\":\"date\",\"required\":true,\"defaultValue\":\"-7 days\"},{\"type\":\"textarea\",\"order\":6,\"name\":\"Notes\",\"description\":\"please add any notes or comments\",\"rows\":3}]"
             },
             {
+                "selected":true,
                 "id":2,
                 "name": "Insurance Renewal",
                 "description": "Please provide all required informations",
