@@ -12,11 +12,11 @@ const HtmlWebpackPluginConfig = new HtmlWebpackPlugin({
   inject: "body"
 });
 
-console.log("---------------------- WEBPACK ------------------")
+console.log("---------------------- WEBPACK DEVELOPMENT CONFIG------------------")
 console.info({
   environment: NODE_ENV
 })
-console.log("---------------------- WEBPACK ------------------")
+console.log("---------------------- WEBPACK DEVELOPMENT CONFIG ------------------")
 module.exports = {
   resolve: {
     fallback: {
@@ -29,7 +29,7 @@ module.exports = {
     errorDetails: true
   },
 
-  devtool: 'source-map',
+  devtool: 'inline-source-map',
   mode: NODE_ENV,//"production",
   watch: true,
   entry: {

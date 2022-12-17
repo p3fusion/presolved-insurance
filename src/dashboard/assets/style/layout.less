@@ -1,0 +1,58 @@
+/* 
+font-family: 'Alfa Slab One', cursive;
+font-family: 'Anton', sans-serif;
+font-family: 'Montserrat', sans-serif;
+font-family: 'Nunito', sans-serif;
+font-family: 'Source Sans Pro', sans-serif;
+*/
+@primary-bg: linear-gradient(135deg, #00023b 0%, #00023b 50%, #313264 100%);
+
+body {
+    font-family: 'Source Sans Pro', sans-serif;
+    font-size: 1em;
+}
+
+section.ant-layout.master {
+    
+    header.ant-layout-header.primaryHeader {
+        background: @primary-bg;
+        height: 80px;
+        padding: 0 50px;
+        line-height: 80px;
+
+        .item-conainer {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+
+            .logo {
+                display: flex;
+                align-items: center;
+            }
+
+            .ant-menu.ant-menu-dark {
+                flex: 1;
+                background: inherit !important;
+
+                .ant-menu-item:hover {
+                    background: linear-gradient(357deg, #00023b 10%, #00023b 10%, #000598 100%);
+                }
+
+                .ant-menu-item-selected {
+                    background: linear-gradient(357deg, #00023b 0%, #00023b 50%, #000598 100%);
+                }
+            }
+
+            .user-info {
+                display: flex;
+                flex-direction: row;
+                flex-wrap: wrap;
+                align-items: center;
+                gap: 10px;
+                color: #fff;
+            }
+
+        }
+    }
+
+}

@@ -25,8 +25,8 @@ const flexItems={
 }
 const ErrorFallback = ({ error, resetErrorBoundary }) => {
     return (
-        <div class="flex-container" style={flexContainer}>
-            <div class="flex-items" style={flexItems}>
+        <div className="flex-container" style={flexContainer}>
+            <div className="flex-items" style={flexItems}>
                 <h2>Something went wrong:</h2>
                 <pre>{error.message}</pre>
                 <pre>{error.stack}</pre> 

@@ -75,7 +75,8 @@
     "url-loader": "^4.1.1",
     "webpack": "^5.74.0",
     "webpack-bundle-analyzer": "^4.6.1",
-    "webpack-cli": "^4.10.0"
+    "webpack-cli": "^4.10.0",
+    "webpack-dev-server": "^4.11.1"
   },
   "scripts": {
     "progress": "mkdir build && cp ./public/build.html ./build/index.html && cp ./public/template.csv ./build/template.csv  && cp ./public/favicon.ico ./build/favicon.ico",
@@ -85,7 +86,8 @@
     "publish": "amplify publish",
     "startdev": "serve  -s ./build/ --ssl-cert ./public/certs/cert.crt --ssl-key ./public/certs/localhost.pvk",
     "start": "serve  -s ./build/",
-    "dev": "npm run clean && concurrently  \"npm run progress\" \"webpack --config ./src/webpack.dev.js\" \"npm run startdev\"",
+    "olddev": "npm run clean && concurrently  \"npm run progress\" \"webpack --config ./src/webpack.dev.js\" \"npm run startdev\"",
+    "dev" :"webpack serve --config ./src/webpack.config.dev",
     "devw": "npm run cleanw && concurrently  \"npm run progressw\" \"webpack --config ./src/webpack.dev.js\" \"npm run startdev\"",
     "build": "npm run clean && webpack --config ./src/webpack.config.js  && cp ./public/template.csv ./build/template.csv",
     "test": "cypress open",

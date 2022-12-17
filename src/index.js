@@ -6,11 +6,12 @@ import awsExports from "./aws-exports";
 import "./gc-components/connect-streams";
 import DefaultErrorBoundary from "./gc-components/errorBoundary";
 import reportWebVitals from "./gc-components/reportWebVitals";
-import PresolvedOnboardIndexPage from "./signupPage";
-import EmailPage from "./emailViewer";
+//import PresolvedOnboardIndexPage from "./signupPage";
+//import EmailPage from "./emailViewer";
 import Suspence from "./suspence";
+import DashboardIndexPage from "./dashboard";
 
-const AgentApp = React.lazy(() => import("./agent_app/"));
+//const AgentApp = React.lazy(() => import("./agent_app/"));
 /* const OnboardAddIndexPage = React.lazy(() => import('./onboarding'));
 const LandingPage = React.lazy(() => import('./landing_page')); */
 
@@ -23,12 +24,16 @@ ReactDOM.render(
     <Suspense fallback={<Suspence />}>
       <DefaultErrorBoundary>
         <Router basepath="/">
-          <AgentApp path="/*" />
+          <DashboardIndexPage path="/*" />
+          <DashboardIndexPage path="/app/*" />
+{/*           <AgentApp path="/*" />
           <AgentApp path="/agent/*" />
-          {/*    <LandingPage path="/site/*" />
-          <OnboardAddIndexPage path="/signup/*" /> */}
+          {
+          // <LandingPage path="/site/*" />
+          // <OnboardAddIndexPage path="/signup/*" />
+          }
           <PresolvedOnboardIndexPage path="/signup/*" />
-          <EmailPage path="/email/*" />
+          <EmailPage path="/email/*" /> */}
         </Router>
       </DefaultErrorBoundary>
     </Suspense>
