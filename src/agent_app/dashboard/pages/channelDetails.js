@@ -105,6 +105,7 @@ const ChannelDetails = () => {
             title: 'Id',
             dataIndex: 'id',
             key: 'id',
+            render:(t)=><Link to={`/channel-Details/${t}`}>{t}</Link>
         },
         {
             title: 'AssignTo',
