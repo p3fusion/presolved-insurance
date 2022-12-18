@@ -44,6 +44,16 @@
           "deploymentBucketName": "amplify-presolvedtenant-test-211355-deployment",
           "s3Key": "amplify-builds/assetsHandler-34327554427a33383159-build.zip"
         }
+      },
+      "api": {
+        "presolvedinsurance": {},
+        "ConnectAPI": {}
+      },
+      "hosting": {
+        "S3AndCloudFront": {}
+      },
+      "custom": {
+        "PSEventBridge": {}
       }
     }
   }
