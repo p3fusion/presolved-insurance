@@ -159,14 +159,15 @@ module.exports = {
     ]
   },
   devServer: {
+    historyApiFallback: {
+      index: '/'
+    },
     allowedHosts: 'all',
     port: 3000,    
     liveReload: true,
     server: 'https',
     client: {
       overlay: true,
-      progress: true,
-      logging: 'info'
     },
     onListening: function (devServer) {
       const port = devServer.server.address().port;
