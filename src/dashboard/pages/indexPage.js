@@ -6,7 +6,7 @@ import '../assets/style/dashboard-index-page.less'
 
 
 const AgentIndexPage = (props) => {
-    console.log(props);
+
     return (
         <section className='dashboard-index-page'>
 

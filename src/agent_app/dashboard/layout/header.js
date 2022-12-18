@@ -58,8 +58,11 @@ const DashboardHeader = ({ setCollapsed, collapsed }) => {
                 ccpSynTimeout: 3000, //optional, defaults to 1000 (ms)
                 ccpLoadTimeout: 10000 //optional, defaults to 5000 (ms)
             });
+
         }
     }, [])
+
+  
 
 
     return (
@@ -96,12 +99,12 @@ const DashboardHeader = ({ setCollapsed, collapsed }) => {
                     </div>
                 </Col>
             </Row>
-            <Drawer 
-            width={450}
-            bodyStyle={{padding:0}}
-            onClose={()=>setState({...state,showDialer:false})}
-            style={{ visibility: state.showDialer ? 'visible' : 'hidden' }} 
-            open={true} >
+            <Drawer
+                width={450}
+                bodyStyle={{ padding: 0 }}
+                onClose={() => setState({ ...state, showDialer: false })}
+                style={{ visibility: state.showDialer ? 'visible' : 'hidden' }}
+                open={true} >
                 <div className="ccp" >
                     <div id="containerDiv" ref={divCCP} style={{ minHeight: '100vh', backgroundColor: '#fff' }} />
                 </div>
@@ -120,7 +123,6 @@ const CustomerProile = (props) => {
         if (customerprofiles.current) {
             const instanceUrl = 'https://p3fusion-uat.my.connect.aws/'
             let client = new connect.CustomerProfilesClient(instanceUrl);
-
         }
 
     }, [connect.agent.initialized])
@@ -128,7 +130,6 @@ const CustomerProile = (props) => {
 
     return (
         <section style={{ minHeight: '100vh' }}>
-
             <div id={`customerprofiles-container`} style={{ minHeight: '100vh' }} ref={customerprofiles} />
         </section>
     )

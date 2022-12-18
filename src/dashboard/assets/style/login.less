@@ -1,0 +1,82 @@
+@grad-primary: linear-gradient(135deg, #00023b 0%, #00023b 50%, #e9b75a 30%);
+
+section.ant-layout.signup-page {
+    main.login-container {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        background-color: #fff !important;
+        box-shadow: -10px 0px 1px -2px #e9b75a;
+
+        section.sidebar {
+            display: flex;
+            min-height: 100vh;
+            width: 400px;
+            background: @grad-primary;
+
+            .sidebar-container {
+
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                align-content: space-between;
+                justify-content: space-between;
+
+                .logo-container {
+                    margin: 20px 10px;
+
+                    img {
+                        width: 100%;
+                        height: auto;
+                    }
+                }
+
+                .footer {
+                    padding: 0 20px;
+
+                    img {
+                        width: 100%;
+                        height: auto;
+                    }
+                }
+            }
+
+        }
+
+        section.main {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            width: 640px;
+            justify-content: center;
+            background-color: #fff;
+
+            .main-container {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                align-content: stretch;
+                justify-content: center;
+
+                .ant-card.ant-card-bordered {
+                    width: 500px;
+                    min-height: 500px;
+                    box-shadow: -10px 0px 1px -2px #6b6a68;
+                    button{
+                        background-color: #00023b;
+                        font-size: 18px;
+                    }
+                    .ant-typography {   
+                        margin: 0;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 767px) {
+    main.container {
+        margin: 0 1em;
+    }
+}

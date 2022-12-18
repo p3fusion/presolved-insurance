@@ -3,29 +3,16 @@ import React from 'react';
 import 'antd/dist/antd.less';
 import 'antd/lib/style/themes/default.less';
 import './assets/style/layout.less';
-import { Router } from '@gatsbyjs/reach-router';
+import { store } from './store';
+import { Provider } from 'react-redux';
 
-const AgentIndexPage= React.lazy(()=>import('./pages/indexPage'))
-const ChannelsInteraction= React.lazy(()=>import('./pages/channels'))
-const DashboardPrimaryHeader= React.lazy(()=>import('./layout/header'))
-const DashboardPrimarySidebar= React.lazy(()=>import('./layout/sidebar'))
-const ConnectWidget= React.lazy(()=>import('./layout/connect'))
+const AgentPage= React.lazy(()=>import('./agent'))
 
 const DashboardIndexPage = () => {
     return (
-        <section className='master'>
-            <DashboardPrimaryHeader />
-            <section className='wrapper'>
-                <DashboardPrimarySidebar />
-                <div className='container'>
-                    <ConnectWidget />
-                    <Router>
-                        <AgentIndexPage path="/" />
-                        <ChannelsInteraction path="channels" />
-                    </Router>
-                </div>
-            </section>
-        </section>
+        <Provider store={store}>
+            <AgentPage />
+        </Provider>
     )
 }
 

@@ -1,14 +1,15 @@
-@primary-bg:#211faf;
+@primary-bg: #211faf;
 
-.ant-btn-primary{
+.ant-btn-primary {
     background-color: @primary-bg;
     border-color: #07054b;
 }
+
 section.connect-widget {
     .ant-typography {
         margin: 0 !important;
     }
-    
+
     margin: 0 0 20px 0;
     min-height: 150px;
     background: #fff;
@@ -23,15 +24,27 @@ section.connect-widget {
 
         .userinfo {
             padding: 20px 10px;
+
             .ant-avatar {
                 background: linear-gradient(177deg, #fc6, #fb804d);
             }
         }
-        .actions{
+
+        .actions {
             display: flex;
             flex-direction: row;
             padding: 0px 10px;
             justify-content: space-between;
+        }
+    }
+}
+
+
+.connect-drawer {
+    .ant-drawer-body {
+        padding: 0;
+        iframe{
+            min-height: 100vh;
         }
     }
 }
