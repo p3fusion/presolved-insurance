@@ -24,6 +24,7 @@ const DashboardPrimarySidebar = () => {
             collapsedWidth={100}   
             onMouseEnter={()=>setCollapse(!collapse)}
             onMouseLeave={()=>setCollapse(!collapse)}
+            className="primary-sidebar"
             >
             <div className={collapse ? 'menu-items-closed' : 'menu-items-expanded'}>
                 <ul>
@@ -34,7 +35,7 @@ const DashboardPrimarySidebar = () => {
                         <Link to='/'><RxDashboard  size={20}  /><span>Dashboard</span></Link>
                     </li>
                     <li>
-                        <Link to='/channels'><RxBackpack  size={20}  /><span>Interactions</span></Link>
+                        <Link to='/interactions'><RxBackpack  size={20}  /><span>Interactions</span></Link>
                     </li>
                     <li>
                         <Link to='/channels'><SlEnvolopeLetter  size={20}  /><span>Reports</span></Link>

@@ -17,6 +17,7 @@ var BUILD_DIR = path.resolve(__dirname, '../', 'build/');
 
 
 module.exports = {
+  stats: 'errors-only',
   mode: 'development',
   entry: {
     main: APP_DIR + '/index.js',
@@ -163,7 +164,7 @@ module.exports = {
       index: '/'
     },
     allowedHosts: 'all',
-    port: 3000,    
+    port: 3000,
     liveReload: true,
     server: 'https',
     client: {

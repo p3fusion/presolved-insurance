@@ -20,7 +20,7 @@
     }
   },
   "Resources": {
-    "LambdaLayerVersionbea32eb4": {
+    "LambdaLayerVersion6661b8ff": {
       "Type": "AWS::Lambda::LayerVersion",
       "Properties": {
         "CompatibleRuntimes": [
@@ -30,9 +30,9 @@
           "S3Bucket": {
             "Ref": "deploymentBucketName"
           },
-          "S3Key": "amplify-builds/presolvedinsurancemsgraph-LambdaLayerVersionbea32eb4-build.zip"
+          "S3Key": "amplify-builds/presolvedinsurancemsgraph-LambdaLayerVersion6661b8ff-build.zip"
         },
-        "Description": "Updated layer version 2022-12-18T14:33:32.359Z",
+        "Description": "Updated layer version 2022-12-18T15:03:42.037Z",
         "LayerName": {
           "Fn::Sub": [
             "presolvedinsurancemsgraph-${env}",
@@ -47,11 +47,11 @@
       "DeletionPolicy": "Delete",
       "UpdateReplacePolicy": "Retain"
     },
-    "LambdaLayerPermissionPrivatebea32eb4": {
+    "LambdaLayerPermissionPrivate6661b8ff": {
       "Type": "AWS::Lambda::LayerVersionPermission",
       "Properties": {
         "Action": "lambda:GetLayerVersion",
-        "LayerVersionArn": "arn:aws:lambda:us-east-1:039289871235:layer:presolvedinsurancemsgraph-test:8",
+        "LayerVersionArn": "arn:aws:lambda:us-east-1:039289871235:layer:presolvedinsurancemsgraph-test:9",
         "Principal": {
           "Ref": "AWS::AccountId"
         }
@@ -61,7 +61,7 @@
   "Outputs": {
     "Arn": {
       "Value": {
-        "Ref": "LambdaLayerVersionbea32eb4"
+        "Ref": "LambdaLayerVersion6661b8ff"
       }
     }
   }

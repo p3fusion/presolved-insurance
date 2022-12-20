@@ -1,9 +1,9 @@
 import React from 'react'
 
-const ChannelsInteraction = () => {
+const ChannelDetailsPage = () => {
   return (
-    <div>ChannelsInteraction</div>
+    <div>ChannelDetailsPage</div>
   )
 }
 
-export default ChannelsInteraction
+export default ChannelDetailsPage

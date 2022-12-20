@@ -5,7 +5,7 @@ import "antd/dist/antd.less";
 import "antd/lib/style/themes/default.less";
 import { Amplify, Storage } from "aws-amplify";
 import awsconfig from "../aws-exports";
-Amplify.configure(awsconfig);
+//Amplify.configure(awsconfig);
 
 const AgentLoginPage = () => {
   const [state, setState] = useState({

@@ -1,6 +1,6 @@
 import { API, DataStore, Auth } from 'aws-amplify'
-import { listEmailMessages } from '../../../graphql/queries'
-import { TaskTemplate } from '../../../models'
+import { listEmailMessages } from '../../graphql/queries'
+
 
 export const getAllEmails = async () => {
     try {

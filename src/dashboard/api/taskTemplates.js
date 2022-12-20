@@ -1,8 +1,8 @@
 import { API, DataStore, Auth } from 'aws-amplify'
-import { listTaskTemplates } from '../../../graphql/queries'
-import { TaskTemplate } from '../../../models/'
+import { listTaskTemplates } from '../../graphql/queries'
 
-export const getTaskTemplates = async () => {
+
+export const getTaskTemplates  = async () => {
     try {
         let result = await API.graphql({
             query: listTaskTemplates,
