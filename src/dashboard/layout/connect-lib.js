@@ -1,4 +1,3 @@
-
 import { notification } from "antd";
 import '../../gc-components/connect-streams'
 const masterTopics = {
@@ -27,7 +26,7 @@ class connectWrapper {
         this.state = state;
         this.divCCP = divCCP;
         this.navigate = navigate;
-    }
+        this.cbConnect=null    }
     initiateCCP() {
         const { connect, dispatch, setState, updateUser, state, divCCP } = this
         if (divCCP.current) {
@@ -63,7 +62,7 @@ class connectWrapper {
                 this.getAgentInfoFromConnect({ setState, dispatch, updateUser, connect, state, divCCP });
                 clearInterval(interval)
             }
-            if (i > 20) {
+            if (i > 10) {
                 connect.agentApp.stopApp(divCCP)
                 this.showConnectLoginPopup(connect)
                 clearInterval(interval)
@@ -84,7 +83,7 @@ class connectWrapper {
         });
     }
     showConnectLoginPopup() {
-        const { connect } = this
+        const { connect,divCCP } = this
         connect.core.getPopupManager().clear(masterTopics.LOGIN_POPUP);
         connect.core.getPopupManager().open(connectUrl, masterTopics.LOGIN_POPUP, loginOptions)
     }

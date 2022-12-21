@@ -46,12 +46,9 @@ exports.handler = async (event) => {
     tenantId,
     messageId
   );
-
   console.log("Attachments: ", attachments);
-
   //reg ex expression to get the src of image
   let regex = /src="([^"]*)"/g;
-
   // Replace cid:image in the email body with the actual image URL
   let cidImage = content.match(regex);
   if (cidImage) {

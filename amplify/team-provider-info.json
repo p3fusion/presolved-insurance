@@ -38,7 +38,7 @@
         },
         "DownloadEmail": {
           "deploymentBucketName": "amplify-presolvedtenant-test-211355-deployment",
-          "s3Key": "amplify-builds/DownloadEmail-3233456347554f4c6139-build.zip"
+          "s3Key": "amplify-builds/DownloadEmail-326d7857653279536d50-build.zip"
         },
         "assetsHandler": {
           "deploymentBucketName": "amplify-presolvedtenant-test-211355-deployment",

@@ -6,7 +6,7 @@ import logo from '../assets/images/logo-white.png';
 import { Layout, Typography, Space, Avatar, Card, Divider, Button, Spin } from 'antd';
 import { VscUnlock } from "react-icons/vsc";
 import { RxPerson } from 'react-icons/rx';
-import { Auth, Hub, Amplify } from "aws-amplify";
+import { Auth, Hub, Amplify,  } from "aws-amplify";
 import oldAwsConfig from '../../aws-exports'
 import '../assets/style/login.less'
 import { useDispatch } from 'react-redux';
@@ -21,9 +21,9 @@ const isLocalhost = Boolean(
     window.location.hostname.match(
         /^127(?:\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}$/
     )
-);
+); 
 
-const oauth = {
+let oauth = {
     domain: "presolvedtenant.auth.us-east-1.amazoncognito.com",
     scope: [
         "aws.cognito.signin.user.admin",
@@ -32,23 +32,25 @@ const oauth = {
         "phone",
         "profile",
     ],
-    redirectSignIn: 'https://localhost:3000/',
-    redirectSignOut: 'https://localhost:3000/',
+    redirectSignIn: 'https://localhost:3000/,https://d36z7vqpuzrikl.cloudfront.net/',
+    redirectSignOut: 'https://localhost:3000/,https://d36z7vqpuzrikl.cloudfront.net/',
     responseType: "code",
     identityProvider: "CognitoSAML",
 }
+const [localRedirectSignIn, productionRedirectSignIn] = oauth?.redirectSignIn.split(",") || 'https://d36z7vqpuzrikl.cloudfront.net';
+const [localRedirectSignOut, productionRedirectSignOut] = oauth?.redirectSignOut.split(",") || 'https://d36z7vqpuzrikl.cloudfront.net';
+
 
 let awsConfig = {
     ...oldAwsConfig,
     oauth: oauth
 }
 
-const [localRedirectSignIn, productionRedirectSignIn] = awsConfig?.oauth?.redirectSignIn.split(",") || [];
-const [localRedirectSignOut, productionRedirectSignOut] = awsConfig?.oauth?.redirectSignOut.split(",") || [];
 
 let updatedAwsConfig = {
     ...awsConfig,
     oauth: {
+        ...oauth,
         redirectSignIn: isLocalhost ? localRedirectSignIn : productionRedirectSignIn,
         redirectSignOut: isLocalhost ? localRedirectSignOut : productionRedirectSignOut,
     },
@@ -65,10 +67,10 @@ const AgentSAMLPage = () => {
     });
 
     useEffect(() => {
-        updatedAwsConfig.oauth = {
-            ...oauth
-        }
-        Amplify.configure(updatedAwsConfig);
+
+        /*updatedAwsConfig.oauth = {...oauth} */
+        console.log({updatedAwsConfig});
+        Amplify.configure(updatedAwsConfig);        
         Auth.currentAuthenticatedUser()
             .then((login) => {
                 setState({ ...state, isLoggedin: true });
@@ -80,8 +82,7 @@ const AgentSAMLPage = () => {
             });
     }, [state.isLoggedin]);
 
-    Hub.listen("auth", (data) => {
-
+    Hub.listen("auth", (data) => {    
         const event = data.payload.event;
         if (event === "signIn") {
             setState({ ...state, isLoggedin: true });
@@ -145,11 +146,14 @@ const AgentSAMLPage = () => {
                             <div>
                                 <Button icon={<VscUnlock size={16} />} type='primary' block size='large' shape='round'
 
-                                    onClick={() => {
+                                    onClick={() => {                                        
                                         setState({...state,showLoginProgress:true})
-                                        Auth.federatedSignIn({
-                                            provider: "CognitoSAML",
-                                        }).catch((error) => {
+                                        console.log({awsExport:updatedAwsConfig, auth : Auth.configure()}); 
+                                        Auth.federatedSignIn({provider: "CognitoSAML"})
+                                        .then((res)=>{
+                                            console.log({res});
+                                        })
+                                        .catch((error) => {
                                             console.error("Error with FederatedSignin is ", error);
                                         })
 
