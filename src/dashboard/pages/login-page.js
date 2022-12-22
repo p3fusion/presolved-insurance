@@ -32,8 +32,8 @@ let oauth = {
         "phone",
         "profile",
     ],
-    redirectSignIn: 'https://localhost:3000/,https://d36z7vqpuzrikl.cloudfront.net/',
-    redirectSignOut: 'https://localhost:3000/,https://d36z7vqpuzrikl.cloudfront.net/',
+    redirectSignIn: 'https://localhost:3000/,https://develop.d1nla2nbfpliwq.amplifyapp.com/',
+    redirectSignOut: 'https://localhost:3000/,https://develop.d1nla2nbfpliwq.amplifyapp.com/',
     responseType: "code",
     identityProvider: "CognitoSAML",
 }
