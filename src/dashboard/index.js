@@ -5,7 +5,7 @@ import 'antd/lib/style/themes/default.less';
 import './assets/style/layout.less';
 import { store } from './store';
 import { Provider } from 'react-redux';
-import '../gc-components/chat'
+
 const AgentPage= React.lazy(()=>import('./agent'))
 
 const DashboardIndexPage = () => {

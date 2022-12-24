@@ -1,4 +1,5 @@
 import { notification } from "antd";
+import { useMemo } from "react";
 import '../../gc-components/connect-streams'
 const masterTopics = {
     "LOGIN_POPUP": "connect::loginPopup",
@@ -18,15 +19,17 @@ const connectUrl = "https://p3fusion-qa.my.connect.aws/ccp-v2";
 const loginUrl = "https://d-9067b5964e.awsapps.com/start/#/saml/default/Amazon%20Connect%20Agent%20App/ins-f150c516c8f568f6";
 
 class connectWrapper {
-    constructor({ connect, dispatch, setState, updateUser, state, divCCP, navigate }) {
+    constructor({ connect, dispatch, setState, updateUser, updateSettings, state, divCCP, navigate }) {
         this.connect = connect;
         this.dispatch = dispatch;
         this.setState = setState;
         this.updateUser = updateUser;
+        this.updateSettings = updateSettings;
         this.state = state;
         this.divCCP = divCCP;
         this.navigate = navigate;
-        this.cbConnect=null    }
+        this.cbConnect = null
+    }
     initiateCCP() {
         const { connect, dispatch, setState, updateUser, state, divCCP } = this
         if (divCCP.current) {
@@ -49,7 +52,7 @@ class connectWrapper {
                 ccpLoadTimeout: 10000 //optional, defaults to 5000 (ms)
             });
             this.getLoginStatus({ connect, dispatch, setState, updateUser, state, divCCP: divCCP.current })
-            this.listenIncomingActivities()
+            this.listenIncomingActivities()            
         }
     }
     getLoginStatus() {
@@ -71,19 +74,20 @@ class connectWrapper {
         }, 1000);
     }
     getAgentInfoFromConnect() {
-        const { connect, dispatch, setState, updateUser, state, navigate } = this
+        const { connect, dispatch, setState, updateUser, updateSettings, state, navigate } = this
         console.log("::Gettting loged in Agent information::");
         connect.agent((agent) => {
             let agentData = agent._getData()
             let currentState = agent.getStatus()
             setState({ ...state, connect: connect, currentState: currentState.name });
             dispatch(updateUser(agentData.configuration))
+            dispatch(updateSettings(agentData.configuration))
             console.log("::completed loading the Agent information::");
             //navigate("/interactions", { state: agentData })
         });
     }
     showConnectLoginPopup() {
-        const { connect,divCCP } = this
+        const { connect, divCCP } = this
         connect.core.getPopupManager().clear(masterTopics.LOGIN_POPUP);
         connect.core.getPopupManager().open(connectUrl, masterTopics.LOGIN_POPUP, loginOptions)
     }
@@ -99,24 +103,21 @@ class connectWrapper {
         })
     }
     listenIncomingActivities() {
-        const { connect, state, setState, navigate } = this
+        const { connect, state, setState, navigate, updateSettings, dispatch } = this
         connect.contact(function (contact) {
             contact.onIncoming(function (contact) {
                 console.log("onIncoming", contact);
-
             });
 
             contact.onRefresh(function (contact) {
                 console.log("onRefresh", contact);
-                notification.info({
-                    message: `You are getting new call`
-                })
-                if (!state.showConnect) {
-                    setState({
-                        ...state,
-                        showConnect: true,
-                    })
+                let { contactId, type } = contact
+                var contactData = contact._getData()
+                let settings = {
+                    activeTask: { ...contactData }
                 }
+                dispatch(updateSettings(settings))
+
             });
 
             contact.onAccepted(function (contact) {
@@ -136,6 +137,10 @@ class connectWrapper {
                 console.log("onEnded", contact);
                 var _getData = contact._getData()
                 console.log({ data: _getData, });
+                let settings = {
+                    activeTask: null,
+                }
+                dispatch(updateSettings(settings))
             });
 
             contact.onConnected(function () {

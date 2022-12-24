@@ -5,6 +5,7 @@ import { combineReducers, compose } from 'redux';
 import  emailReducer  from './reducers/emails';
 import  channelsReducer  from './reducers/channels';
 import  configReducer  from './reducers/config';
+import settingsReducer from './reducers/settings';
 
 const composeEnhancers = typeof window === 'object' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
     trace: true, 
@@ -16,7 +17,8 @@ export const store = configureStore({
         user:userSlice,
         channels:channelsReducer,
         config:configReducer,
-        emails:emailReducer
+        emails:emailReducer,
+        settings:settingsReducer
     }),
     middleware: (getDefaultMiddleware) => getDefaultMiddleware({
         serializableCheck: false
