@@ -1,13 +1,14 @@
 import { Avatar, Space, Typography, Button, Drawer, Spin, Popover, Popconfirm, Modal } from 'antd'
 import React, { useRef, useState, } from 'react'
 import { useEffect } from 'react'
-import { RxBell, RxMobile, RxPerson, RxStar } from 'react-icons/rx'
-import { SlUserUnfollow, SlCallIn } from 'react-icons/sl'
+import { RxBell, RxMobile, RxPerson, RxStar,RxInfoCircled } from 'react-icons/rx'
+import { SlUserUnfollow, SlCallIn, SlCallOut } from 'react-icons/sl'
 import '../assets/style/connectWidget.less'
 import '../../gc-components/amazon-connect-customer-profiles'
 import '../../gc-components/amazon-connect-task'
 import { updateUser } from '../store/reducers/user'
-import { updateSettings } from '../store/reducers/settings'
+import  { updateSettings } from '../store/reducers/settings'
+import  { addNewChannel } from '../store/reducers/channels'
 import { useDispatch } from 'react-redux'
 import { useSelector } from 'react-redux'
 import connectWrapper from './connect-lib'
@@ -18,6 +19,8 @@ import { navigate } from '@gatsbyjs/reach-router'
 const ConnectWidget = (props) => {
     const dispatch = useDispatch()
     const user = useSelector((state) => state.user);
+    const settings = useSelector((state) => state.settings);
+    const channels = useSelector((state) => state.channels);
     const ref = useRef(null);
     const ref1 = useRef(null);
     const ref2 = useRef(null);
@@ -32,19 +35,41 @@ const ConnectWidget = (props) => {
         isLoggedin: false,
         agentStates: []
     })
-
-
+    //show the logged in agent information 
     useEffect(() => setState({ ...state, isLoggedin: true, ...user }), [user])
-
     const updateState = (newState) => setState({ ...newState })
-
-
     const routeToInterection = (link, props) => {
         navigate(link, { state: { ...props.state } })
     }
-    const wrapper = new connectWrapper({ connect,  dispatch, divCCP, setState: updateState, state, updateUser,updateSettings, navigate: routeToInterection })
+
+    const wrapper = new connectWrapper({ connect,  dispatch, divCCP, setState: updateState, state, updateUser,updateSettings, addNewChannel, navigate: routeToInterection })
+    //initiate the aws conect dialer
     useEffect(() => wrapper.initiateCCP(),[])
-    
+
+    //settings based events
+    useEffect(()=>{
+        if(settings.activeTask?.contactId && !settings.isConnected){
+            let {contactId,type}=settings.activeTask
+            Modal.confirm({
+                mask:true,
+                title: `New  ${type || "call"}`,
+                icon: <RxInfoCircled />,
+                content: `Are you sure want to pick the ${contactId}`,
+                okText: 'Yes',
+                okType: 'danger',
+                cancelText: 'No',
+                onOk() {
+                    setState({ ...state, showConnect: true })
+                },
+                onCancel() {
+                    console.log('Cancel');
+                },
+            });
+            //setState({...state,showConnect:true,})
+            
+        }
+
+    },[settings])
 
 
     const tourSteps = [
@@ -66,66 +91,7 @@ const ConnectWidget = (props) => {
             target: () => ref2.current,
         },
     ];
-
-    const listenConnectAtivity = () => {
-
-        connect.contact(function (contact) {
-            contact.onIncoming(function (contact) {
-                console.log("onIncoming", contact);
-            });
-
-            contact.onRefresh(function (contact) {
-                console.log("onRefresh", contact);
-                let { contactId, type } = contact
-                var contactData = contact._getData()
-                console.log({ contactData });
-                //notification.info({ message: `You are getting new call ${contactId}` })
-                if (!state.showConnect) {
-                    Modal.confirm({
-                        title: `New  ${type || "call"}`,
-                        icon: <ExclamationCircleFilled />,
-                        content: `Are you sure want to pick the ${contactId}`,
-                        okText: 'Yes',
-                        okType: 'danger',
-                        cancelText: 'No',
-                        onOk() {
-                            setState({ ...state, showConnect: true })
-                        },
-                        onCancel() {
-                            console.log('Cancel');
-                        },
-                    });
-                }
-                //setState({ ...state, showConnect: true })
-
-            });
-
-            contact.onAccepted(function (contact) {
-                console.log("onAccepted", contact);
-                var contactData = contact._getData()
-                /*   var contactAttributes = { ...contactData }
-                  delete contactAttributes.connections
-                  delete contactAttributes.contactFeatures
-                  delete contactAttributes.queue
-                  setState({ ...state, showWrapButton: true })
-                  createChannel(contactAttributes, user) */
-                navigate("/interactions", { state: contactData })
-
-            });
-
-            contact.onEnded(function () {
-                console.log("onEnded", contact);
-                var _getData = contact._getData()
-                console.log({ data: _getData, });
-            });
-
-            contact.onConnected(function () {
-                console.log(`onConnected(${contact.getContactId()})`);
-            });
-        });
-    }
-
-
+    
     return (
         <section className='connect-widget'>
             <div className='widget-container'>
@@ -168,6 +134,15 @@ const ConnectWidget = (props) => {
 
                                 <Button ref={ref} onClick={() => setState({ ...state, showAvailibilityPopup: !state.showAvailibilityPopup })} shape='round' icon={<RxPerson />} size="large" type="primary">&nbsp; Change Availibility</Button>
                             </Popover>
+                            {
+                                settings.isConnected ?
+                                <Button type='primary' shape='round' icon={<SlCallIn/>}
+                                color="#fc6" onClick={()=>navigate('/interactions')} size='large'  className='in-call'>&nbsp; Status: In-Call</Button>
+                                :
+                                <Button type='ghost' size='large'  shape='round' icon={<SlCallOut/>}
+                                color="#fc6">&nbsp; Status: Free-Available</Button>
+                            }
+                            
                         </Space>
                     </div>
                     <div >

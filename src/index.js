@@ -17,7 +17,7 @@ const DashboardIndexPage = React.lazy(() => import('./dashboard'));
 //const AgentApp = React.lazy(() => import("./agent_app/"));
 /* const OnboardAddIndexPage = React.lazy(() => import('./onboarding'));
 const LandingPage = React.lazy(() => import('./landing_page')); */
-
+connect.getLog().setEchoLevel(connect.LogLevel.CRITICAL);
 const root = document.getElementById("root");
 Amplify.configure(oldAwsConfig);
 //Amplify.configure(awsExports);

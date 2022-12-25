@@ -21,14 +21,15 @@ const AgentSAMLPage = React.lazy(() => import('./pages/login-page'))
 const DashboardPrimaryHeader = React.lazy(() => import('./layout/header'))
 const DashboardPrimarySidebar = React.lazy(() => import('./layout/sidebar'))
 const InteractionsIndexPage = React.lazy(() => import('./pages/interaction'))
+const TasksBuilder = React.lazy(() => import('./pages/task_builder/newTemplate'))
 
 const ConnectWidget = React.lazy(() => import('./layout/connect'))
 
 
 
 const AgentPage = () => {
-    const dispatch=useDispatch()
-    
+    const dispatch = useDispatch()
+
     const emails = useSelector((state) => state.emails)
     const config = useSelector((state) => state.config)
     const channels = useSelector((state) => state.channels)
@@ -57,17 +58,17 @@ const AgentPage = () => {
             }
 
             if (!config.templates.isLoaded) {
-               /*  getAllUsersFromConnect().then((allUsers) => {
-               
-                }).catch((error) => {
-                    notification.error({
-                        description: error.message,
-                        duration: 10,
-                        message: "Unable to load  getAllUsersFromConnect",
-                        type: 'error'
-
-                    })
-                }) */
+                /*  getAllUsersFromConnect().then((allUsers) => {
+                
+                 }).catch((error) => {
+                     notification.error({
+                         description: error.message,
+                         duration: 10,
+                         message: "Unable to load  getAllUsersFromConnect",
+                         type: 'error'
+ 
+                     })
+                 }) */
 
                 getTaskTemplates().then((taskTemplates) => {
                     dispatch(updateTemplates(taskTemplates))
@@ -104,10 +105,11 @@ const AgentPage = () => {
                     <DashboardPrimarySidebar />
                     <div className='container'>
                         <ConnectWidget />
-                        <Router>
+                        <Router >
                             <AgentIndexPage path="/" />
                             <ChannelsDetails path="/channels" />
                             <InteractionsIndexPage path="/interactions" />
+                            <TasksBuilder path="/task-builder" />
                         </Router>
                     </div>
 

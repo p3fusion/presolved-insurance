@@ -1,6 +1,6 @@
 
 import { RxTextAlignLeft, RxDashboard,RxBackpack } from "react-icons/rx";
-import { SlEnvolopeLetter, SlEnvolope } from "react-icons/sl";
+import { SlEnvolopeLetter, SlEnvolope, SlGameController } from "react-icons/sl";
 
 import {Link} from '@gatsbyjs/reach-router'
 
@@ -16,6 +16,7 @@ const DashboardPrimarySidebar = () => {
     const [collapse, setCollapse] = useState(true)
     return (
         <Sider 
+            style={{height:'100vh'}}
             collapsed={collapse} 
             trigger={null} 
             width={200} 
@@ -42,6 +43,9 @@ const DashboardPrimarySidebar = () => {
                     </li>
                     <li>
                         <Link to='/channels'><SlEnvolope  size={20}  /><span>Email</span></Link>
+                    </li>
+                    <li>
+                        <Link to='/task-builder'><SlGameController  size={20}  /><span>Task Templates</span></Link>
                     </li>
                 </ul>
             </div>

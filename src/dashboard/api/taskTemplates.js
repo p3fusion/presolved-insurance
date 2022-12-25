@@ -8,7 +8,7 @@ export const getTaskTemplates  = async () => {
             query: listTaskTemplates,
             authMode: 'API_KEY',
             authToken: "da2-fe33kite7zho7nlro4cliwvxxe"
-        })
+        })  
         //let taskTemplates = await DataStore.query(TaskTemplate)
         console.log({ result });
         return result.data

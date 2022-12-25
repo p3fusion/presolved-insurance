@@ -1,6 +1,6 @@
 import { notification } from "antd";
-import { useMemo } from "react";
-import '../../gc-components/connect-streams'
+import { addNewChannel } from "../store/reducers/channels";
+
 const masterTopics = {
     "LOGIN_POPUP": "connect::loginPopup",
     "SEND_LOGS": "connect::sendLogs",
@@ -19,12 +19,14 @@ const connectUrl = "https://p3fusion-qa.my.connect.aws/ccp-v2";
 const loginUrl = "https://d-9067b5964e.awsapps.com/start/#/saml/default/Amazon%20Connect%20Agent%20App/ins-f150c516c8f568f6";
 
 class connectWrapper {
-    constructor({ connect, dispatch, setState, updateUser, updateSettings, state, divCCP, navigate }) {
+
+    constructor({ connect, dispatch,addNewChannel, setState, updateUser, updateSettings, state, divCCP, navigate }) {
         this.connect = connect;
         this.dispatch = dispatch;
         this.setState = setState;
         this.updateUser = updateUser;
         this.updateSettings = updateSettings;
+        this.addNewChannel = addNewChannel;
         this.state = state;
         this.divCCP = divCCP;
         this.navigate = navigate;
@@ -33,6 +35,7 @@ class connectWrapper {
     initiateCCP() {
         const { connect, dispatch, setState, updateUser, state, divCCP } = this
         if (divCCP.current) {
+
             connect.agentApp.initCCP(divCCP.current, {
                 ccpUrl: connectUrl, // REQUIRED
                 region: "us-east-1", // REQUIRED for `CHAT`, optional otherwise
@@ -52,7 +55,7 @@ class connectWrapper {
                 ccpLoadTimeout: 10000 //optional, defaults to 5000 (ms)
             });
             this.getLoginStatus({ connect, dispatch, setState, updateUser, state, divCCP: divCCP.current })
-            this.listenIncomingActivities()            
+            this.listenIncomingActivities()
         }
     }
     getLoginStatus() {
@@ -103,48 +106,70 @@ class connectWrapper {
         })
     }
     listenIncomingActivities() {
-        const { connect, state, setState, navigate, updateSettings, dispatch } = this
-        connect.contact(function (contact) {
-            contact.onIncoming(function (contact) {
-                console.log("onIncoming", contact);
-            });
+        const { connect, navigate, updateSettings, dispatch } = this
 
-            contact.onRefresh(function (contact) {
-                console.log("onRefresh", contact);
-                let { contactId, type } = contact
+
+
+        connect.contact(function (contact) {
+
+            contact.onConnecting(function (contact) {
+                console.log("onConnecting::", contact);
                 var contactData = contact._getData()
                 let settings = {
-                    activeTask: { ...contactData }
+                    eventName: "onConnecting",
+                    activeTask: contactData,
+                    isConnected: false
                 }
                 dispatch(updateSettings(settings))
+            })
 
+            contact.onIncoming(function (contact) {
+                console.log("onIncoming::", contact);
+                var contactData = contact._getData()
+                let settings = {
+                    eventName: "onIncoming",
+                    activeTask: contactData,
+                    isConnected: false
+                }
+                dispatch(updateSettings(settings))
             });
 
+            contact.onRefresh(function (contact) { });
+
             contact.onAccepted(function (contact) {
-                console.log("onAccepted", contact);
+                console.log("onAccepted::", contact);
                 var contactData = contact._getData()
-                /*   var contactAttributes = { ...contactData }
-                  delete contactAttributes.connections
-                  delete contactAttributes.contactFeatures
-                  delete contactAttributes.queue
-                  setState({ ...state, showWrapButton: true })
-                  createChannel(contactAttributes, user) */
+                let settings = {
+                    eventName: "onAccepted",
+                    activeTask: contactData,
+                    isConnected: true
+                }
+                dispatch(updateSettings(settings))
+                dispatch(addNewChannel({...contactData}))
                 navigate("/interactions", { state: contactData })
 
             });
 
             contact.onEnded(function () {
-                console.log("onEnded", contact);
-                var _getData = contact._getData()
-                console.log({ data: _getData, });
+                console.log("onEnded::", contact);
                 let settings = {
+                    eventName: "onEnded",
                     activeTask: null,
+                    isConnected: false
                 }
                 dispatch(updateSettings(settings))
             });
 
             contact.onConnected(function () {
-                console.log(`onConnected(${contact.getContactId()})`);
+                console.log("onConnected::", contact);
+                var contactData = contact._getData()
+                let settings = {
+                    eventName: "onConnected",
+                    activeTask: contactData,
+                    isConnected: true
+                }
+                dispatch(updateSettings(settings))
+
             });
         });
     }

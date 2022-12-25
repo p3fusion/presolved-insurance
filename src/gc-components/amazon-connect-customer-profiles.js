@@ -108,7 +108,7 @@ function createCustomerProfilesWidget(instanceUrl) {
     var widget_frame = findExistingWidget();
 
     if (widget_frame == null) {
-        //createDivForWidgetIfAbsent();
+        createDivForWidgetIfAbsent();
         window?.connect?.agentApp.initApp(
             CLIENT.CLIENT_NAME,
             AGENT_APP.CUSTOMER_PROFILES_WIDGET_ID,
