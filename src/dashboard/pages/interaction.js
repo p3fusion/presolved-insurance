@@ -4,7 +4,8 @@ import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import '../assets/style/interaction.less'
 import SearchCustomer from './interactions/search-customer'
-import { SlCallEnd, SlPlus, SlBadge, SlBasket, SlClock } from 'react-icons/sl'
+import { SlCallEnd, SlPlus, SlBadge, SlBasket, SlClock, SlDirection } from 'react-icons/sl'
+import NewInteractionForm from './interactions/new-interaction'
 const { Panel } = Collapse;
 const InteractionsIndexPage = () => {
   const settings = useSelector((state) => state.settings)
@@ -35,7 +36,7 @@ const InteractionsIndexPage = () => {
 
       <div className='statistics'>
         <Card>
-          <Card.Grid>
+          <Card.Grid style={{ width: '20%' }}>
             <Space size={30}>
               <SlBadge size={40} />
               <Space direction='vertical' size={1}>
@@ -45,7 +46,7 @@ const InteractionsIndexPage = () => {
             </Space>
           </Card.Grid>
 
-          <Card.Grid >
+          <Card.Grid style={{ width: '20%' }} >
             <Space size={30}>
               <SlBasket size={40} />
               <Space direction='vertical' size={1}>
@@ -54,8 +55,17 @@ const InteractionsIndexPage = () => {
               </Space>
             </Space>
           </Card.Grid>
-          
-          <Card.Grid >
+          <Card.Grid style={{ width: '20%' }} >
+            <Space size={30}>
+              <SlDirection size={40} />
+              <Space direction='vertical' size={1}>
+                <Typography.Title level={4}>Queue</Typography.Title>
+                {state.queue?.name && <Typography.Title level={5}>{state.queue?.name || 'N/A'}</Typography.Title>}
+              </Space>
+            </Space>
+          </Card.Grid>
+
+          <Card.Grid style={{ width: '20%' }} >
             <Space size={30}>
               <SlClock size={40} />
               <Space direction='vertical' size={1}>
@@ -64,26 +74,27 @@ const InteractionsIndexPage = () => {
               </Space>
             </Space>
           </Card.Grid>
-          
+
         </Card>
       </div>
 
-      <section className='tab-container'>
-        {state.contactId &&
-          <Tabs
-            size='large'
+      <section className='task-container'>
+        {
+          state.contactId &&
+          <section className='interation-form'>
+           {/*  <Typography.Title level={4}>Create task and wait for completion</Typography.Title> */}
+            <Row gutter={[4, 4]}>
+              <Col span={24}>
+                <NewInteractionForm settings={settings} />
+                <Divider dashed />
+              </Col>
+            </Row>
+          </section> ||
+          <section className='task-section'>
+            <Result title="No Aactive call !" subTitle="You can see the data when you get the call"
 
-            type="editable-card"
-            defaultActiveKey="1"
-            items={[
-              {
-                label: `Interaction`,
-                key: '1',
-                children: <InteractionForm />,
-              },
-            ]}
-          />
-
+            />
+          </section>
 
         }
       </section>
@@ -93,39 +104,6 @@ const InteractionsIndexPage = () => {
 
 
 
-const InteractionForm = () => {
 
-  return (
-    <section className='interation-form'>
-      <Collapse defaultActiveKey={['1']} ghost>
-        <Panel key="1" header={<Typography.Title level={4}>Create task and wait for completion</Typography.Title>}>
-          <Row gutter={[4, 4]}>
-            <Col span={24}>
-
-              <Result title="Add Tasks" subTitle="Wrap the call to complete the task"
-                extra={<Space size={20} direction="vertical">
-                  <Button block type='dashed' shape='round' size='large' icon={<SlPlus />} >&nbsp; Add Task</Button>
-                  <Button block type='primary' danger shape='round' size='large' icon={<SlCallEnd />} >&nbsp; Wrap Call</Button>
-                </Space>}
-              />
-              <Divider dashed />
-            </Col>
-          </Row>
-        </Panel>
-        <Panel header={<Typography.Title level={4}>Search Customers</Typography.Title>} key="2">
-          <Row gutter={[4, 4]}>
-            <Col span={24}>
-              <SearchCustomer />
-
-            </Col>
-          </Row>
-        </Panel>
-      </Collapse>
-    </section>
-
-  )
-}
 
 export default InteractionsIndexPage
-
-{/* */ }

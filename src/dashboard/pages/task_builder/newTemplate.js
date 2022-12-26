@@ -17,6 +17,7 @@ const CreateNewTemplate = (props) => {
     const [form] = Form.useForm();
     const initialState = {
         items: [],
+        sections: [],
         collection: {},
         isEdit: props?.location?.state?.edit || false,
         id: props?.location?.state?.id || null,
@@ -30,9 +31,9 @@ const CreateNewTemplate = (props) => {
                 fields: JSON.parse(record.attributes)
             }
             form.setFieldsValue({
-                task: newFormat              
+                task: newFormat
             })
-            setState({...state,items:newFormat.fields})            
+            setState({ ...state, items: newFormat.fields })
         }
     }, []);
 
@@ -170,6 +171,11 @@ const CreateNewTemplate = (props) => {
             });
         })
     }
+    const updateSections = (e) => {
+        let sections = e.split(/\n/);
+        setState({ ...state, sections })
+
+    }
 
     const generateTemplateId = (length = 6) => {
 
@@ -224,6 +230,18 @@ const CreateNewTemplate = (props) => {
                                             <Input.TextArea rows={3} />
                                         </Form.Item>
                                     </Col>
+                                    <Col span={24}>
+                                        <Form.Item help="Add multiple entries by Pressing 'Enter' " label="Task Sections" name={['task', 'sections']}
+                                            rules={[
+                                                {
+                                                    required: true,
+                                                    message: 'Please enter task description',
+                                                },
+                                            ]}
+                                        >
+                                            <Input.TextArea rows={3} onChange={(e) => updateSections(e.target.value)} />
+                                        </Form.Item>
+                                    </Col>
                                 </Row>
                             </Card>
                         </Col>
@@ -232,10 +250,10 @@ const CreateNewTemplate = (props) => {
 
 
                             <Col span={24} key={index} className="dynamicFields">
-                                {itm.type === 'text' && <TextField removeField={removeField} index={index} itm={itm} />}
-                                {itm.type === 'textarea' && <TextareaField removeField={removeField} index={index} itm={itm} />}
-                                {itm.type === 'select' && <SelectField removeField={removeField} index={index} itm={itm} />}
-                                {itm.type === 'date' && <DateField removeField={removeField} index={index} itm={itm} />}
+                                {itm.type === 'text' && <TextField removeField={removeField} index={index} itm={itm} sections={state.sections} />}
+                                {itm.type === 'textarea' && <TextareaField removeField={removeField} index={index} itm={itm} sections={state.sections} />}
+                                {itm.type === 'select' && <SelectField removeField={removeField} index={index} itm={itm} sections={state.sections} />}
+                                {itm.type === 'date' && <DateField removeField={removeField} index={index} itm={itm} sections={state.sections} />}
                             </Col>
 
                         )}
@@ -256,7 +274,7 @@ const CreateNewTemplate = (props) => {
 }
 
 
-const TextField = ({ index, removeField, itm }) => {
+const TextField = ({ index, removeField, itm, sections }) => {
     return (
         <Card title={<Tag>{itm.id}</Tag>} extra={[<Button icon={<CloseOutlined />} onClick={() => removeField(index)} />]}>
             <Form.Item initialValue={itm.type} label={null} name={['task', "fields", index, "type"]}>
@@ -264,7 +282,6 @@ const TextField = ({ index, removeField, itm }) => {
             </Form.Item>
             <Row gutter={[16, 16]}>
                 <Col span={2}>
-
                     <Form.Item initialValue={index} label="Task Order" name={['task', "fields", index, "order"]}
                         rules={[
                             {
@@ -276,6 +293,26 @@ const TextField = ({ index, removeField, itm }) => {
                         <Input inputMode='numeric' />
                     </Form.Item>
                 </Col>
+                <Col span={4}>
+                    <Form.Item label="Section" name={['task', "fields", index, "section"]}
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Please choose section',
+                            },
+                        ]}
+                    >
+                        <Select
+                            showSearch
+                            placeholder="Choose a section" optionFilterProp="children"
+                            options={
+                                sections.map((section) => {
+                                    return { "value": section, "label": section }
+                                }
+                                )}
+                        />
+                    </Form.Item>
+                </Col>
                 <Col span={6}>
                     <Form.Item label="Field Name" name={['task', "fields", index, "name"]}
                         rules={[
@@ -324,7 +361,7 @@ const TextField = ({ index, removeField, itm }) => {
     )
 }
 
-const TextareaField = ({ itm, index, removeField }) => {
+const TextareaField = ({ itm, index, removeField, sections }) => {
     return (
         <Card title={<Tag>{itm.id}</Tag>} extra={[<Button icon={<CloseOutlined />} onClick={() => removeField(index)} />]}>
             <Form.Item initialValue={itm.type} label={null} name={['task', "fields", index, "type"]}>
@@ -343,6 +380,26 @@ const TextareaField = ({ itm, index, removeField }) => {
                         <Input />
                     </Form.Item>
                 </Col>
+                <Col span={4}>
+                    <Form.Item label="Section" name={['task', "fields", index, "section"]}
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Please choose section',
+                            },
+                        ]}
+                    >
+                        <Select
+                            showSearch
+                            placeholder="Choose a section" optionFilterProp="children"
+                            options={
+                                sections.map((section) => {
+                                    return { "value": section, "label": section }
+                                }
+                                )}
+                        />
+                    </Form.Item>
+                </Col>
                 <Col span={6}>
                     <Form.Item label="Field Name" name={['task', "fields", index, "name"]}
                         rules={[
@@ -367,7 +424,7 @@ const TextareaField = ({ itm, index, removeField }) => {
                         <Input />
                     </Form.Item>
                 </Col>
-                <Col span={6}>
+                <Col span={4}>
                     <Form.Item initialValue={itm.rows || 3} label="No Of Rows." name={['task', "fields", index, "rows"]}
                         rules={[
                             {
@@ -379,7 +436,7 @@ const TextareaField = ({ itm, index, removeField }) => {
                         <Input type='number' />
                     </Form.Item>
                 </Col>
-                <Col span={4}>
+                <Col span={2}>
                     <Form.Item name={['task', "fields", index, "required"]} label="Is Required" valuePropName="yes">
                         <Switch />
                     </Form.Item>
@@ -403,7 +460,7 @@ const TextareaField = ({ itm, index, removeField }) => {
     )
 }
 
-const SelectField = ({ itm, index, removeField }) => {
+const SelectField = ({ itm, index, removeField, sections }) => {
     const [state, setState] = useState([])
     const updateSignleSelect = (value) => {
         setState(value)
@@ -427,6 +484,26 @@ const SelectField = ({ itm, index, removeField }) => {
                         <Input inputMode='numeric' />
                     </Form.Item>
                 </Col>
+                <Col span={4}>
+                    <Form.Item label="Section" name={['task', "fields", index, "section"]}
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Please choose section',
+                            },
+                        ]}
+                    >
+                        <Select
+                            showSearch
+                            placeholder="Choose a section" optionFilterProp="children"
+                            options={
+                                sections.map((section) => {
+                                    return { "value": section, "label": section }
+                                }
+                                )}
+                        />
+                    </Form.Item>
+                </Col>
                 <Col span={6}>
                     <Form.Item label="Field Name" name={['task', "fields", index, "name"]}
                         rules={[
@@ -451,7 +528,7 @@ const SelectField = ({ itm, index, removeField }) => {
                         <Input />
                     </Form.Item>
                 </Col>
-                <Col span={6}>
+                <Col span={4}>
                     <Form.Item initialValue={state} help="Type options and press enter or comma to add next" label="Add Options" name={['task', "fields", index, "options"]}
                     /* rules={[
                         {
@@ -467,7 +544,7 @@ const SelectField = ({ itm, index, removeField }) => {
 
                     </Form.Item>
                 </Col>
-                <Col span={4}>
+                <Col span={2}>
                     <Form.Item name={['task', "fields", index, "required"]} label="Is Required" valuePropName="yes">
                         <Switch />
                     </Form.Item>
@@ -491,7 +568,7 @@ const SelectField = ({ itm, index, removeField }) => {
     )
 }
 
-const DateField = ({ itm, index, removeField }) => {
+const DateField = ({ itm, index, removeField, sections }) => {
 
     return (
         <Card title={<Tag>{itm.id}</Tag>} extra={[<Button icon={<CloseOutlined />} onClick={() => removeField(index)} />]}>
@@ -509,6 +586,26 @@ const DateField = ({ itm, index, removeField }) => {
                         ]}
                     >
                         <Input inputMode='numeric' />
+                    </Form.Item>
+                </Col>
+                <Col span={4}>
+                    <Form.Item label="Section" name={['task', "fields", index, "section"]}
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Please choose section',
+                            },
+                        ]}
+                    >
+                        <Select
+                            showSearch
+                            placeholder="Choose a section" optionFilterProp="children"
+                            options={
+                                sections.map((section) => {
+                                    return { "value": section, "label": section }
+                                }
+                                )}
+                        />
                     </Form.Item>
                 </Col>
                 <Col span={6}>
@@ -535,7 +632,7 @@ const DateField = ({ itm, index, removeField }) => {
                         <Input />
                     </Form.Item>
                 </Col>
-                <Col span={6}>
+                <Col span={4}>
                     <Form.Item label="Date picker type" name={['task', "fields", index, "options"]}
                         rules={[
                             {
@@ -552,7 +649,7 @@ const DateField = ({ itm, index, removeField }) => {
 
                     </Form.Item>
                 </Col>
-                <Col span={4}>
+                <Col span={2}>
                     <Form.Item name={['task', "fields", index, "required"]} label="Is Required" valuePropName="yes">
                         <Switch />
                     </Form.Item>
