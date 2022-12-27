@@ -1,5 +1,7 @@
 import { notification } from "antd";
+import { API } from "aws-amplify";
 import { addNewChannel } from "../store/reducers/channels";
+import * as mutations from '../../graphql/mutations'
 
 const masterTopics = {
     "LOGIN_POPUP": "connect::loginPopup",
@@ -20,7 +22,7 @@ const loginUrl = "https://d-9067b5964e.awsapps.com/start/#/saml/default/Amazon%2
 
 class connectWrapper {
 
-    constructor({ connect, dispatch,addNewChannel, setState, updateUser, updateSettings, state, divCCP, navigate }) {
+    constructor({ connect, dispatch, addNewChannel, setState, updateUser, updateSettings, state, divCCP, navigate }) {
         this.connect = connect;
         this.dispatch = dispatch;
         this.setState = setState;
@@ -107,8 +109,7 @@ class connectWrapper {
     }
     listenIncomingActivities() {
         const { connect, navigate, updateSettings, dispatch } = this
-
-
+        var that = this
 
         connect.contact(function (contact) {
 
@@ -144,9 +145,24 @@ class connectWrapper {
                     activeTask: contactData,
                     isConnected: true
                 }
-                dispatch(updateSettings(settings))
-                dispatch(addNewChannel({...contactData}))
-                navigate("/interactions", { state: contactData })
+
+                var contactAttributes = { ...contactData }
+                delete contactAttributes.connections
+                delete contactAttributes.contactFeatures
+                delete contactAttributes.queue
+                //setState({ ...state, showWrapButton: true })
+                that.createChannel(contactAttributes).then((channel) => {
+                    settings = {
+                        ...settings,
+                        channel: channel
+                    }
+                    dispatch(updateSettings(settings))
+                    dispatch(addNewChannel({ ...contactData }))
+                    navigate("/interactions", { state: contactData })
+                }).catch((err)=>{
+                    console.error({channelError:err})
+                })
+
 
             });
 
@@ -172,7 +188,36 @@ class connectWrapper {
 
             });
         });
+
     }
+    createChannel(contactData) {
+        return new Promise((resolve, reject) => {
+            /* {id,assignTo,contactID,channelType,contactAttributes} */
+            let agent = ""
+            const newChannel = {
+                assignTo: agent,
+                contactID: contactData.contactId,
+                channelType: contactData.type,
+                contactAttributes: JSON.stringify({ ...contactData })
+            }
+            console.log({ newChannel, agent })
+
+            API.graphql({ query: mutations.createChannel, variables: { input: newChannel } }).then((result) => {
+                let currentChannelRawData = result.data.createChannel
+                let currentChannel = {
+                    ...currentChannelRawData
+                }
+                resolve({ ...currentChannel })
+            }).catch((error) => {
+                console.error({ mutationscreateChannel: error })
+                reject({ mutationscreateChannel: error })
+            })
+        })
+
+    }
+
+
+
 }
 
 export default connectWrapper;

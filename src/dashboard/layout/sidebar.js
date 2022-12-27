@@ -29,24 +29,25 @@ const DashboardPrimarySidebar = () => {
             >
             <div className={collapse ? 'menu-items-closed' : 'menu-items-expanded'}>
                 <ul>
-                    <li>
+                 {/*    <li>
                         <Link to='/'><RxTextAlignLeft  size={20}  /><span>Navigations</span></Link>
-                    </li>
+                    </li> */}
                     <li>
                         <Link to='/'><RxDashboard  size={20}  /><span>Dashboard</span></Link>
                     </li>
+                    {/*
                     <li>
                         <Link to='/interactions'><RxBackpack  size={20}  /><span>Interactions</span></Link>
                     </li>
-                    <li>
+                      <li>
                         <Link to='/channels'><SlEnvolopeLetter  size={20}  /><span>Reports</span></Link>
-                    </li>
+                    </li> 
                     <li>
                         <Link to='/channels'><SlEnvolope  size={20}  /><span>Email</span></Link>
                     </li>
                     <li>
                         <Link to='/task-builder'><SlGameController  size={20}  /><span>Task Templates</span></Link>
-                    </li>
+                    </li> */}
                 </ul>
             </div>
             

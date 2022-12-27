@@ -1,10 +1,10 @@
-import { Button, Card, Col, PageHeader, Row, Space, Tabs, Tag, Collapse, Typography, Result, Divider } from 'antd'
-import { FiSearch, FiMail, FiPlus, } from 'react-icons/fi'
+import { Card, Col, Collapse, Divider, PageHeader, Result, Row, Space, Tag, Typography } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import '../assets/style/interaction.less'
-import SearchCustomer from './interactions/search-customer'
-import { SlCallEnd, SlPlus, SlBadge, SlBasket, SlClock, SlDirection } from 'react-icons/sl'
+
+import { SlBadge, SlBasket, SlClock, SlDirection } from 'react-icons/sl'
+import { FaSave } from 'react-icons/fa';
 import NewInteractionForm from './interactions/new-interaction'
 const { Panel } = Collapse;
 const InteractionsIndexPage = () => {
@@ -36,12 +36,12 @@ const InteractionsIndexPage = () => {
 
       <div className='statistics'>
         <Card>
-          <Card.Grid style={{ width: '20%' }}>
+          <Card.Grid style={{ width: '20%', overflow:'hidden' }}>
             <Space size={30}>
               <SlBadge size={40} />
-              <Space direction='vertical' size={1}>
-                <Typography.Title level={4} ellipsis >Interaction ID</Typography.Title>
-                {state.contactId && <Typography.Title level={5}>{state.contactId}</Typography.Title>}
+              <Space direction='vertical' size={1} wrap={false}>
+                <Typography.Title  level={5}  >Interaction ID</Typography.Title>
+                {state.contactId && <Typography.Title style={{width:155}} level={3} ellipsis={{rows:1,tooltip:{title:state.contactId}}}>{state.contactId}</Typography.Title>}
               </Space>
             </Space>
           </Card.Grid>
@@ -50,8 +50,8 @@ const InteractionsIndexPage = () => {
             <Space size={30}>
               <SlBasket size={40} />
               <Space direction='vertical' size={1}>
-                <Typography.Title level={4}>Interaction Type</Typography.Title>
-                {state.activeTask?.type && <Typography.Title level={5}>{state.activeTask?.type || 'N/A'}</Typography.Title>}
+                <Typography.Title level={5}>Interaction Type</Typography.Title>
+                {state.activeTask?.type && <Typography.Title level={3}>{state.activeTask?.type || 'N/A'}</Typography.Title>}
               </Space>
             </Space>
           </Card.Grid>
@@ -59,8 +59,8 @@ const InteractionsIndexPage = () => {
             <Space size={30}>
               <SlDirection size={40} />
               <Space direction='vertical' size={1}>
-                <Typography.Title level={4}>Queue</Typography.Title>
-                {state.queue?.name && <Typography.Title level={5}>{state.queue?.name || 'N/A'}</Typography.Title>}
+                <Typography.Title level={5}>Queue</Typography.Title>
+                {settings.activeTask?.queue?.name && <Typography.Title level={3}>{settings.activeTask?.queue?.name || 'N/A'}</Typography.Title>}
               </Space>
             </Space>
           </Card.Grid>
@@ -69,8 +69,8 @@ const InteractionsIndexPage = () => {
             <Space size={30}>
               <SlClock size={40} />
               <Space direction='vertical' size={1}>
-                <Typography.Title level={4}>Duration</Typography.Title>
-                {state.activeTask?.type && <Typography.Title level={5}>{state.activeTask?.contactDuration || '0'} Seconds</Typography.Title>}
+                <Typography.Title level={5}>Duration</Typography.Title>
+                {state.activeTask?.type && <Typography.Title level={3}>{state.activeTask?.contactDuration || '0'} Seconds</Typography.Title>}
               </Space>
             </Space>
           </Card.Grid>
@@ -91,7 +91,7 @@ const InteractionsIndexPage = () => {
             </Row>
           </section> ||
           <section className='task-section'>
-            <Result title="No Aactive call !" subTitle="You can see the data when you get the call"
+            <Result title="No Active interaction !" subTitle="You can see the data when you get the call"
 
             />
           </section>

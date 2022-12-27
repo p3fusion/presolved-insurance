@@ -31,7 +31,7 @@ export const saveTaskAPI = (taskData) => {
         channelType: state.channel.channelType,
         Name: taskData.name,
         status: 'pending',
-        taskAttributes: JSON.stringify(taskData.attrinutes)
+        taskAttributes: JSON.stringify(taskData.attributes)
     }
     console.log({ newtask })
 

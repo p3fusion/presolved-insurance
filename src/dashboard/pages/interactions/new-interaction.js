@@ -1,16 +1,20 @@
 import { CheckCircleOutlined, CloseOutlined } from '@ant-design/icons';
-import { Button, Card, Col, Collapse, Dropdown, Form, Input, Menu, notification, Result, Row, Select, Space, Tabs, Typography } from 'antd';
+import { Button, Card, Col, Collapse, Dropdown, Form, Input, Menu, notification, Result, Row, Select, Space, Tabs, Typography, Modal } from 'antd';
 import { filter, find } from 'lodash';
 import React, { useState } from 'react';
-import { SlCallEnd, SlPlus } from 'react-icons/sl';
+import { SlBasket, SlCallEnd, SlPlus } from 'react-icons/sl';
 import { useSelector } from 'react-redux';
 import SearchCustomer from './search-customer';
+import * as mutations from '../../../graphql/mutations'
+import { FaSave } from 'react-icons/fa';
+import { API } from 'aws-amplify';
 const { Panel } = Collapse;
 
 
 const NewInteractionForm = (props) => {
-    let { settings } = props
+
     const config = useSelector((state) => state.config);
+    const settings = useSelector((state) => state.settings);
     const [form] = Form.useForm();
     const [state, setState] = useState({
         settings,
@@ -18,30 +22,27 @@ const NewInteractionForm = (props) => {
         isTemplatesLoaded: false,
         tasks: [],
         showWrapButton: false,
-        channel: {
-            "id": "24bdef8d-4558-4111-88cd-1d6b2f4f8416",
-            "contactID": "fdef4a81-2f0d-496e-90b9-b97ef272e72b",
-            "channelType": "chat",
-            "contactAttributes": "{\"initialContactId\":null,\"contactId\":\"fdef4a81-2f0d-496e-90b9-b97ef272e72b\",\"initiationMethod\":null,\"name\":null,\"description\":null,\"attributes\":{\"accountnumber\":{\"name\":\"accountnumber\",\"value\":\"9715463636\"},\"Customer-Number\":{\"name\":\"Customer-Number\",\"value\":\"0123\"}},\"state\":{\"type\":\"connected\",\"timestamp\":\"2022-09-21T15:21:17.387Z\"},\"contactDuration\":\"3\",\"type\":\"chat\",\"queueTimestamp\":null,\"status\":{\"type\":\"connected\",\"timestamp\":\"2022-09-21T15:21:17.387Z\"}}",
+        channel: props.settings?.channel  || {
+            "id": props.settings?.channel?.id || null ,
+            "contactID": props.settings?.channel?.contactID || null ,
+            "channelType": props.settings?.channel?.type || null ,
             "tasks": {
                 "items": [],
                 "nextToken": null
             },
-            "createdAt": "2022-09-21T15:21:18.512Z",
-            "updatedAt": "2022-09-21T15:21:18.512Z"
         },
     })
     const saveTask = (taskData) => {
         /* {id,assignTo,channelID,contactID,channelType,Name,taskAttributes,status} */
-        let agent = username.current.value
+        let agent = state.settings.username
         const newtask = {
             assignTo: agent,
-            contactID: state.channel.contactID,
-            channelID: state.channel.id,
-            channelType: state.channel.channelType,
+            contactID: taskData.contactID,
+            channelID: taskData.channelID,
+            channelType: state.settings.activeTask.type,
             Name: taskData.name,
             status: 'pending',
-            taskAttributes: JSON.stringify(taskData.attrinutes)
+            taskAttributes: JSON.stringify(taskData.attributes)
         }
         console.log({ newtask })
 
@@ -88,6 +89,7 @@ const NewInteractionForm = (props) => {
 
     const onFinish = (e) => {
         let { task } = e.case
+        console.log({ form: e });
         Modal.confirm({
             title: 'Are you sure want to Wrap the call',
             icon: <CheckCircleOutlined />,
@@ -105,108 +107,106 @@ const NewInteractionForm = (props) => {
 
     }
 
-
+    let id = state.settings.activeTask?.contactID
 
     return (
-        <section className='task-section'>
-
-            <Tabs defaultActiveKey="searchCustomer"
-                items={[
-                    {
-                        "label": "Search Customer",
-                        "key": "searchCustomer",
-                        "children": <SearchCustomer />
-                    },
-                    ...state.tasks.map((task, index) => {
-                        return {
-                            "label": task.name,
-                            "key": task.id,
-                            "children": <RenderTaskItems onFinish={onFinish} form={form} state={state} setState={setState} task={task} index={index} />,
-                        }
-
-                    }),
-                    {
-                        "label": "Add / Wrap Call",
-                        "key": "wrapcall",
-                        "children": <Result title="Add Tasks" subTitle="Wrap the call to complete the task"
-                            extra={<Space size={20} direction="vertical">
-                                <Dropdown overlay={
-                                    <Menu items={
-                                        config.templates.data.map((tasks) => {
-                                            return {
-                                                "key": tasks.id,
-                                                "label": tasks.name
-                                            }
-                                        })
+        <Form onFinishFailed={onFinishFailed} form={form} name="case" layout="vertical" onFinish={onFinish}
+            initialValues={{ case: { interactionID: id, task: { interactionID: id, attributes: { Building_Number: 25 } } } }}>
+            <section className='task-section'>
+                <div className='add-task-button'>
+                    <Space size={15} className="act-button">
+                        <Dropdown overlay={
+                            <Menu items={
+                                config.templates.data.map((tasks) => {
+                                    return {
+                                        "key": tasks.id,
+                                        "label": tasks.name
                                     }
-                                        onClick={({ key }) => addTask(key)}
-                                    />}
-                                    placement="bottomLeft" arrow>
-                                    <Button block type='dashed' shape='round' size='large' icon={<SlPlus />} >&nbsp; Add Task</Button>
-                                </Dropdown>
-                                <Button block type='primary' danger shape='round' size='large' icon={<SlCallEnd />} >&nbsp; Wrap Call</Button>
-                            </Space>}
-                        />
-                    },
-                ]
+                                })
+                            } onClick={({ key }) => addTask(key)}
+                            />}
+                            placement="bottomLeft" arrow>
+                            <Button type='primary' shape='round' size='large' icon={<SlBasket />} > &nbsp; Add Task</Button>
+                        </Dropdown>
+                        <Button shape='round' onClick={() => form.submit()} type='primary' size='large' icon={<FaSave />} > &nbsp; Wrap Call </Button>
+                    </Space>
+                </div>
+                <Tabs defaultActiveKey="searchCustomer"
+                    items={[
+                        {
+                            "label": "Search Customer",
+                            "key": "searchCustomer",
+                            "children": <SearchCustomer />
+                        },
+                        ...state.tasks.map((task, index) => {
+                            return {
+                                "label": task.name,
+                                "key": task.id,
+                                "children": <RenderTaskItems onFinish={onFinish} form={form} name={task.name.replaceAll(" ", "-")} state={state} settings={state.settings} setState={setState} task={task} index={index} />,
+                            }
+
+                        }),
+                        {
+                            "label": "Add / Wrap Call",
+                            "key": "wrapcall",
+                            "children": <Space size={20} style={{ width: 600 }} direction="vertical">
+                                <Form.Item label=" Notes">
+                                    <Input.TextArea rows={10} />
+                                </Form.Item>
+                                <Button onClick={() => form.submit()} block type='primary' danger shape='round' size='large' icon={<SlCallEnd />} >&nbsp; Wrap Call</Button>
+                            </Space>
 
 
-                }
-            />
 
+                        },
+                    ]}
+                />
+            </section>
+        </Form>
 
-
-
-        </section>
     )
 }
 
-const RenderTaskItems = ({ onFinish, task, index, state, setState, form }) => {
-    let id = state.settings.activeTask.contactID
+const RenderTaskItems = ({ name, task, index, state }) => {
+
     return (
         <section className='task-item'>
             <Row style={{ marginTop: 30 }}>
                 <Col span={24}>
-                    <Form
-                        form={form} name="case" layout="vertical" onFinish={onFinish}
-                        initialValues={{ case: { interactionID: id, task: { interactionID: id, attributes: { Building_Number: 25 } } } }}
 
-                    >
-                        {/* Hidden Field*/}
-                        <Form.Item initialValue={state.channel.id} label={null} name={['case', 'channelID']} style={{ display: 'none' }}>
-                            <Input type='hidden' />
-                        </Form.Item>
-                        {/* Hidden Field*/}
-                        {/* Hidden Field*/}
-                        <Form.Item initialValue={task.name} label={null} name={['case', 'task', index, 'name']} style={{ display: 'none' }}>
-                            <Input type='hidden' />
-                        </Form.Item>
-                        <Form.Item initialValue={state.settings.activeTask.contactId} label={null} name={['case', 'task', index, 'contactID']} style={{ display: 'none' }}>
-                            <Input type='hidden' />
-                        </Form.Item>
-                        <Form.Item initialValue={state.channel.id} label={null} name={['case', 'task', index, 'channelID']} style={{ display: 'none' }}>
-                            <Input type='hidden' />
-                        </Form.Item>
-                        {/* Hidden Field*/}
+                    {/* Hidden Field*/}
+                    <Form.Item initialValue={state.channel.id} label={null} name={['case', 'channel', 'ID']} style={{ display: 'none' }}>
+                        <Input type='hidden' />
+                    </Form.Item>
+                    {/* Hidden Field*/}
+                    {/* Hidden Field*/}
+                    <Form.Item initialValue={task.name} label={null} name={['case', 'task', index, 'name']} style={{ display: 'none' }}>
+                        <Input type='hidden' />
+                    </Form.Item>
+                    <Form.Item initialValue={state.settings.activeTask.contactId} label={null} name={['case', 'task', index, 'contactID']} style={{ display: 'none' }}>
+                        <Input type='hidden' />
+                    </Form.Item>
+                    <Form.Item initialValue={state.channel.id} label={null} name={['case', 'task', index, 'channelID']} style={{ display: 'none' }}>
+                        <Input type='hidden' />
+                    </Form.Item>
+                    {/* Hidden Field*/}
 
-                        <Typography.Title level={5}>{task.description}</Typography.Title>
-                        <Row gutter={[16, 16]}>
-                            {task.attributes.map((field, findex) =>
-                                <IRenderField key={findex} data={field} index={findex} taskIndex={index} />
-                            )}
-                            <Col span={24}>
-                                <Form.Item wrapperCol={{ span: 8 }} label="Assign Task to" name={["case", "task", index, "assignTo"]}>
-                                    <Select  >
-                                        <option value="p3fusion">p3fusion</option>
-                                    </Select>
-                                </Form.Item>
-                            </Col>
-                        </Row>
-                    </Form>
+                    <Typography.Title level={5}>{task.description}</Typography.Title>
+                    <Row gutter={[16, 16]}>
+                        {task.attributes.map((field, findex) =>
+                            <IRenderField taskName={name} key={findex} data={field} index={findex} taskIndex={index} />
+                        )}
+                        <Col span={24}>
+                            <Form.Item wrapperCol={{ span: 8 }} label="Assign Task to" name={["case", "task", index, "assignTo"]}>
+                                <Select  >
+                                    <option value="p3fusion">p3fusion</option>
+                                </Select>
+                            </Form.Item>
+                        </Col>
+                    </Row>
                 </Col>
-
             </Row>
-        </section>
+        </section >
 
     )
 }
@@ -216,7 +216,7 @@ export default NewInteractionForm
 
 
 
-export const IRenderField = ({ data, index, taskIndex }) => {
+export const IRenderField = ({ taskName, data, index, taskIndex }) => {
     if (data.type === 'text') {
         return <Col span={24} key={index}>
             <Form.Item
@@ -228,7 +228,7 @@ export const IRenderField = ({ data, index, taskIndex }) => {
                 }
                 help={data.description}
                 label={data.name}
-                name={["case", "task", taskIndex, 'attrinutes', data.name]}>
+                name={["case", "task", taskIndex, 'attributes', index, data.name]}>
                 <Input />
             </Form.Item>
         </Col>
@@ -244,7 +244,7 @@ export const IRenderField = ({ data, index, taskIndex }) => {
                 }
                 help={data.description}
                 label={data.name}
-                name={["case", "task", taskIndex, 'attrinutes', data.name]}>
+                name={["case", "task", taskIndex, 'attributes', index, data.name]}>
                 <Input.TextArea rows={data.rows} />
             </Form.Item>
         </Col>
@@ -260,7 +260,7 @@ export const IRenderField = ({ data, index, taskIndex }) => {
                 }
                 help={data.description}
                 label={data.name}
-                name={["case", "task", taskIndex, 'attrinutes', data.name]}>
+                name={["case", "task", taskIndex, 'attributes', index, data.name]}>
                 <DatePicker format="MM/DD/YYYY" allowClear
                     defaultValue={moment(moment().subtract(data?.defaultValue.split("days")[0] || 7, 'days'), 'MM/DD/YYYYY')} />
             </Form.Item>
@@ -277,7 +277,7 @@ export const IRenderField = ({ data, index, taskIndex }) => {
                 }
                 help={data.description}
                 label={data.name}
-                name={["case", "task", taskIndex, 'attrinutes', data.name]}>
+                name={["case", "task", taskIndex, 'attributes', index, data.name]}>
                 <Select defaultValue={[data.defaultValue]} options={data.options.map((rec) => { return { value: rec } })} />
             </Form.Item>
         </Col>

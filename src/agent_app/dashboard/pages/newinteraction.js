@@ -187,7 +187,7 @@ const NewInteraction = (props) => {
             channelType: state.channel.channelType,
             Name: taskData.name,
             status: 'pending',
-            taskAttributes: JSON.stringify(taskData.attrinutes)
+            taskAttributes: JSON.stringify(taskData.attributes)
         }
         console.log({ newtask })
 
@@ -378,7 +378,7 @@ export const IRenderField = ({ data, index, taskIndex }) => {
                 }
                 help={data.description}
                 label={data.name}
-                name={["case", "task", taskIndex, 'attrinutes', data.name]}>
+                name={["case", "task", taskIndex, 'attributes', data.name]}>
                 <Input />
             </Form.Item>
         </Col>
@@ -394,7 +394,7 @@ export const IRenderField = ({ data, index, taskIndex }) => {
                 }
                 help={data.description}
                 label={data.name}
-                name={["case", "task", taskIndex, 'attrinutes', data.name]}>
+                name={["case", "task", taskIndex, 'attributes', data.name]}>
                 <Input.TextArea rows={data.rows} />
             </Form.Item>
         </Col>
@@ -410,7 +410,7 @@ export const IRenderField = ({ data, index, taskIndex }) => {
                 }
                 help={data.description}
                 label={data.name}
-                name={["case", "task", taskIndex, 'attrinutes', data.name]}>
+                name={["case", "task", taskIndex, 'attributes', data.name]}>
                 <DatePicker format="MM/DD/YYYY" allowClear
                     defaultValue={moment(moment().subtract(data?.defaultValue.split("days")[0] || 7, 'days'), 'MM/DD/YYYYY')} />
             </Form.Item>
@@ -427,7 +427,7 @@ export const IRenderField = ({ data, index, taskIndex }) => {
                 }
                 help={data.description}
                 label={data.name}
-                name={["case", "task", taskIndex, 'attrinutes', data.name]}>
+                name={["case", "task", taskIndex, 'attributes', data.name]}>
                 <Select defaultValue={[data.defaultValue]} options={data.options.map((rec) => { return { value: rec } })} />
             </Form.Item>
         </Col>
