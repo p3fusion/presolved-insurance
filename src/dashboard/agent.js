@@ -12,6 +12,8 @@ import { updateTemplates } from './store/reducers/config';
 import { updateChannels } from './store/reducers/channels';
 import { notification } from 'antd';
 import { uniqBy } from 'lodash';
+import ChannelViewAll from './pages/channel-view-all-interactions';
+import ChannelDetails from './pages/interactions/channel-details';
 
 
 
@@ -110,6 +112,8 @@ const AgentPage = () => {
                             <ChannelsDetails path="/channels" />
                             <InteractionsIndexPage path="/interactions" />
                             <TasksBuilder path="/task-builder" />
+                            <ChannelViewAll path="/view-all" />
+                            <ChannelDetails path="/details" />
                         </Router>
                     </div>
 

@@ -1,8 +1,10 @@
+import { Link } from '@gatsbyjs/reach-router';
 import { Card, PageHeader, Row, Space, Typography, Col, Skeleton } from 'antd';
 import React from 'react';
 import { SlCalculator, SlLayers, SlList, SlNotebook, SlOrganization } from "react-icons/sl";
 
 import '../assets/style/dashboard-index-page.less'
+import ChannelTypeTable from './indexpage/channelType-table';
 
 
 const AgentIndexPage = (props) => {
@@ -67,7 +69,7 @@ const AgentIndexPage = (props) => {
 
                 </Card>
             </div>
-
+        
             <section className='report-widgets'>
                 <Row gutter={[16, 16]}>
                     <Col span={16}>
@@ -107,15 +109,16 @@ const AgentIndexPage = (props) => {
                         </Card>
                     </Col>
                     <Col span={24}>
-                        <Card bordered>
-                            <Skeleton
-                                active
-                                paragraph={{
-                                    rows: 6,
-                                }}
-                            />
+                        <Card 
+                        style={{padding:0}}
+                        title={<Typography.Title level={5}>Channels</Typography.Title>}
+                        bordered
+                        extra={<Link to="/view-all">View all</Link>}
+                        >
+                            <ChannelTypeTable/>
                         </Card>
                     </Col>
+                    
                 </Row>
             </section>
 
