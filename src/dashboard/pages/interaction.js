@@ -31,46 +31,46 @@ const InteractionsIndexPage = () => {
           </Space>
         }
         onBack={() => window.history.back()}
-        title={state.contactId && `Interaction : ${state.contactId}` || false}
+        title={state.contactId && `Customer Contact Case : ${state.contactId}` || false}
       />
 
       <div className='statistics'>
         <Card>
-          <Card.Grid style={{ width: '20%', overflow:'hidden' }}>
+          <Card.Grid style={{ width: '25%', overflow:'hidden' }}>
             <Space size={30}>
               <SlBadge size={40} />
               <Space direction='vertical' size={1} wrap={false}>
-                <Typography.Title  level={5}  >Interaction ID</Typography.Title>
-                {state.contactId && <Typography.Title style={{width:155}} level={3} ellipsis={{rows:1,tooltip:{title:state.contactId}}}>{state.contactId}</Typography.Title>}
+                <Typography.Title  level={5}  >Customer contact case ID </Typography.Title>
+                {state.contactId && <Typography.Title style={{width:155}} level={4} strong ellipsis={{rows:1,tooltip:{title:state.contactId}}}>{state.contactId}</Typography.Title>}
               </Space>
             </Space>
           </Card.Grid>
 
-          <Card.Grid style={{ width: '20%' }} >
+          <Card.Grid style={{ width: '25%' }} >
             <Space size={30}>
               <SlBasket size={40} />
               <Space direction='vertical' size={1}>
-                <Typography.Title level={5}>Interaction Type</Typography.Title>
-                {state.activeTask?.type && <Typography.Title level={3}>{state.activeTask?.type || 'N/A'}</Typography.Title>}
+                <Typography.Title level={5}>Customer contact case Type</Typography.Title>
+                {state.activeTask?.type && <Typography.Title strong level={4}>{state.activeTask?.type || 'N/A'}</Typography.Title>}
               </Space>
             </Space>
           </Card.Grid>
-          <Card.Grid style={{ width: '20%' }} >
+          <Card.Grid style={{ width: '25%' }} >
             <Space size={30}>
               <SlDirection size={40} />
               <Space direction='vertical' size={1}>
                 <Typography.Title level={5}>Queue</Typography.Title>
-                {settings.activeTask?.queue?.name && <Typography.Title level={3}>{settings.activeTask?.queue?.name || 'N/A'}</Typography.Title>}
+                {settings.activeTask?.queue?.name && <Typography.Title strong level={4}>{settings.activeTask?.queue?.name || 'N/A'}</Typography.Title>}
               </Space>
             </Space>
           </Card.Grid>
 
-          <Card.Grid style={{ width: '20%' }} >
+          <Card.Grid style={{ width: '25%' }} >
             <Space size={30}>
               <SlClock size={40} />
               <Space direction='vertical' size={1}>
                 <Typography.Title level={5}>Duration</Typography.Title>
-                {state.activeTask?.type && <Typography.Title level={3}>{state.activeTask?.contactDuration || '0'} Seconds</Typography.Title>}
+                {state.activeTask?.type && <Typography.Title strong level={4}>{state.activeTask?.contactDuration || '0'} Seconds</Typography.Title>}
               </Space>
             </Space>
           </Card.Grid>

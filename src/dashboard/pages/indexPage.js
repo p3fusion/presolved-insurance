@@ -1,13 +1,42 @@
 import { Link } from '@gatsbyjs/reach-router';
 import { Card, PageHeader, Row, Space, Typography, Col, Skeleton } from 'antd';
-import React from 'react';
+import React, { useState, useEffect } from "react";
 import { SlCalculator, SlLayers, SlList, SlNotebook, SlOrganization } from "react-icons/sl";
-
 import '../assets/style/dashboard-index-page.less'
 import ChannelTypeTable from './indexpage/channelType-table';
+import { useSelector } from 'react-redux';
 
 
 const AgentIndexPage = (props) => {
+
+    const channel = useSelector((state) => state.channels)
+
+    const initialState = {
+        channels: 0,
+        resolutionCases: 0,
+        myResolutionCases: 0,
+        openResolutionCases: 0
+    }
+    const [state, setState] = useState({ ...initialState })
+
+    useEffect(() => {
+        let count = 0;
+        if (channel.isLoaded) {
+            channel?.data?.listChannels?.items.map((item) => {
+                count += Object.keys(item.tasks.items).length
+            })
+            setState({
+                ...state,
+                channels: Object.keys(channel.data?.listChannels?.items).length,
+                resolutionCases: count,
+                myResolutionCases: count,
+                openResolutionCases: count
+            });
+        }
+
+    }, [channel])
+
+
 
     return (
         <section className='dashboard-index-page'>
@@ -20,59 +49,60 @@ const AgentIndexPage = (props) => {
 
             <div className='statistics'>
                 <Card>
-                    <Card.Grid style={{ width: '200px' }}>
-                        <Space wrap size={20}>
-                            <SlLayers size={45} />
-                            <Space wrap direction='vertical' size={0}>
-                                <Typography.Title level={5}>Channels</Typography.Title>
-                                <Typography.Title level={1}>30</Typography.Title>
-                            </Space>
-                        </Space>
-                    </Card.Grid>
-                    <Card.Grid style={{ width: '200px' }}>
-                        <Space wrap size={20}>
-                            <SlOrganization size={45} />
-                            <Space wrap direction='vertical' size={0}>
-                                <Typography.Title level={5}>Tasks</Typography.Title>
-                                <Typography.Title level={1}>50</Typography.Title>
-                            </Space>
-                        </Space>
-                    </Card.Grid>
-                    <Card.Grid style={{ width: '200px' }}>
-                        <Space wrap size={20}>
-                            <SlNotebook size={45} />
-                            <Space wrap direction='vertical' size={0}>
-                                <Typography.Title level={5}>My Tasks</Typography.Title>
-                                <Typography.Title level={1}>50</Typography.Title>
-                            </Space>
-                        </Space>
-                    </Card.Grid>
-                    <Card.Grid style={{ width: '200px' }}>
-                        <Space wrap size={20}>
-                            <SlCalculator size={45} />
-                            <Space wrap direction='vertical' size={0}>
-                                <Typography.Title level={5}>Open Tasks</Typography.Title>
-                                <Typography.Title level={1}>15</Typography.Title>
-                            </Space>
-                        </Space>
-                    </Card.Grid>
-                    <Card.Grid style={{ width: '200px' }}>
-                        <Space wrap size={20}>
-                            <SlLayers size={45} />
-                            <Space wrap direction='vertical' size={0}>
-                                <Typography.Title level={5}>Channels</Typography.Title>
-                                <Typography.Title level={1}>30</Typography.Title>
-                            </Space>
-                        </Space>
-                    </Card.Grid>
                     
-
+                        <Card.Grid style={{ width: '276px' }}>
+                            <Space wrap size={20}>
+                                <SlLayers size={45} />
+                                <Space wrap direction='vertical' size={0}>
+                                    <Typography.Title level={5}>Channels</Typography.Title>
+                                    <Typography.Title level={1}>{state.channels}</Typography.Title>
+                                </Space>
+                            </Space>
+                        </Card.Grid>
+                        <Card.Grid style={{ width: '276px' }}>
+                            <Space wrap size={20}>
+                                <SlOrganization size={45} />
+                                <Space wrap direction='vertical' size={0}>
+                                    <Typography.Title level={5}>Resolution cases</Typography.Title>
+                                    <Typography.Title level={1}>{state.resolutionCases}</Typography.Title>
+                                </Space>
+                            </Space>
+                        </Card.Grid>
+                        <Card.Grid style={{ width: '276px' }}>
+                            <Space wrap size={20}>
+                                <SlNotebook size={45} />
+                                <Space wrap direction='vertical' size={0}>
+                                    <Typography.Title level={5}>My Resolution cases</Typography.Title>
+                                    <Typography.Title level={1}>{state.myResolutionCases}</Typography.Title>
+                                </Space>
+                            </Space>
+                        </Card.Grid>
+                        <Card.Grid style={{ width: '280px' }}>
+                            <Space wrap size={20}>
+                                <SlCalculator size={45} />
+                                <Space wrap direction='vertical' size={0}>
+                                    <Typography.Title level={5}>Open Resolution cases</Typography.Title>
+                                    <Typography.Title level={1}>{state.openResolutionCases}</Typography.Title>
+                                </Space>
+                            </Space>
+                        </Card.Grid>
+                        {/* <Card.Grid style={{ width: '200px' }}>
+                        <Space wrap size={20}>
+                            <SlLayers size={45} />
+                            <Space wrap direction='vertical' size={0}>
+                                <Typography.Title level={5}>Channels</Typography.Title>
+                                <Typography.Title level={1}>30</Typography.Title>
+                            </Space>
+                        </Space>
+                    </Card.Grid>
+                     */}
+                    
                 </Card>
             </div>
-        
+
             <section className='report-widgets'>
                 <Row gutter={[16, 16]}>
-                    <Col span={16}>
+                    {/*  <Col span={16}>
                         <Row gutter={[16, 16]}>
                             <Col span={24}>
                                 <Card bordered>
@@ -107,18 +137,18 @@ const AgentIndexPage = (props) => {
                                 }}
                             />
                         </Card>
-                    </Col>
+                    </Col> */}
                     <Col span={24}>
-                        <Card 
-                        style={{padding:0}}
-                        title={<Typography.Title level={5}>Channels</Typography.Title>}
-                        bordered
-                        extra={<Link to="/view-all">View all</Link>}
+                        <Card
+                            style={{ padding: 0 }}
+                            title={<Typography.Title level={5}>Channels</Typography.Title>}
+                            bordered
+                            extra={<Link to="/view-all">View all</Link>}
                         >
-                            <ChannelTypeTable/>
+                            <ChannelTypeTable />
                         </Card>
                     </Col>
-                    
+
                 </Row>
             </section>
 

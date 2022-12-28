@@ -1,5 +1,5 @@
 import { Tabs, Card, Table, Drawer, Layout, Typography, Row, Col } from 'antd';
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Link } from "@gatsbyjs/reach-router";
 import { Storage } from 'aws-amplify'
 import { useSelector } from 'react-redux';
@@ -12,7 +12,6 @@ import { LoadEmail } from '../../store/reducers/emails';
 const ChannelTypeTable = (props) => {
 
     const channel = useSelector((state) => state.channels)
-    const data = channel.data?.listChannels?.items;
     let grouped = _.groupBy(channel.data?.listChannels?.items, data => data?.channelType);
     const [open, setOpen] = useState(false);
     const initialState = {
@@ -125,7 +124,7 @@ const ChannelTypeTable = (props) => {
             title: 'Id',
             dataIndex: 'id',
             key: 'id',
-            render: (a,b,c) => <Link to={`/details/`} state={{channel:b}} channel={b} >{a}</Link>
+            render: (a, b, c) => <Link to={`/details/`} state={{ channel: b }} channel={b} >{a}</Link>
         },
         {
             title: 'AssignTo',
@@ -191,7 +190,7 @@ const ChannelTypeTable = (props) => {
                     {
                         label: <Typography.Title level={5} style={{ paddingLeft: '1px' }}>Voice</Typography.Title>,
                         key: 'voice',
-                        children: <Card>
+                        children:
                             <Table
                                 size='large'
                                 borderRadius={10}
@@ -199,12 +198,12 @@ const ChannelTypeTable = (props) => {
                                 dataSource={grouped.voice}
                                 scroll={{ x: 400, y: 250 }}
                             />
-                        </Card>
+
                     },
                     {
                         label: <Typography.Title level={5} style={{ paddingLeft: '1px' }}>Chat</Typography.Title>,
                         key: 'chat',
-                        children: <Card>
+                        children:
                             <Table
                                 size='large'
                                 borderRadius={10}
@@ -212,12 +211,12 @@ const ChannelTypeTable = (props) => {
                                 dataSource={grouped.chat}
                                 scroll={{ x: 400, y: 250 }}
                             />
-                        </Card>
+
                     },
                     {
                         label: <Typography.Title level={5} style={{ paddingLeft: '1px' }}>Email</Typography.Title>,
                         key: 'email',
-                        children: <Card>
+                        children:
                             <Table
                                 size='large'
                                 borderRadius={10}
@@ -233,7 +232,7 @@ const ChannelTypeTable = (props) => {
                                     };
                                 }}
                             />
-                        </Card>
+
                     },
                 ]}
             />
