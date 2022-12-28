@@ -16,16 +16,17 @@ const NewInteractionForm = (props) => {
     const config = useSelector((state) => state.config);
     const settings = useSelector((state) => state.settings);
     const [form] = Form.useForm();
+    const [tab, activeTab] = useState("searchCustomer")
     const [state, setState] = useState({
         settings,
         showAddTask: false,
         isTemplatesLoaded: false,
         tasks: [],
         showWrapButton: false,
-        channel: props.settings?.channel  || {
-            "id": props.settings?.channel?.id || null ,
-            "contactID": props.settings?.channel?.contactID || null ,
-            "channelType": props.settings?.channel?.type || null ,
+        channel: props.settings?.channel || {
+            "id": props.settings?.channel?.id || null,
+            "contactID": props.settings?.channel?.contactID || null,
+            "channelType": props.settings?.channel?.type || null,
             "tasks": {
                 "items": [],
                 "nextToken": null
@@ -77,7 +78,9 @@ const NewInteractionForm = (props) => {
             }
             //let taskItem = formatTemplateAttributes(rawtaskItem)
             tasks.push(rawtaskItem)
+            activeTab(tasks[tasks.length-1].id)
             setState({ ...state, tasks })
+            
         }
 
 
@@ -128,10 +131,14 @@ const NewInteractionForm = (props) => {
                             placement="bottomLeft" arrow>
                             <Button type='primary' shape='round' size='large' icon={<SlBasket />} > &nbsp; Add Task</Button>
                         </Dropdown>
-                        <Button shape='round' onClick={() => form.submit()} type='primary' size='large' icon={<FaSave />} > &nbsp; Wrap Call </Button>
+                        {/* <Button shape='round' onClick={() => form.submit()} type='primary' size='large' icon={<FaSave />} > &nbsp; Wrap Call </Button> */}
+                        <Button shape='round' onClick={() => activeTab("completeCall")} type='primary' size='large' icon={<FaSave />} > &nbsp; Wrap Call </Button>
                     </Space>
                 </div>
-                <Tabs defaultActiveKey="searchCustomer"
+                <Tabs
+                    defaultActiveKey="searchCustomer"
+                    activeKey={tab}
+                    onChange={(e) => activeTab(e)}
                     items={[
                         {
                             "label": "Search Customer",
@@ -139,6 +146,7 @@ const NewInteractionForm = (props) => {
                             "children": <SearchCustomer />
                         },
                         ...state.tasks.map((task, index) => {
+                            
                             return {
                                 "label": task.name,
                                 "key": task.id,
@@ -147,13 +155,13 @@ const NewInteractionForm = (props) => {
 
                         }),
                         {
-                            "label": "Add / Wrap Call",
-                            "key": "wrapcall",
+                            "label": "Complete Call",
+                            "key": "completeCall",
                             "children": <Space size={20} style={{ width: 600 }} direction="vertical">
                                 <Form.Item label=" Notes">
                                     <Input.TextArea rows={10} />
                                 </Form.Item>
-                                <Button onClick={() => form.submit()} block type='primary' danger shape='round' size='large' icon={<SlCallEnd />} >&nbsp; Wrap Call</Button>
+                                <Button onClick={() => form.submit()} block type='primary' danger shape='round' size='large' icon={<SlCallEnd />} >&nbsp; Complete</Button>
                             </Space>
 
 
