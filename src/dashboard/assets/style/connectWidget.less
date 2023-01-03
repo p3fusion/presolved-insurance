@@ -36,11 +36,12 @@ section.connect-widget {
             padding: 0px 10px;
             justify-content: space-between;
 
-            .in-call{
+            .in-call {
                 background: linear-gradient(176deg, #4caf50, #1d6a20);
                 border: solid 1px #23a928 !important;
             }
-            .available{
+
+            .available {
                 background: linear-gradient(176deg, #4caf50, #1d6a20);
                 border: solid 1px #23a928 !important;
             }
@@ -50,11 +51,50 @@ section.connect-widget {
 }
 
 
-.connect-drawer {
-    .ant-drawer-body {
-        padding: 0;
-        iframe{
-            min-height: 95vh;
+
+#dialerpopover {
+    display: flex;
+    flex-direction: column-reverse;
+
+    .ant-popover-title {
+        padding: 5px;
+    }
+
+    .ant-popover-inner-content {
+        padding: 5px;
+
+        .ccp {
+            height: 100%;
+
+            #containerDiv {
+                height: 100%;
+
+                iframe {
+                    width: 100%;
+                    height: 100%;
+                    border: solid 1px #e4dfdf;
+
+                    body {
+                        display: none;
+                    }
+
+                }
+            }
         }
     }
+
+}
+
+
+
+
+
+header.HeaderBar-sc-1j7wx9d-1.dqOTbp {
+    background: linear-gradient(135deg, #00023b 0%, #00023b 50%, #300693 100%);
+}
+
+.ffmdkm .DropdownContainer-sc-108vfbt-0 {
+    margin-left: 0.3125rem;
+    background: linear-gradient(135deg, #00023b 0%, #00023b 50%, #300693 100%);
+    color: var(--header-text-color);
 }

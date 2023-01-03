@@ -14,6 +14,7 @@ import { notification } from 'antd';
 import { uniqBy } from 'lodash';
 import ChannelViewAll from './pages/channel-view-all-interactions';
 import ChannelDetails from './pages/interactions/channel-details';
+import { updateAgentsList } from './store/reducers/user';
 
 
 
@@ -60,8 +61,9 @@ const AgentPage = () => {
             }
 
             if (!config.templates.isLoaded) {
-                /*  getAllUsersFromConnect().then((allUsers) => {
-                
+                getAllUsersFromConnect().then((allUsers) => {
+                    console.log({allUsers});
+                    dispatch(updateAgentsList(allUsers?.Users || allUsers ))
                  }).catch((error) => {
                      notification.error({
                          description: error.message,
@@ -70,7 +72,7 @@ const AgentPage = () => {
                          type: 'error'
  
                      })
-                 }) */
+                 }) 
 
                 getTaskTemplates().then((taskTemplates) => {
                     dispatch(updateTemplates(taskTemplates))

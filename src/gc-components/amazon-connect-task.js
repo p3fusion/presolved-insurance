@@ -319,7 +319,7 @@
         e.call(
           connect.TaskTemplatesClientMethods.GET_TASK_TEMPLATE,
           { instanceId: s, templateParams: t },
-          n
+          
         );
       }),
     connect.Agent.prototype.listTaskTemplates ||

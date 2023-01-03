@@ -2,6 +2,8 @@ import { notification } from "antd";
 import { API } from "aws-amplify";
 import { addNewChannel } from "../store/reducers/channels";
 import * as mutations from '../../graphql/mutations'
+import '../../gc-components/amazon-connect-customer-profiles'
+
 
 const masterTopics = {
     "LOGIN_POPUP": "connect::loginPopup",
@@ -116,6 +118,9 @@ class connectWrapper {
             contact.onConnecting(function (contact) {
                 console.log("onConnecting::", contact);
                 var contactData = contact._getData()
+                console.log({
+                    onConnecting:contactData
+                });
                 let settings = {
                     eventName: "onConnecting",
                     activeTask: contactData,
@@ -127,6 +132,9 @@ class connectWrapper {
             contact.onIncoming(function (contact) {
                 console.log("onIncoming::", contact);
                 var contactData = contact._getData()
+                console.log({
+                    onIncoming:contactData
+                });
                 let settings = {
                     eventName: "onIncoming",
                     activeTask: contactData,
@@ -135,11 +143,14 @@ class connectWrapper {
                 dispatch(updateSettings(settings))
             });
 
-            contact.onRefresh(function (contact) { });
+            contact.onRefresh(function (contact) {});
 
             contact.onAccepted(function (contact) {
                 console.log("onAccepted::", contact);
                 var contactData = contact._getData()
+                console.log({
+                    onAccepted:contactData
+                });
                 let settings = {
                     eventName: "onAccepted",
                     activeTask: contactData,
@@ -168,6 +179,10 @@ class connectWrapper {
 
             contact.onEnded(function () {
                 console.log("onEnded::", contact);
+                var contactData = contact._getData()
+                console.log({
+                    onEnded:contactData
+                });
                 let settings = {
                     eventName: "onEnded",
                     activeTask: null,
@@ -179,6 +194,9 @@ class connectWrapper {
             contact.onConnected(function () {
                 console.log("onConnected::", contact);
                 var contactData = contact._getData()
+                console.log({
+                    onConnected:contactData
+                });
                 let settings = {
                     eventName: "onConnected",
                     activeTask: contactData,
@@ -192,30 +210,60 @@ class connectWrapper {
     }
     createChannel(contactData) {
         return new Promise((resolve, reject) => {
-            /* {id,assignTo,contactID,channelType,contactAttributes} */
-            let agent = ""
+            resolve({
+                "id": "15d986c8-a649-4f76-9a37-82ece28dd201",
+                "assignTo": "",
+                "contactID": "e2fd4945-1074-482f-b979-7f3dfee5db4d",
+                "channelType": "chat",
+                "contactAttributes": "{\"initialContactId\":null,\"contactId\":\"e2fd4945-1074-482f-b979-7f3dfee5db4d\",\"initiationMethod\":null,\"name\":null,\"description\":null,\"attributes\":{\"Distribute by percentage\":{\"name\":\"Distribute by percentage\",\"value\":\"17%\"}},\"state\":{\"type\":\"connecting\",\"timestamp\":\"2022-12-29T15:01:53.043Z\"},\"contactDuration\":\"0\",\"type\":\"chat\",\"queueTimestamp\":null,\"status\":{\"type\":\"connecting\",\"timestamp\":\"2022-12-29T15:01:53.043Z\"}}",
+                "tasks": {
+                    "items": [],
+                    "nextToken": null
+                },
+                "createdAt": "2022-12-29T15:02:06.050Z",
+                "updatedAt": "2022-12-29T15:02:06.050Z"
+            })
+           /*  let agent = ""
             const newChannel = {
                 assignTo: agent,
                 contactID: contactData.contactId,
                 channelType: contactData.type,
                 contactAttributes: JSON.stringify({ ...contactData })
             }
-            console.log({ newChannel, agent })
+            
 
             API.graphql({ query: mutations.createChannel, variables: { input: newChannel } }).then((result) => {
                 let currentChannelRawData = result.data.createChannel
                 let currentChannel = {
                     ...currentChannelRawData
                 }
+                console.log({currentChannel});
                 resolve({ ...currentChannel })
             }).catch((error) => {
                 console.error({ mutationscreateChannel: error })
                 reject({ mutationscreateChannel: error })
-            })
+            }) */
         })
 
     }
 
+    fetchProfiles(){
+        const {connect} =this
+        const profile = new connect.CustomerProfilesClient('https://p3fusion-qa.my.connect.aws/')
+        profile.listAccountIntegrations({
+            "DomainName": "amazon-connect-p3fusion-qa",
+            "KeyName": "_profileId",
+            "Values": [
+                "96493fff2dd9421ab9ab728ff422f166"
+            ],
+            "MaxResults": 10,
+            "NextToken": null
+        }, (error,result) => {
+            console.log({CustomerProfilesClient:{error}});
+            console.log({ CustomerProfilesClient: result });
+            return {result,error}
+        })
+    }
 
 
 }

@@ -1,13 +1,15 @@
 import { CheckCircleOutlined, CloseOutlined } from '@ant-design/icons';
 import { Button, Card, Col, Collapse, Dropdown, Form, Input, Menu, notification, Result, Row, Select, Space, Tabs, Typography, Modal } from 'antd';
 import { filter, find } from 'lodash';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { SlBasket, SlCallEnd, SlPlus } from 'react-icons/sl';
 import { useSelector } from 'react-redux';
 import SearchCustomer from './search-customer';
 import * as mutations from '../../../graphql/mutations'
 import { FaSave } from 'react-icons/fa';
 import { API } from 'aws-amplify';
+
+
 const { Panel } = Collapse;
 
 
@@ -33,6 +35,36 @@ const NewInteractionForm = (props) => {
             },
         },
     })
+
+
+    useEffect(() => {
+
+        fetchProfiles()
+
+    }, [])
+
+    const fetchProfiles = () => {
+
+        const isConnected = setInterval(() => {
+
+            if (connect.agent.initialized) {
+                clearInterval(isConnected)
+                const client = new connect.CustomerProfilesClient('https://p3fusion-qa.my.connect.aws/')
+                client.searchProfiles({
+                    "KeyName": "name",
+                    value: ["sai"],
+
+                }).then((profiles) => {
+                    console.table(profiles)
+                }).catch((ex) => {
+                    console.error({ ex });
+                })
+            }
+        }, 3000)
+
+
+    }
+
     const saveTask = (taskData) => {
         /* {id,assignTo,channelID,contactID,channelType,Name,taskAttributes,status} */
         let agent = state.settings.username
@@ -78,9 +110,9 @@ const NewInteractionForm = (props) => {
             }
             //let taskItem = formatTemplateAttributes(rawtaskItem)
             tasks.push(rawtaskItem)
-            activeTab(tasks[tasks.length-1].id)
+            activeTab(tasks[tasks.length - 1].id)
             setState({ ...state, tasks })
-            
+
         }
 
 
@@ -110,6 +142,11 @@ const NewInteractionForm = (props) => {
 
     }
 
+
+
+
+
+
     let id = state.settings.activeTask?.contactID
 
     return (
@@ -131,6 +168,7 @@ const NewInteractionForm = (props) => {
                             placement="bottomLeft" arrow>
                             <Button type='primary' shape='round' size='large' icon={<SlBasket />} > &nbsp; Add Task</Button>
                         </Dropdown>
+                        <Button onClick={() => fetchProfiles()} type='primary' shape='round' size='large' icon={<SlBasket />} > &nbsp; List Profiles</Button>
                         {/* <Button shape='round' onClick={() => form.submit()} type='primary' size='large' icon={<FaSave />} > &nbsp; Wrap Call </Button> */}
                         <Button shape='round' onClick={() => activeTab("completeCall")} type='primary' size='large' icon={<FaSave />} > &nbsp; Wrap Call </Button>
                     </Space>
@@ -146,7 +184,7 @@ const NewInteractionForm = (props) => {
                             "children": <SearchCustomer />
                         },
                         ...state.tasks.map((task, index) => {
-                            
+
                             return {
                                 "label": task.name,
                                 "key": task.id,
