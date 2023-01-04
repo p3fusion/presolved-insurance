@@ -3,6 +3,7 @@ import { API } from "aws-amplify";
 import { addNewChannel } from "../store/reducers/channels";
 import * as mutations from '../../graphql/mutations'
 import '../../gc-components/amazon-connect-customer-profiles'
+import { userProfilesMock } from "../mocks/profiles";
 
 
 const masterTopics = {
@@ -35,6 +36,7 @@ class connectWrapper {
         this.divCCP = divCCP;
         this.navigate = navigate;
         this.cbConnect = null
+        this.agenInfo=null;
     }
     initiateCCP() {
         const { connect, dispatch, setState, updateUser, state, divCCP } = this
@@ -88,6 +90,7 @@ class connectWrapper {
             let currentState = agent.getStatus()
             setState({ ...state, connect: connect, currentState: currentState.name });
             dispatch(updateUser(agentData.configuration))
+            this.agenInfo=agentData.configuration?.username || ""
             dispatch(updateSettings(agentData.configuration))
             console.log("::completed loading the Agent information::");
             //navigate("/interactions", { state: agentData })
@@ -119,7 +122,7 @@ class connectWrapper {
                 console.log("onConnecting::", contact);
                 var contactData = contact._getData()
                 console.log({
-                    onConnecting:contactData
+                    onConnecting: contactData
                 });
                 let settings = {
                     eventName: "onConnecting",
@@ -133,7 +136,7 @@ class connectWrapper {
                 console.log("onIncoming::", contact);
                 var contactData = contact._getData()
                 console.log({
-                    onIncoming:contactData
+                    onIncoming: contactData
                 });
                 let settings = {
                     eventName: "onIncoming",
@@ -143,14 +146,12 @@ class connectWrapper {
                 dispatch(updateSettings(settings))
             });
 
-            contact.onRefresh(function (contact) {});
+            contact.onRefresh(function (contact) { });
 
             contact.onAccepted(function (contact) {
                 console.log("onAccepted::", contact);
                 var contactData = contact._getData()
-                console.log({
-                    onAccepted:contactData
-                });
+
                 let settings = {
                     eventName: "onAccepted",
                     activeTask: contactData,
@@ -170,8 +171,8 @@ class connectWrapper {
                     dispatch(updateSettings(settings))
                     dispatch(addNewChannel({ ...contactData }))
                     navigate("/interactions", { state: contactData })
-                }).catch((err)=>{
-                    console.error({channelError:err})
+                }).catch((err) => {
+                    console.error({ channelError: err })
                 })
 
 
@@ -181,7 +182,7 @@ class connectWrapper {
                 console.log("onEnded::", contact);
                 var contactData = contact._getData()
                 console.log({
-                    onEnded:contactData
+                    onEnded: contactData
                 });
                 let settings = {
                     eventName: "onEnded",
@@ -195,7 +196,8 @@ class connectWrapper {
                 console.log("onConnected::", contact);
                 var contactData = contact._getData()
                 console.log({
-                    onConnected:contactData
+                    onConnected: contactData,
+                    state:that.state
                 });
                 let settings = {
                     eventName: "onConnected",
@@ -210,7 +212,7 @@ class connectWrapper {
     }
     createChannel(contactData) {
         return new Promise((resolve, reject) => {
-            resolve({
+            /* resolve({
                 "id": "15d986c8-a649-4f76-9a37-82ece28dd201",
                 "assignTo": "",
                 "contactID": "e2fd4945-1074-482f-b979-7f3dfee5db4d",
@@ -222,33 +224,37 @@ class connectWrapper {
                 },
                 "createdAt": "2022-12-29T15:02:06.050Z",
                 "updatedAt": "2022-12-29T15:02:06.050Z"
-            })
-           /*  let agent = ""
+            }) */
+            
+            let agent = this.agenInfo
+
+            console.log("creating channel");
             const newChannel = {
+                notes: "New call picked by "+agent,
                 assignTo: agent,
                 contactID: contactData.contactId,
                 channelType: contactData.type,
-                contactAttributes: JSON.stringify({ ...contactData })
+                contactAttributes: JSON.stringify({ ...contactData, userProfile:this.getRandomObjectFromArray() })
             }
-            
+
 
             API.graphql({ query: mutations.createChannel, variables: { input: newChannel } }).then((result) => {
                 let currentChannelRawData = result.data.createChannel
                 let currentChannel = {
                     ...currentChannelRawData
                 }
-                console.log({currentChannel});
+                console.log({ currentChannel });
                 resolve({ ...currentChannel })
             }).catch((error) => {
                 console.error({ mutationscreateChannel: error })
                 reject({ mutationscreateChannel: error })
-            }) */
+            })
         })
 
     }
 
-    fetchProfiles(){
-        const {connect} =this
+    fetchProfiles() {
+        const { connect } = this
         const profile = new connect.CustomerProfilesClient('https://p3fusion-qa.my.connect.aws/')
         profile.listAccountIntegrations({
             "DomainName": "amazon-connect-p3fusion-qa",
@@ -258,13 +264,17 @@ class connectWrapper {
             ],
             "MaxResults": 10,
             "NextToken": null
-        }, (error,result) => {
-            console.log({CustomerProfilesClient:{error}});
+        }, (error, result) => {
+            console.log({ CustomerProfilesClient: { error } });
             console.log({ CustomerProfilesClient: result });
-            return {result,error}
+            return { result, error }
         })
     }
 
+    getRandomObjectFromArray() {
+        let array=userProfilesMock()        
+        return array[Math.floor(Math.random() * array.length)];        
+    }
 
 }
 

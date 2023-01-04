@@ -1,5 +1,5 @@
 import { API, DataStore, Auth } from 'aws-amplify'
-import { listTaskTemplates } from '../../graphql/queries'
+import { listTaskTemplates, listChannels } from '../../graphql/queries'
 
 
 export const getTaskTemplates  = async () => {
@@ -10,7 +10,6 @@ export const getTaskTemplates  = async () => {
             authToken: "da2-fe33kite7zho7nlro4cliwvxxe"
         })  
         //let taskTemplates = await DataStore.query(TaskTemplate)
-        console.log({ result });
         return result.data
     } catch (error) {
         console.error({ getTaskTemplates: error })
@@ -32,8 +31,6 @@ export const getAllUsersFromConnect = async () => {
             }
         }
         let result = await API.get(apiName, path, myInit)
-        //let taskTemplates = await DataStore.query(TaskTemplate)
-        console.log({ result });
         return result.data
 
     } catch (error) {
@@ -44,7 +41,7 @@ export const getAllUsersFromConnect = async () => {
 }
 
 export const getAllChannels = async () => {
-    try {
+    try {   
         const query = `
         query ListChannels(
             $filter: ModelChannelFilterInput
@@ -78,15 +75,14 @@ export const getAllChannels = async () => {
               nextToken
             }
           }
-        `
+        `    
         let result = await API.graphql({
-            query,
+            query:listChannels,
             authMode: 'API_KEY',
             authToken: "da2-fe33kite7zho7nlro4cliwvxxe"
         })
         //let taskTemplates = await DataStore.query(TaskTemplate)
-        console.log({ result });
-        return result.data
+        return result.data.listChannels.items
 
     } catch (error) {
         console.error({ getAllChannels: error })

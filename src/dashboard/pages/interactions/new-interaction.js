@@ -8,6 +8,8 @@ import SearchCustomer from './search-customer';
 import * as mutations from '../../../graphql/mutations'
 import { FaSave } from 'react-icons/fa';
 import { API } from 'aws-amplify';
+import { saveTaskAPI } from '../../api/interaction-api';
+import moment from 'moment-timezone';
 
 
 const { Panel } = Collapse;
@@ -16,10 +18,13 @@ const { Panel } = Collapse;
 const NewInteractionForm = (props) => {
 
     const config = useSelector((state) => state.config);
+    const user = useSelector((state) => state.user);
     const settings = useSelector((state) => state.settings);
+    
     const [form] = Form.useForm();
-    const [tab, activeTab] = useState("searchCustomer")
     const [state, setState] = useState({
+        isCallCompleted: false,
+        tab: "searchCustomer",
         settings,
         showAddTask: false,
         isTemplatesLoaded: false,
@@ -31,17 +36,12 @@ const NewInteractionForm = (props) => {
             "channelType": props.settings?.channel?.type || null,
             "tasks": {
                 "items": [],
-                "nextToken": null
             },
         },
     })
 
 
-    useEffect(() => {
-
-        fetchProfiles()
-
-    }, [])
+    useEffect(() => { }, [])
 
     const fetchProfiles = () => {
 
@@ -67,23 +67,26 @@ const NewInteractionForm = (props) => {
 
     const saveTask = (taskData) => {
         /* {id,assignTo,channelID,contactID,channelType,Name,taskAttributes,status} */
-        let agent = state.settings.username
+        let notes = [{
+            user: state.settings.username,
+            date: moment().valueOf(),
+            note: taskData.notes,
+        }]
+        
         const newtask = {
-            assignTo: agent,
+            assignTo: taskData.assignTo,
             contactID: taskData.contactID,
             channelID: taskData.channelID,
             channelType: state.settings.activeTask.type,
             Name: taskData.name,
+            notes: JSON.stringify(notes),
             status: 'pending',
             taskAttributes: JSON.stringify(taskData.attributes)
         }
-        console.log({ newtask })
-
-        API.graphql({ query: mutations.createTask, variables: { input: newtask } }).then((result) => {
-            console.log({ id: newtask.channelID, result });
-        }).catch((error) => {
-            console.error({ mutationscreateChannel: error })
+        saveTaskAPI(newtask).then((saveTaskResult) => {
+            console.log({ saveTaskResult });
         })
+
 
     }
 
@@ -110,8 +113,8 @@ const NewInteractionForm = (props) => {
             }
             //let taskItem = formatTemplateAttributes(rawtaskItem)
             tasks.push(rawtaskItem)
-            activeTab(tasks[tasks.length - 1].id)
-            setState({ ...state, tasks })
+            let activeTab = tasks[tasks.length - 1].id
+            setState({ ...state, tasks, tab: activeTab })
 
         }
 
@@ -120,6 +123,24 @@ const NewInteractionForm = (props) => {
 
     const onFinishFailed = (e) => {
         console.log({ e });
+    }
+
+    const updateChannel = (notes) => {
+        let existingContactAttributes = JSON.parse(props.settings?.channel?.contactAttributes)
+
+        const channel = {
+            id: props.settings?.channel?.id,
+            contactAttributes: JSON.stringify({
+                ...existingContactAttributes,
+                notes: notes
+            })
+        }
+        API.graphql({ query: mutations.updateChannel, variables: { input: channel } }).then((result) => {
+            setState({ ...state, isCallCompleted: true })
+        }).catch((error) => {
+            console.error({ mutationscreateChannel: error })
+        })
+
     }
 
     const onFinish = (e) => {
@@ -132,9 +153,10 @@ const NewInteractionForm = (props) => {
             okText: 'Yes, Wrap the call',
             cancelText: 'No, Ignore it',
             onOk: () => {
+                updateChannel(e.case.notes)
                 for (var i = 0; i < task.length; i++) {
                     let tsk = task[i]
-                    saveTask(tsk)
+                    saveTask({ ...tsk, notes: e.case.notes })
                 }
 
             }
@@ -153,67 +175,77 @@ const NewInteractionForm = (props) => {
         <Form onFinishFailed={onFinishFailed} form={form} name="case" layout="vertical" onFinish={onFinish}
             initialValues={{ case: { interactionID: id, task: { interactionID: id, attributes: { Building_Number: 25 } } } }}>
             <section className='task-section'>
-                <div className='add-task-button'>
-                    <Space size={15} className="act-button">
-                        <Dropdown overlay={
-                            <Menu items={
-                                config.templates.data.map((tasks) => {
-                                    return {
-                                        "key": tasks.id,
-                                        "label": tasks.name
-                                    }
-                                })
-                            } onClick={({ key }) => addTask(key)}
-                            />}
-                            placement="bottomLeft" arrow>
-                            <Button type='primary' shape='round' size='large' icon={<SlBasket />} > &nbsp; Add Task</Button>
-                        </Dropdown>
-                        <Button onClick={() => fetchProfiles()} type='primary' shape='round' size='large' icon={<SlBasket />} > &nbsp; List Profiles</Button>
-                        {/* <Button shape='round' onClick={() => form.submit()} type='primary' size='large' icon={<FaSave />} > &nbsp; Wrap Call </Button> */}
-                        <Button shape='round' onClick={() => activeTab("completeCall")} type='primary' size='large' icon={<FaSave />} > &nbsp; Wrap Call </Button>
-                    </Space>
-                </div>
-                <Tabs
-                    defaultActiveKey="searchCustomer"
-                    activeKey={tab}
-                    onChange={(e) => activeTab(e)}
-                    items={[
-                        {
-                            "label": "Search Customer",
-                            "key": "searchCustomer",
-                            "children": <SearchCustomer />
-                        },
-                        ...state.tasks.map((task, index) => {
+                {
+                    !state.isCallCompleted ?
+                        <div>
+                            <div className='add-task-button'>
+                                <Space size={15} className="act-button">
+                                    <Dropdown overlay={
+                                        <Menu items={
+                                            config.templates.data.map((tasks) => {
+                                                return {
+                                                    "key": tasks.id,
+                                                    "label": tasks.name
+                                                }
+                                            })
+                                        } onClick={({ key }) => addTask(key)}
+                                        />}
+                                        placement="bottomLeft" arrow>
+                                        <Button type='primary' shape='round' size='large' icon={<SlBasket />} > &nbsp; Add Task</Button>
+                                    </Dropdown>
+                                    <Button onClick={() => fetchProfiles()} type='primary' shape='round' size='large' icon={<SlBasket />} > &nbsp; List Profiles</Button>
+                                    {/* <Button shape='round' onClick={() => form.submit()} type='primary' size='large' icon={<FaSave />} > &nbsp; Wrap Call </Button> */}
+                                    <Button shape='round' onClick={() => setState({ ...state, tab: "completeCall" })} type='primary' size='large' icon={<FaSave />} > &nbsp; Wrap Call </Button>
+                                </Space>
+                            </div>
+                            <Tabs
+                                defaultActiveKey="searchCustomer"
+                                activeKey={state.tab}
+                                onChange={(e) => setState({ ...state, tab: e })}
+                                items={[
+                                    {
+                                        "label": "Search Customer",
+                                        "key": "searchCustomer",
+                                        "children": <SearchCustomer />
+                                    },
+                                    ...state.tasks.map((task, index) => {
 
-                            return {
-                                "label": task.name,
-                                "key": task.id,
-                                "children": <RenderTaskItems onFinish={onFinish} form={form} name={task.name.replaceAll(" ", "-")} state={state} settings={state.settings} setState={setState} task={task} index={index} />,
-                            }
+                                        return {
+                                            "label": task.name,
+                                            "key": task.id,
+                                            "children": <RenderTaskItems user={user} onFinish={onFinish} form={form} name={task.name.replaceAll(" ", "-")} state={state} settings={state.settings} setState={setState} task={task} index={index} />,
+                                        }
 
-                        }),
-                        {
-                            "label": "Complete Call",
-                            "key": "completeCall",
-                            "children": <Space size={20} style={{ width: 600 }} direction="vertical">
-                                <Form.Item label=" Notes">
-                                    <Input.TextArea rows={10} />
-                                </Form.Item>
-                                <Button onClick={() => form.submit()} block type='primary' danger shape='round' size='large' icon={<SlCallEnd />} >&nbsp; Complete</Button>
-                            </Space>
+                                    }),
+                                    {
+                                        "label": "Complete Call",
+                                        "key": "completeCall",
+                                        "children": <Space size={20} style={{ width: 600 }} direction="vertical">
+                                            <Form.Item name={['case', 'notes']} label="Notes">
+                                                <Input.TextArea rows={10} />
+                                            </Form.Item>
+                                            <Button onClick={() => form.submit()} block type='primary' danger shape='round' size='large' icon={<SlCallEnd />} >&nbsp; Complete</Button>
+                                        </Space>
 
 
 
-                        },
-                    ]}
-                />
+                                    },
+                                ]}
+                            />
+                        </div>
+                        :
+                        <div>
+                            <Result title="Call Completed" subTitle="Call has been completed, you can return to the dashboard" />
+                        </div>
+                }
+
             </section>
         </Form>
 
     )
 }
 
-const RenderTaskItems = ({ name, task, index, state }) => {
+const RenderTaskItems = ({ name, task, index, state, user }) => {
 
     return (
         <section className='task-item'>
@@ -245,7 +277,9 @@ const RenderTaskItems = ({ name, task, index, state }) => {
                         <Col span={24}>
                             <Form.Item wrapperCol={{ span: 8 }} label="Assign Task to" name={["case", "task", index, "assignTo"]}>
                                 <Select  >
-                                    <option value="p3fusion">p3fusion</option>
+                                    {
+                                        user.agents.map((availAgent) => <option key={availAgent.Username} value={availAgent.Username}>{availAgent.Username}</option>)
+                                    }
                                 </Select>
                             </Form.Item>
                         </Col>

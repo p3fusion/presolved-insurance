@@ -4,7 +4,8 @@ const initialState = {
 
   isLoaded: false,
   activeChannels: [],
-  data: []
+  data: [],
+  tasks: []
 
 }
 
@@ -20,16 +21,23 @@ export const channels = createSlice({
 
       }
     },
+    updateTasks: (state, action) => {
+      console.log({ action });
+      return {
+        ...state,
+        tasks: action.payload
+      }
+    },
     addNewChannel: (state, action) => {
       return {
         ...state,
-        activeChannels:action.payload
+        activeChannels: action.payload
       }
 
     }
   },
 })
 // Action creators are generated for each case reducer function
-export const { updateChannels,addNewChannel } = channels.actions
+export const { updateChannels, addNewChannel, updateTasks } = channels.actions
 
 export default channels.reducer
