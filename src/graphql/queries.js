@@ -9,6 +9,7 @@ export const getChannel = /* GraphQL */ `
       contactID
       channelType
       contactAttributes
+      notes
       tasks {
         items {
           id
@@ -18,6 +19,7 @@ export const getChannel = /* GraphQL */ `
           channelType
           Name
           taskAttributes
+          notes
           status
           createdAt
           updatedAt
@@ -42,6 +44,7 @@ export const listChannels = /* GraphQL */ `
         contactID
         channelType
         contactAttributes
+        notes
         tasks {
           nextToken
         }
@@ -95,6 +98,7 @@ export const getTask = /* GraphQL */ `
         contactID
         channelType
         contactAttributes
+        notes
         tasks {
           nextToken
         }
@@ -105,6 +109,7 @@ export const getTask = /* GraphQL */ `
       channelType
       Name
       taskAttributes
+      notes
       status
       createdAt
       updatedAt
@@ -128,6 +133,7 @@ export const listTasks = /* GraphQL */ `
           contactID
           channelType
           contactAttributes
+          notes
           createdAt
           updatedAt
         }
@@ -135,6 +141,7 @@ export const listTasks = /* GraphQL */ `
         channelType
         Name
         taskAttributes
+        notes
         status
         createdAt
         updatedAt

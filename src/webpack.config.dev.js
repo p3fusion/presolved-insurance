@@ -23,6 +23,7 @@ module.exports = {
     main: APP_DIR + '/index.js',
   },
   output: {
+    publicPath: '/',
     clean: true,
     pathinfo: true,
     path: BUILD_DIR,
@@ -160,9 +161,7 @@ module.exports = {
     ]
   },
   devServer: {
-    historyApiFallback: {
-      index: '/'
-    },
+    historyApiFallback:true,
     allowedHosts: 'all',
     port: 3000,
     liveReload: true,

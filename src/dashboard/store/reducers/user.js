@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
   isLoggedin: false,
+  agents:[]
 
 }
 
@@ -16,28 +17,15 @@ export const userSlice = createSlice({
         ...action.payload
       }
     },
-/*     updateConnectUser: (state, action) => {
+     updateAgentsList: (state, action) => {
       return {
         ...state,
-        isLoggedin: true,
-        connect: {
-          isLoggedin: true,
-          ...action.payload
-        }
+        agents:action.payload
       }
     },
-    updateAppUser: (state, action) => {
-      return {
-        ...state,
-        AppAuth: {
-          isLoggedin: true,
-          ...action.payload
-        }
-      }
-    }, */
   },
 })
 // Action creators are generated for each case reducer function
-export const { updateUser,updateAppUser,updateConnectUser } = userSlice.actions
+export const { updateUser,updateAgentsList} = userSlice.actions
 
 export default userSlice.reducer

@@ -1,3 +1,6 @@
+import { API } from "aws-amplify"
+import * as queries from '../../graphql/queries'
+import * as mutations from '../../graphql/mutations'
 
 export const createNewChannelAPI = (contactData, user) => {
     /* {id,assignTo,contactID,channelType,contactAttributes} */
@@ -21,53 +24,25 @@ export const createNewChannelAPI = (contactData, user) => {
     })
 }
 
-export const saveTaskAPI = (taskData) => {
-    /* {id,assignTo,channelID,contactID,channelType,Name,taskAttributes,status} */
-    let agent = username.current.value
-    const newtask = {
-        assignTo:agent,
-        contactID: state.channel.contactID,
-        channelID: state.channel.id,
-        channelType: state.channel.channelType,
-        Name: taskData.name,
-        status: 'pending',
-        taskAttributes: JSON.stringify(taskData.attributes)
-    }
-    console.log({ newtask })
-
-    API.graphql({ query: mutations.createTask, variables: { input: newtask } }).then((result) => {
-        console.log({ id: newtask.channelID, result });
-    }).catch((error) => {
-        console.error({ mutationscreateChannel: error })
+export const getAllTasksAPI = () => {
+    return new Promise((resolve, reject) => {
+        API.graphql({ query: queries.listTasks }).then((result) => {
+            resolve(result.data.listTasks.items)
+        }).catch((error) => {
+            console.error({ listTasks: error })
+        })
     })
+
 
 }
 
-export const addTaskAPI = (id) => {
-    let { tasks } = state
-    let findtask = find(config.templates.data, { id })
-    let isAdded = filter(state.tasks, { id })
-    if (isAdded.length > 0) {
-        notification.warning({
-            message: "You have already added the task " + findtask.name
+export const saveTaskAPI = (taskData) => {
+    return new Promise((resolve, reject) => {
+        API.graphql({ query: mutations.createTask, variables: { input: taskData } }).then((result) => {
+            console.log({ id: taskData.channelID, result });
+            resolve({ id: taskData.channelID, result })
+        }).catch((error) => {
+            console.error({ mutationscreateChannel: error })
         })
-    } else {
-
-        let parseFields = JSON.parse(findtask.attributes)
-        let newformat = parseFields.map((itm) => {
-            return {
-                ...itm,
-                name: itm.name.replaceAll(" ", "_")
-            }
-        })
-        let rawtaskItem = {
-            ...findtask,
-            attributes: newformat
-        }
-        //let taskItem = formatTemplateAttributes(rawtaskItem)
-        tasks.push(rawtaskItem)
-        setState({ ...state, tasks })
-    }
-
-
+    })
 }

@@ -9,6 +9,7 @@ type Channel @model  @auth(rules: [{ allow: public }]) {
   contactID: String!
   channelType: String!
   contactAttributes: AWSJSON
+  notes: String!
   tasks: [Task] @hasMany(indexName: "byChannel", fields: ["id"])
 }
 
@@ -28,6 +29,7 @@ type Task @model  @auth(rules: [{ allow: public }]) {
   channelType: String!
   Name: String!
   taskAttributes: AWSJSON
+  notes: AWSJSON
   status: String!
 }
 

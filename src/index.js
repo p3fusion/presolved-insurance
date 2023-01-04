@@ -22,6 +22,8 @@ const root = document.getElementById("root");
 Amplify.configure(oldAwsConfig);
 //Amplify.configure(awsExports);
 
+
+
 ReactDOM.render(
   <React.StrictMode>
     <Suspense fallback={<Suspence />}>
@@ -46,3 +48,8 @@ ReactDOM.render(
 );
 
 reportWebVitals();
+
+
+//to bulk delete
+//data.items.map((rec,index)=>`id${index}:deleteChannel(input: {id: "${rec.id}"}) {id}`).toString()
+//data.items.map((rec,index)=>`id${index}:deleteTask(input: {id: "${rec.id}"}) {id}`).toString()

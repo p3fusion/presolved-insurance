@@ -9,11 +9,13 @@ import { getAllEmails } from './api/emails';
 import { getAllChannels, getAllUsersFromConnect, getTaskTemplates } from './api/taskTemplates';
 import { updateEmails } from './store/reducers/emails';
 import { updateTemplates } from './store/reducers/config';
-import { updateChannels } from './store/reducers/channels';
+import { updateChannels, updateTasks } from './store/reducers/channels';
 import { notification } from 'antd';
 import { uniqBy } from 'lodash';
 import ChannelViewAll from './pages/channel-view-all-interactions';
 import ChannelDetails from './pages/interactions/channel-details';
+import { updateAgentsList } from './store/reducers/user';
+import { getAllTasksAPI } from './api/interaction-api';
 
 
 
@@ -44,59 +46,65 @@ const AgentPage = () => {
     useEffect(() => {
         if (user.isLoggedin) {
             setState({ ...state, isLoggedin: true })
-            if (!emails.isLoaded) {
-                getAllEmails().then((allEmails) => {
-                    let uniqEMails = uniqBy(allEmails, 'messageID')
-                    dispatch(updateEmails(uniqEMails))
-                }).catch((error) => {
-                    notification.error({
-                        description: error.message,
-                        duration: 10,
-                        message: "Unable to load  getAllEmails",
-                        type: 'error'
-
-                    })
-                })
-            }
-
-            if (!config.templates.isLoaded) {
-                /*  getAllUsersFromConnect().then((allUsers) => {
-                
-                 }).catch((error) => {
-                     notification.error({
-                         description: error.message,
-                         duration: 10,
-                         message: "Unable to load  getAllUsersFromConnect",
-                         type: 'error'
- 
-                     })
-                 }) */
-
-                getTaskTemplates().then((taskTemplates) => {
-                    dispatch(updateTemplates(taskTemplates))
-                }).catch((error) => {
-                    notification.error({
-                        message: "Unable to load the configs",
-                        description: error.message,
-                        type: 'error'
-
-                    })
-                })
-            }
-            if (!channels.isLoaded) {
-                getAllChannels().then((result) => {
-                    dispatch(updateChannels(result))
-                }).catch((error) => {
-                    notification.error({
-                        description: error.message,
-                        message: "Unable to load the channels",
-                        type: 'error'
-
-                    })
-                })
-            }
         }
     }, [user])
+
+    useEffect(() => {
+        if (!emails.isLoaded) {
+            getAllEmails().then((allEmails) => {
+                let uniqEMails = uniqBy(allEmails, 'messageID')
+                dispatch(updateEmails(uniqEMails))
+            }).catch((error) => {
+                notification.error({
+                    description: error.message,
+                    duration: 10,
+                    message: "Unable to load  getAllEmails",
+                    type: 'error'
+
+                })
+            })
+        }
+
+        if (!config.templates.isLoaded) {
+            getAllUsersFromConnect().then((allUsers) => {
+                dispatch(updateAgentsList(allUsers?.Users || allUsers))
+            }).catch((error) => {
+                notification.error({
+                    description: error.message,
+                    duration: 10,
+                    message: "Unable to load  getAllUsersFromConnect",
+                    type: 'error'
+
+                })
+            })
+
+            getTaskTemplates().then((taskTemplates) => {
+                dispatch(updateTemplates(taskTemplates))
+            }).catch((error) => {
+                notification.error({
+                    message: "Unable to load the configs",
+                    description: error.message,
+                    type: 'error'
+
+                })
+            })
+        }
+        if (!channels.isLoaded) {            
+            getAllTasksAPI().then((result) => {    
+                dispatch(updateTasks(result))
+            })
+            getAllChannels().then((result) => {
+                dispatch(updateChannels(result))
+            }).catch((error) => {
+                notification.error({
+                    description: error.message,
+                    message: "Unable to load the channels",
+                    type: 'error'
+
+                })
+            })
+        }
+    }, [])
 
     // render the dashboard only if user is authenticated
     if (state.isLoggedin) {

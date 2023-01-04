@@ -127,7 +127,6 @@ function createCustomerProfilesWidget(instanceUrl) {
         // TODO: Is there a way to know for sure if the iframe is loaded?
         widget_frame.isReady = true;
     }
-    console.log('createCustomerProfilesWidget',widget_frame);
     return widget_frame;
 }
 

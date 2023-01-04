@@ -12,6 +12,7 @@ export const createChannel = /* GraphQL */ `
       contactID
       channelType
       contactAttributes
+      notes
       tasks {
         items {
           id
@@ -21,6 +22,7 @@ export const createChannel = /* GraphQL */ `
           channelType
           Name
           taskAttributes
+          notes
           status
           createdAt
           updatedAt
@@ -43,6 +45,7 @@ export const updateChannel = /* GraphQL */ `
       contactID
       channelType
       contactAttributes
+      notes
       tasks {
         items {
           id
@@ -52,6 +55,7 @@ export const updateChannel = /* GraphQL */ `
           channelType
           Name
           taskAttributes
+          notes
           status
           createdAt
           updatedAt
@@ -74,6 +78,7 @@ export const deleteChannel = /* GraphQL */ `
       contactID
       channelType
       contactAttributes
+      notes
       tasks {
         items {
           id
@@ -83,6 +88,7 @@ export const deleteChannel = /* GraphQL */ `
           channelType
           Name
           taskAttributes
+          notes
           status
           createdAt
           updatedAt
@@ -154,6 +160,7 @@ export const createTask = /* GraphQL */ `
         contactID
         channelType
         contactAttributes
+        notes
         tasks {
           nextToken
         }
@@ -164,6 +171,7 @@ export const createTask = /* GraphQL */ `
       channelType
       Name
       taskAttributes
+      notes
       status
       createdAt
       updatedAt
@@ -185,6 +193,7 @@ export const updateTask = /* GraphQL */ `
         contactID
         channelType
         contactAttributes
+        notes
         tasks {
           nextToken
         }
@@ -195,6 +204,7 @@ export const updateTask = /* GraphQL */ `
       channelType
       Name
       taskAttributes
+      notes
       status
       createdAt
       updatedAt
@@ -216,6 +226,7 @@ export const deleteTask = /* GraphQL */ `
         contactID
         channelType
         contactAttributes
+        notes
         tasks {
           nextToken
         }
@@ -226,6 +237,7 @@ export const deleteTask = /* GraphQL */ `
       channelType
       Name
       taskAttributes
+      notes
       status
       createdAt
       updatedAt

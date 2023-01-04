@@ -26,7 +26,7 @@
         },
         "GetUsersList": {
           "deploymentBucketName": "amplify-presolvedtenant-test-211355-deployment",
-          "s3Key": "amplify-builds/GetUsersList-53674f52362b77633244-build.zip"
+          "s3Key": "amplify-builds/GetUsersList-5a346b3179465a43546f-build.zip"
         },
         "presolvedinsurancemsgraph": {
           "deploymentBucketName": "amplify-presolvedtenant-test-211355-deployment",

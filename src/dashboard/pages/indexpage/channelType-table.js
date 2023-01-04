@@ -12,7 +12,9 @@ import { LoadEmail } from '../../store/reducers/emails';
 const ChannelTypeTable = (props) => {
 
     const channel = useSelector((state) => state.channels)
-    let grouped = _.groupBy(channel.data?.listChannels?.items, data => data?.channelType);
+
+    let grouped = _.groupBy(channel.tasks, data => data?.channelType);
+
     const [open, setOpen] = useState(false);
     const initialState = {
         selected: null,
@@ -23,25 +25,6 @@ const ChannelTypeTable = (props) => {
     }
     const dispatch = useDispatch()
     const emails = useSelector((state) => state.emails)
-
-    if (channel.isLoaded) {
-        if ('voice' in grouped) {
-            grouped.voice = grouped.voice.map((item) => {
-                return { ...item, "noOfTasks": Object.keys(item.tasks.items).length };
-            })
-        }
-        if ('email' in grouped) {
-            grouped.email = grouped.email.map((item) => {
-                return { ...item, "noOfTasks": Object.keys(item.tasks.items).length };
-            })
-        }
-
-        if ('chat' in grouped) {
-            grouped.chat = grouped.chat.map((item) => {
-                return { ...item, "noOfTasks": Object.keys(item.tasks.items).length };
-            })
-        }
-    }
 
     const signedURL = async (id) => {
         let result = await Storage.get(
@@ -63,8 +46,6 @@ const ChannelTypeTable = (props) => {
     };
 
     const getMail = (item) => {
-        console.clear()
-        console.log(item)
         if (emails.body[item.contactID]) {
             setState({
                 ...state,
@@ -127,14 +108,19 @@ const ChannelTypeTable = (props) => {
             render: (a, b, c) => <Link to={`/details/`} state={{ channel: b }} channel={b} >{a}</Link>
         },
         {
+            title: 'Name',
+            dataIndex: 'Name',
+            key: 'Name',
+        },
+        {
             title: 'AssignTo',
             dataIndex: 'assignTo',
             key: 'assignTo',
         },
         {
-            title: 'Number of tasks',
-            dataIndex: 'noOfTasks',
-            key: 'noOfTasks',
+            title: 'status',
+            dataIndex: 'status',
+            key: 'status',
         },
         {
             title: 'CreatedAt',
@@ -185,7 +171,7 @@ const ChannelTypeTable = (props) => {
         <>
             <Tabs
 
-                defaultActiveKey="1"
+                defaultActiveKey="chat"
                 items={[
                     {
                         label: <Typography.Title level={5} style={{ paddingLeft: '1px' }}>Voice</Typography.Title>,

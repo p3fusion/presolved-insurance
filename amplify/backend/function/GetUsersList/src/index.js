@@ -13,7 +13,8 @@ exports.handler = async (event) => {
 
     const input = {
         /** input parameters */
-        InstanceId: 'b19b8083-cbfe-4bc3-84d1-8fbb0fdd5a99', /* required */
+        //InstanceId: 'b19b8083-cbfe-4bc3-84d1-8fbb0fdd5a99', /* required */
+        InstanceId: '78e878e8-2ffd-4183-b1a8-8ca60d65a9ad', /* required */
         MaxResults: 100
     };
 
