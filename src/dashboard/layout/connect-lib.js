@@ -20,8 +20,8 @@ const loginOptions = {
     top: 80,
     right: 100
 }
-const connectUrl = "https://p3fusion-qa.my.connect.aws/ccp-v2";
-const loginUrl = "https://d-9067b5964e.awsapps.com/start/#/saml/default/Amazon%20Connect%20Agent%20App/ins-f150c516c8f568f6";
+const connectUrl = "https://gwcc-demo.my.connect.aws/ccp-v2";
+const loginUrl = "https://p3fusion.awsapps.com/start/#/saml/default/GWCC%20Amazon%20Connect/ins-b5f0cb262d3e32a0";
 
 class connectWrapper {
 
@@ -255,9 +255,9 @@ class connectWrapper {
 
     fetchProfiles() {
         const { connect } = this
-        const profile = new connect.CustomerProfilesClient('https://p3fusion-qa.my.connect.aws/')
+        const profile = new connect.CustomerProfilesClient('https://gwcc-demo.my.connect.aws/')
         profile.listAccountIntegrations({
-            "DomainName": "amazon-connect-p3fusion-qa",
+            "DomainName": "amazon-connect-gwcc-demo",
             "KeyName": "_profileId",
             "Values": [
                 "96493fff2dd9421ab9ab728ff422f166"
