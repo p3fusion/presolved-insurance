@@ -2,8 +2,11 @@ import { Card, Col, Descriptions, PageHeader, Result, Row, Typography, Form, Inp
 import moment from 'moment-timezone';
 import React, { useState, useEffect } from 'react'
 import { SlUser } from 'react-icons/sl';
-
+import { useSelector } from 'react-redux';
+import '../../assets/style/channel-details.less'
 const ChannelDetails = (props) => {
+    const user=useSelector((state=>state.user))
+
     const [form] = Form.useForm();
     const [state, setState] = useState({
         channel: props.location?.state?.channel || null,
@@ -28,7 +31,13 @@ const ChannelDetails = (props) => {
 
     }, [props.location?.state?.channel])
 
-
+    const addNotes=()=>{
+        let task=form.getFieldValue('task')       
+        let newHistory=[...state.history]
+        newHistory.push({note:task.notes,date:moment().format('YYYY-MM-DD HH:mm:ss'),user:user?.username})
+        setState({...state,history:newHistory})
+        form.setFieldsValue({notes:null})
+    }
 
 
     return (
@@ -43,7 +52,7 @@ const ChannelDetails = (props) => {
                             <Card bodyStyle={{ padding: '15px ' }}  >
                                 <Row gutter={[16, 16]}>
                                     <Col span={12}>
-                                        <Descriptions column={3} title="Channel Information" bordered layout="horizontal" >
+                                        <Descriptions bordered column={3} title="Channel Information"  layout="horizontal" >
                                             <Descriptions.Item label="Contact ID">{state.channel.contactID}</Descriptions.Item>
                                             <Descriptions.Item label="Type">{state.channel.channelType}</Descriptions.Item>
                                             <Descriptions.Item label="Created By">{state.channel.channel.assignTo}</Descriptions.Item>
@@ -54,7 +63,7 @@ const ChannelDetails = (props) => {
 
                                     </Col>
                                     <Col span={12}>
-                                        <Descriptions column={3} title="Customer Information" bordered layout="horizontal" >
+                                        <Descriptions bordered column={3} title="Customer Information"  layout="horizontal" >
                                             <Descriptions.Item label="Title">{state.contactAttributes?.userProfile?.title} </Descriptions.Item>
                                             <Descriptions.Item label="Name">{state.contactAttributes?.userProfile?.first_name} {state.contactAttributes?.userProfile?.last_name} </Descriptions.Item>
                                             <Descriptions.Item label="E-mail">{state.contactAttributes?.userProfile?.email}</Descriptions.Item>
@@ -130,7 +139,7 @@ const ChannelDetails = (props) => {
                                     <Typography.Title level={5} style={{ marginBottom: 40 }}>Task History</Typography.Title>
 
                                     <Row gutter={[16, 16]}>
-                                        <Col span={24}>
+                                        <Col span={24} className="timeline">
                                             <Timeline>
                                                 {state.history.map((item, index) =>
                                                     <Timeline.Item key={index} dot={<Avatar icon={<SlUser />} />}>
@@ -146,7 +155,7 @@ const ChannelDetails = (props) => {
                                                         <Form.Item name={['task', 'notes']} label="Add your notes">
                                                             <Input.TextArea rows={5} />
                                                         </Form.Item>
-                                                        <Button shape='round'  size='small' type='primary'>Add Notes</Button>
+                                                        <Button onClick={()=>addNotes()} shape='round'  size='small' type='primary'>Add Notes</Button>
                                                     </Col>
                                                 </Timeline.Item>
                                             </Timeline>
