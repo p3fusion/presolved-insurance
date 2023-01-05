@@ -28,7 +28,7 @@ const DashboardHeader = ({ setCollapsed, collapsed }) => {
     }, [user.connect])
 
     useEffect(() => {
-        const connectUrl = "https://p3fusion-uat.my.connect.aws/ccp-v2"
+        const connectUrl = "https://gwcc-demo.my.connect.aws/ccp-v2"
         if (divCCP.current) {
             connect.agentApp.initCCP(divCCP.current, {
                 ccpUrl: connectUrl, // REQUIRED
@@ -121,7 +121,7 @@ const CustomerProile = (props) => {
     const customerprofiles = useRef(null);
     useEffect(() => {
         if (customerprofiles.current) {
-            const instanceUrl = 'https://p3fusion-uat.my.connect.aws/'
+            const instanceUrl = 'https://gwcc-demo.my.connect.aws/'
             let client = new connect.CustomerProfilesClient(instanceUrl);
         }
 
