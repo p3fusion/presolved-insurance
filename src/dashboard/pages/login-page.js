@@ -24,7 +24,7 @@ const isLocalhost = Boolean(
 ); 
 
 let oauth = {
-    domain: "presolvedtenant.auth.us-east-1.amazoncognito.com",
+    domain: "presolvedgwcc.auth.us-east-1.amazoncognito.com",
     scope: [
         "aws.cognito.signin.user.admin",
         "email",
@@ -32,13 +32,13 @@ let oauth = {
         "phone",
         "profile",
     ],
-    redirectSignIn: 'https://localhost:3000/,https://develop.d1nla2nbfpliwq.amplifyapp.com/',
-    redirectSignOut: 'https://localhost:3000/,https://develop.d1nla2nbfpliwq.amplifyapp.com/',
+    redirectSignIn: 'https://localhost:3000/,https://dev.d2yotsysr4wgyh.amplifyapp.com/',
+    redirectSignOut: 'https://localhost:3000/,https://dev.d2yotsysr4wgyh.amplifyapp.com/',
     responseType: "code",
     identityProvider: "CognitoSAML",
 }
-const [localRedirectSignIn, productionRedirectSignIn] = oauth?.redirectSignIn.split(",") || 'https://d36z7vqpuzrikl.cloudfront.net';
-const [localRedirectSignOut, productionRedirectSignOut] = oauth?.redirectSignOut.split(",") || 'https://d36z7vqpuzrikl.cloudfront.net';
+const [localRedirectSignIn, productionRedirectSignIn] = oauth?.redirectSignIn.split(",") || 'https://d2ems3jxchwy0y.cloudfront.net';
+const [localRedirectSignOut, productionRedirectSignOut] = oauth?.redirectSignOut.split(",") || 'https://d2ems3jxchwy0y.cloudfront.net';
 
 
 let awsConfig = {
