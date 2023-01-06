@@ -15,7 +15,7 @@ import { updateConnectUser } from '../store/reducers/user';
 const AgentLoginPage = () => {
     const dispatch=useDispatch()
     const loginContainer = useRef(null);
-    const connectUrl = "https://p3fusion-uat.my.connect.aws/ccp-v2"
+    const connectUrl = "https://gwcc-demo.my.connect.aws/ccp-v2"
     const masterTopics = {
         "LOGIN_POPUP": "connect::loginPopup",
         "SEND_LOGS": "connect::sendLogs",

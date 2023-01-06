@@ -1,173 +1,271 @@
 {
   "api": {
-    "presolvedinsurance": {
-      "service": "AppSync",
+    "ConnectAPI": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "GetUsersList"
+        },
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "assetsHandler"
+        }
+      ],
       "providerPlugin": "awscloudformation",
+      "service": "API Gateway"
+    },
+    "presolvedinsurance": {
       "dependsOn": [],
       "output": {
         "authConfig": {
+          "additionalAuthenticationProviders": [],
           "defaultAuthentication": {
-            "authenticationType": "API_KEY",
             "apiKeyConfig": {
-              "apiKeyExpirationDays": 365,
               "apiKeyExpirationDate": "2023-11-20T14:49:05.669Z",
+              "apiKeyExpirationDays": 365,
               "description": "new api key"
-            }
-          },
-          "additionalAuthenticationProviders": []
+            },
+            "authenticationType": "API_KEY"
+          }
         }
-      }
-    },
-    "ConnectAPI": {
-      "service": "API Gateway",
+      },
       "providerPlugin": "awscloudformation",
-      "dependsOn": [
-        {
-          "category": "function",
-          "resourceName": "GetUsersList",
-          "attributes": [
-            "Name",
-            "Arn"
-          ]
-        },
-        {
-          "category": "function",
-          "resourceName": "assetsHandler",
-          "attributes": [
-            "Name",
-            "Arn"
-          ]
-        }
-      ]
-    }
-  },
-  "function": {
-    "presolvedinsurancelayer": {
-      "providerPlugin": "awscloudformation",
-      "service": "LambdaLayer",
-      "build": true
-    },
-    "GetUsersList": {
-      "build": true,
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda",
-      "dependsOn": []
-    },
-    "presolvedinsurancemsgraph": {
-      "providerPlugin": "awscloudformation",
-      "service": "LambdaLayer",
-      "build": true
-    },
-    "GetMails": {
-      "build": true,
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda",
-      "dependsOn": [
-        {
-          "category": "api",
-          "resourceName": "presolvedinsurance",
-          "attributes": [
-            "GraphQLAPIIdOutput",
-            "GraphQLAPIEndpointOutput",
-            "GraphQLAPIKeyOutput"
-          ]
-        }
-      ]
-    },
-    "DownloadEmail": {
-      "build": true,
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda",
-      "dependsOn": [
-        {
-          "category": "storage",
-          "resourceName": "psemailbucket",
-          "attributes": [
-            "BucketName"
-          ]
-        }
-      ]
-    },
-    "assetsHandler": {
-      "build": true,
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda",
-      "dependsOn": [
-        {
-          "category": "storage",
-          "resourceName": "psemailbucket",
-          "attributes": [
-            "BucketName"
-          ]
-        }
-      ]
+      "service": "AppSync"
     }
   },
   "auth": {
     "presolvedinsurance": {
-      "service": "Cognito",
-      "serviceType": "managed",
-      "providerPlugin": "awscloudformation",
       "dependsOn": [],
       "frontendAuthConfig": {
-        "socialProviders": [],
-        "usernameAttributes": [],
-        "signupAttributes": [
-          "EMAIL"
-        ],
-        "passwordProtectionSettings": {
-          "passwordPolicyMinLength": 8,
-          "passwordPolicyCharacters": []
-        },
         "mfaConfiguration": "OFF",
         "mfaTypes": [
           "SMS"
         ],
+        "passwordProtectionSettings": {
+          "passwordPolicyCharacters": [],
+          "passwordPolicyMinLength": 8
+        },
+        "signupAttributes": [
+          "EMAIL"
+        ],
+        "socialProviders": [],
+        "usernameAttributes": [],
         "verificationMechanisms": [
           "EMAIL"
         ]
-      }
-    }
-  },
-  "hosting": {
-    "S3AndCloudFront": {
-      "service": "S3AndCloudFront",
-      "providerPlugin": "awscloudformation"
+      },
+      "providerPlugin": "awscloudformation",
+      "service": "Cognito",
+      "serviceType": "managed"
     }
   },
   "custom": {
     "PSEventBridge": {
-      "service": "customCDK",
-      "providerPlugin": "awscloudformation",
       "dependsOn": [
         {
-          "category": "function",
-          "resourceName": "GetMails",
           "attributes": [
             "Name",
             "Arn",
             "Region",
             "LambdaExecutionRole"
-          ]
+          ],
+          "category": "function",
+          "resourceName": "GetMails"
         },
         {
-          "category": "function",
-          "resourceName": "DownloadEmail",
           "attributes": [
             "Name",
             "Arn",
             "Region",
             "LambdaExecutionRole"
-          ]
+          ],
+          "category": "function",
+          "resourceName": "DownloadEmail"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "customCDK"
+    }
+  },
+  "function": {
+    "DownloadEmail": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "BucketName"
+          ],
+          "category": "storage",
+          "resourceName": "psemailbucket"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "GetMails": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "GraphQLAPIIdOutput",
+            "GraphQLAPIEndpointOutput",
+            "GraphQLAPIKeyOutput"
+          ],
+          "category": "api",
+          "resourceName": "presolvedinsurance"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "GetUsersList": {
+      "build": true,
+      "dependsOn": [],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "assetsHandler": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "BucketName"
+          ],
+          "category": "storage",
+          "resourceName": "psemailbucket"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "presolvedinsurancelayer": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "LambdaLayer"
+    },
+    "presolvedinsurancemsgraph": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "LambdaLayer"
+    }
+  },
+  "hosting": {
+    "S3AndCloudFront": {
+      "providerPlugin": "awscloudformation",
+      "service": "S3AndCloudFront"
+    }
+  },
+  "parameters": {
+    "AMPLIFY_function_DownloadEmail_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "DownloadEmail"
+        }
+      ]
+    },
+    "AMPLIFY_function_DownloadEmail_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "DownloadEmail"
+        }
+      ]
+    },
+    "AMPLIFY_function_GetMails_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "GetMails"
+        }
+      ]
+    },
+    "AMPLIFY_function_GetMails_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "GetMails"
+        }
+      ]
+    },
+    "AMPLIFY_function_GetUsersList_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "GetUsersList"
+        }
+      ]
+    },
+    "AMPLIFY_function_GetUsersList_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "GetUsersList"
+        }
+      ]
+    },
+    "AMPLIFY_function_assetsHandler_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "assetsHandler"
+        }
+      ]
+    },
+    "AMPLIFY_function_assetsHandler_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "assetsHandler"
+        }
+      ]
+    },
+    "AMPLIFY_function_presolvedinsurancelayer_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "presolvedinsurancelayer"
+        }
+      ]
+    },
+    "AMPLIFY_function_presolvedinsurancelayer_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "presolvedinsurancelayer"
+        }
+      ]
+    },
+    "AMPLIFY_function_presolvedinsurancemsgraph_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "presolvedinsurancemsgraph"
+        }
+      ]
+    },
+    "AMPLIFY_function_presolvedinsurancemsgraph_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "presolvedinsurancemsgraph"
         }
       ]
     }
   },
   "storage": {
     "psemailbucket": {
-      "service": "S3",
+      "dependsOn": [],
       "providerPlugin": "awscloudformation",
-      "dependsOn": []
+      "service": "S3"
     }
   }
 }

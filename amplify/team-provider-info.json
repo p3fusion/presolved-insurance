@@ -1,60 +1,79 @@
 {
-  "test": {
-    "awscloudformation": {
-      "AuthRoleName": "amplify-presolvedtenant-test-211355-authRole",
-      "UnauthRoleArn": "arn:aws:iam::039289871235:role/amplify-presolvedtenant-test-211355-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::039289871235:role/amplify-presolvedtenant-test-211355-authRole",
-      "Region": "us-east-1",
-      "DeploymentBucketName": "amplify-presolvedtenant-test-211355-deployment",
-      "UnauthRoleName": "amplify-presolvedtenant-test-211355-unauthRole",
-      "StackName": "amplify-presolvedtenant-test-211355",
-      "StackId": "arn:aws:cloudformation:us-east-1:039289871235:stack/amplify-presolvedtenant-test-211355/24432c50-7afd-11ed-9802-12e4bf39268d",
-      "AmplifyAppId": "d1nla2nbfpliwq",
-      "APIGatewayAuthURL": "https://s3.amazonaws.com/amplify-presolvedtenant-test-211355-deployment/amplify-cfn-templates/api/APIGatewayAuthStack.json"
-    },
-    "categories": {
-      "auth": {
-        "presolvedinsurance": {}
-      },
-      "storage": {
-        "psemailbucket": {}
-      },
-      "function": {
-        "presolvedinsurancelayer": {
-          "deploymentBucketName": "amplify-presolvedtenant-test-211355-deployment",
-          "s3Key": "amplify-builds/presolvedinsurancelayer-LambdaLayerVersion18dc25b2-build.zip"
+    "develop": {
+        "awscloudformation": {
+            "AuthRoleName": "amplify-presolvedtenant-develop-122036-authRole",
+            "UnauthRoleArn": "arn:aws:iam::039289871235:role/amplify-presolvedtenant-develop-122036-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::039289871235:role/amplify-presolvedtenant-develop-122036-authRole",
+            "Region": "us-east-1",
+            "DeploymentBucketName": "amplify-presolvedtenant-develop-122036-deployment",
+            "UnauthRoleName": "amplify-presolvedtenant-develop-122036-unauthRole",
+            "StackName": "amplify-presolvedtenant-develop-122036",
+            "StackId": "arn:aws:cloudformation:us-east-1:039289871235:stack/amplify-presolvedtenant-develop-122036/70ff7750-88d7-11ed-b422-0a4ef95939fb",
+            "AmplifyAppId": "d2yotsysr4wgyh",
+            "APIGatewayAuthURL": "https://s3.amazonaws.com/amplify-presolvedtenant-develop-122036-deployment/amplify-cfn-templates/api/APIGatewayAuthStack.json"
         },
-        "GetUsersList": {
-          "deploymentBucketName": "amplify-presolvedtenant-test-211355-deployment",
-          "s3Key": "amplify-builds/GetUsersList-5a346b3179465a43546f-build.zip"
-        },
-        "presolvedinsurancemsgraph": {
-          "deploymentBucketName": "amplify-presolvedtenant-test-211355-deployment",
-          "s3Key": "amplify-builds/presolvedinsurancemsgraph-LambdaLayerVersionee991d86-build.zip"
-        },
-        "GetMails": {
-          "deploymentBucketName": "amplify-presolvedtenant-test-211355-deployment",
-          "s3Key": "amplify-builds/GetMails-7a4938374e50587a5661-build.zip"
-        },
-        "DownloadEmail": {
-          "deploymentBucketName": "amplify-presolvedtenant-test-211355-deployment",
-          "s3Key": "amplify-builds/DownloadEmail-326d7857653279536d50-build.zip"
-        },
-        "assetsHandler": {
-          "deploymentBucketName": "amplify-presolvedtenant-test-211355-deployment",
-          "s3Key": "amplify-builds/assetsHandler-34327554427a33383159-build.zip"
+        "categories": {
+            "auth": {
+                "presolvedinsurance": {}
+            }
         }
-      },
-      "api": {
-        "presolvedinsurance": {},
-        "ConnectAPI": {}
-      },
-      "hosting": {
-        "S3AndCloudFront": {}
-      },
-      "custom": {
-        "PSEventBridge": {}
-      }
+    },
+    "test": {
+        "awscloudformation": {
+            "AuthRoleName": "amplify-presolvedtenant-test-211355-authRole",
+            "UnauthRoleArn": "arn:aws:iam::039289871235:role/amplify-presolvedtenant-test-211355-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::039289871235:role/amplify-presolvedtenant-test-211355-authRole",
+            "Region": "us-east-1",
+            "DeploymentBucketName": "amplify-presolvedtenant-test-211355-deployment",
+            "UnauthRoleName": "amplify-presolvedtenant-test-211355-unauthRole",
+            "StackName": "amplify-presolvedtenant-test-211355",
+            "StackId": "arn:aws:cloudformation:us-east-1:039289871235:stack/amplify-presolvedtenant-test-211355/24432c50-7afd-11ed-9802-12e4bf39268d",
+            "AmplifyAppId": "d1nla2nbfpliwq",
+            "APIGatewayAuthURL": "https://s3.amazonaws.com/amplify-presolvedtenant-test-211355-deployment/amplify-cfn-templates/api/APIGatewayAuthStack.json"
+        },
+        "categories": {
+            "auth": {
+                "presolvedinsurance": {}
+            },
+            "storage": {
+                "psemailbucket": {}
+            },
+            "function": {
+                "presolvedinsurancelayer": {
+                    "deploymentBucketName": "amplify-presolvedtenant-test-211355-deployment",
+                    "s3Key": "amplify-builds/presolvedinsurancelayer-LambdaLayerVersion18dc25b2-build.zip"
+                },
+                "GetUsersList": {
+                    "deploymentBucketName": "amplify-presolvedtenant-test-211355-deployment",
+                    "s3Key": "amplify-builds/GetUsersList-5a346b3179465a43546f-build.zip"
+                },
+                "presolvedinsurancemsgraph": {
+                    "deploymentBucketName": "amplify-presolvedtenant-test-211355-deployment",
+                    "s3Key": "amplify-builds/presolvedinsurancemsgraph-LambdaLayerVersionee991d86-build.zip"
+                },
+                "GetMails": {
+                    "deploymentBucketName": "amplify-presolvedtenant-test-211355-deployment",
+                    "s3Key": "amplify-builds/GetMails-7a4938374e50587a5661-build.zip"
+                },
+                "DownloadEmail": {
+                    "deploymentBucketName": "amplify-presolvedtenant-test-211355-deployment",
+                    "s3Key": "amplify-builds/DownloadEmail-326d7857653279536d50-build.zip"
+                },
+                "assetsHandler": {
+                    "deploymentBucketName": "amplify-presolvedtenant-test-211355-deployment",
+                    "s3Key": "amplify-builds/assetsHandler-34327554427a33383159-build.zip"
+                }
+            },
+            "api": {
+                "presolvedinsurance": {},
+                "ConnectAPI": {}
+            },
+            "hosting": {
+                "S3AndCloudFront": {}
+            },
+            "custom": {
+                "PSEventBridge": {}
+            }
+        }
     }
-  }
 }
