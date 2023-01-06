@@ -22,7 +22,7 @@
       "function": {
         "presolvedinsurancelayer": {
           "deploymentBucketName": "amplify-presolvedtenant-test-211355-deployment",
-          "s3Key": "amplify-builds/presolvedinsurancelayer-LambdaLayerVersion18dc25b2-build.zip"
+          "s3Key": "amplify-builds/presolvedinsurancelayer-LambdaLayerVersiond94d0b10-build.zip"
         },
         "GetUsersList": {
           "deploymentBucketName": "amplify-presolvedtenant-test-211355-deployment",
@@ -30,11 +30,11 @@
         },
         "presolvedinsurancemsgraph": {
           "deploymentBucketName": "amplify-presolvedtenant-test-211355-deployment",
-          "s3Key": "amplify-builds/presolvedinsurancemsgraph-LambdaLayerVersionee991d86-build.zip"
+          "s3Key": "amplify-builds/presolvedinsurancemsgraph-LambdaLayerVersione00bccc2-build.zip"
         },
         "GetMails": {
           "deploymentBucketName": "amplify-presolvedtenant-test-211355-deployment",
-          "s3Key": "amplify-builds/GetMails-7a4938374e50587a5661-build.zip"
+          "s3Key": "amplify-builds/GetMails-614b6437617a51304865-build.zip"
         },
         "DownloadEmail": {
           "deploymentBucketName": "amplify-presolvedtenant-test-211355-deployment",

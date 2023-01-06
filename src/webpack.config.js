@@ -37,6 +37,8 @@ module.exports = {
   },
   output: {
     //path: path.resolve("dist")
+    clean: true,
+    pathinfo: true,
     path: path.resolve(__dirname, '../build'),
     publicPath: '/'
   },
